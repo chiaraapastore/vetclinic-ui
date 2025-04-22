@@ -1,1 +1,60 @@
-<p>assistente works!</p>
+<div class="dashboard">
+
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <img src="https://i.pinimg.com/736x/57/38/48/573848ebfeef7475d442c045a5ba9643.jpg" alt="Logo Clinica">
+    </div>
+
+    <ul class="sidebar-menu">
+      <li><a routerLink="/assistente/pazienti"><i class="fas fa-user"></i> Pazienti Animali</a></li>
+      <li><a routerLink="/assistente/magazzino"><i class="fas fa-pills"></i> Magazzino</a></li>
+      <li><a routerLink="/assistente/somministrazioni"><i class="fas fa-syringe"></i> Somministrazioni</a></li>
+      <li><a routerLink="/assistente/appuntamenti"><i class="fas fa-calendar-alt"></i> Appuntamenti</a></li>
+      <li><a routerLink="/assistente/pagamenti"><i class="fas fa-credit-card"></i> Pagamenti</a></li>
+      <li><a routerLink="/assistente/profilo"><i class="fas fa-user-circle"></i> Profilo</a></li>
+    </ul>
+
+    <div class="sidebar-logout">
+      <button (click)="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+  </nav>
+
+  <div class="main">
+
+    <header class="top-bar">
+      <div class="welcome">
+        <h2>Benvenuto, {{ assistenteUsername }} </h2>
+        <p>Assistente Veterinario</p>
+      </div>
+    </header>
+
+    <section class="cards">
+      <div class="card" (click)="navigateTo('pazienti-animali')">
+        <i class="fa-solid fa-paw"style="color: #007b5e;"></i>
+        <h3>Pazienti Animali</h3>
+      </div>
+      <div class="card" (click)="navigateTo('magazzino')">
+        <i class="fa-solid fa-warehouse"style="color: #007b5e;"></i>
+        <h3>Magazzino</h3>
+      </div>
+      <div class="card" (click)="navigateTo('somministrazioni')">
+        <i class="fas fa-syringe"></i>
+        <h3>Somministrazioni</h3>
+      </div>
+      <div class="card" (click)="navigateTo('appuntamenti')">
+        <i class="fas fa-calendar-alt"></i>
+        <h3>Appuntamenti</h3>
+      </div>
+      <div class="card" (click)="navigateTo('pagamenti')">
+        <i class="fas fa-credit-card"></i>
+        <h3>Pagamenti</h3>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>© 2025 VetEnterprise Solutions. Tutti i diritti riservati.</p>
+    </footer>
+
+  </div>
+
+</div>

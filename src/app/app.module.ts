@@ -46,6 +46,11 @@ export function initializeKeycloak(keycloak: KeycloakService, platformId: Object
   declarations: [
     AppComponent,
     HomeComponent,
+    AdminComponent,
+    ClienteComponent,
+    CapoRepartoComponent,
+    VeterinarioComponent,
+    AssistenteComponent,
     ErrorComponent,
     AdminComponent,
     AssistenteComponent,
