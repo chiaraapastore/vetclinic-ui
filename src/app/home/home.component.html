@@ -1,0 +1,77 @@
+<div class="intro-section">
+  <div class="overlay"></div>
+
+  <div class="container intro-content animate__animated animate__fadeIn">
+    <h1 class="main-title">VetClinic</h1>
+    <h2 class="subtitle">La piattaforma completa per la gestione della tua clinica veterinaria</h2>
+    <p class="description">
+      Gestione pazienti animali, controllo magazzino farmaceutico e analisi cliniche.
+      <br>Un'unica soluzione per animali di ogni specie.
+    </p>
+    <a class="btn access-btn" (click)="goToUserProfile()" data-bs-toggle="tooltip">Accedi alla Piattaforma</a>
+  </div>
+</div>
+
+
+<section class="features-section">
+  <div class="container features">
+    <div class="feature-card">
+    <h3>Gestione Pazienti Animali</h3>
+      <div class="feature-icon">
+        <i class="fas fa-user-md" style="color: #007b5e;"></i>
+      </div>
+      <p>Registra anamnesi, vaccinazioni, trattamenti e monitoraggi clinici per per animali di ogni specie.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Controllo Magazzino</h3>
+      <div class="feature-icon">
+       <i class="fa-solid fa-warehouse" style="color: #007b5e;"></i>
+      </div>
+      <p>Monitora e gestisci scorte di farmaci veterinari con riordino automatico e alert di emergenza scorte.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Report Clinici e Statistiche</h3>
+      <div class="feature-icon">
+       <i class="fas fa-file" style="color: #007b5e;"></i>
+      </div>
+      <p>Analizza l'andamento clinico della struttura con report dettagliati per ottimizzare la cura degli animali.</p>
+    </div>
+  </div>
+</section>
+
+<div class="testimonial-image">
+  <div class="testimonial-overlay"></div>
+  <div class="testimonials-overlay-content">
+    <h2>Cosa Dicono di Noi</h2>
+
+    <div class="testimonial-carousel">
+      <button class="carousel-btn prev-btn" (click)="scrollCarousel(-1)">❮</button>
+      <div class="testimonial-wrapper">
+        <div class="testimonial-grid">
+          <div *ngFor="let testimonial of visibleTestimonials" class="testimonial">
+            <p class="testimonial-text">"{{ testimonial.text }}"</p>
+            <p class="testimonial-author">- {{ testimonial.author }}</p>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-btn next-btn" (click)="scrollCarousel(1)">❯</button>
+    </div>
+  </div>
+</div>
+
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>Contattaci</h3>
+        <p><i class="fas fa-envelope" style="color: #004D40;"></i> <a href="mailto:support@vetenterprise.com">support&#64;vetenterprise.com</a></p>
+        <p><i class="fas fa-phone" style="color: #004D40;"></i> <a href="tel:+390212345678">+39 02 1234 5678</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 VetEnterprise Solutions. Tutti i diritti riservati.</p>
+    </div>
+  </div>
+</footer>
+
