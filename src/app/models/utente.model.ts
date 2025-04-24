@@ -1,6 +1,3 @@
-import {Reparto} from './reparto.model';
-
-
 export interface Utente {
   id?: number;
   firstName: string;
@@ -11,7 +8,8 @@ export interface Utente {
   profileImage?: string;
   registrationNumber?: string;
   role: 'admin' | 'capo-reparto' | 'assistente' | 'veterinario' | 'cliente';
-  reparto?: Reparto;
+  repartoId?: number;
+  nameDepartment?: string;
   countNotification?: number;
   keycloakId?: string;
 }

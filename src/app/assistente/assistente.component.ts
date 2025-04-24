@@ -1,10 +1,11 @@
+
+
 import { Component, HostListener, OnInit } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../auth/authenticationService';
 import { NotificheService } from '../services/notifiche.service';
 import { AssistenteService } from '../services/assistente.service';
-import {Notifiche} from '../models/notifiche.model';
 
 @Component({
   selector: 'app-assistente',
@@ -19,7 +20,9 @@ export class AssistenteComponent implements OnInit {
   unreadNotifications: number = 0;
   notifications: any[] = [];
   dropdownOpen: boolean = false;
+  userId!: number;
   ordini: any[] = [];
+  repartoId!: number;
 
   constructor(
     private assistenteService: AssistenteService,
@@ -31,11 +34,24 @@ export class AssistenteComponent implements OnInit {
 
   ngOnInit() {
     this.getAssistenteUsername();
+    this.loadRepartoAndData();
     this.caricaPazientiAnimali();
-    this.caricaMedicinali();
     this.caricaOrdini();
     this.listenForNewNotifications();
   }
+
+  loadRepartoAndData() {
+    this.authenticationService.getUserInfo().subscribe(user => {
+      if (user.repartoId) {
+        this.repartoId = user.repartoId;
+        this.caricaMedicinali(this.repartoId);
+      } else {
+        console.warn('Reparto non disponibile per l’utente', user);
+      }
+    });
+  }
+
+
 
   caricaPazientiAnimali() {
     this.assistenteService.getVeterinarianPatients().subscribe((data: any[]) => {
@@ -43,11 +59,13 @@ export class AssistenteComponent implements OnInit {
     });
   }
 
-  caricaMedicinali() {
-    this.assistenteService.viewDepartmentMedicines(1).subscribe((data: any[]) => {
+  caricaMedicinali(repartoId: number) {
+    this.assistenteService.viewDepartmentMedicines(repartoId).subscribe((data: any[]) => {
       this.medicinali = data;
     });
   }
+
+
 
   caricaOrdini() {
     this.assistenteService.getOrderHistory().subscribe((data: any[]) => {
@@ -67,19 +85,15 @@ export class AssistenteComponent implements OnInit {
     }
   }
 
-  loadNotifications(): void {
+  loadNotifications() {
+    if (!this.userId) return;
     this.notificationService.markAllNotificationsAsRead().subscribe({
-      next: (notifiche: Notifiche[]) => {
-        this.notifications = notifiche;
-        this.unreadNotifications = notifiche.filter(n => !n.letta).length;
+      next: (notifications) => {
+        this.notifications = notifications;
       },
-      error: (error) => {
-        console.error('Errore nel recupero delle notifiche:', error);
-      },
+      error: (err) => console.error('Errore nel recupero notifiche:', err)
     });
   }
-
-
 
   markAllAsRead(event: Event) {
     event.stopPropagation();
@@ -87,7 +101,6 @@ export class AssistenteComponent implements OnInit {
       this.loadNotifications();
     });
   }
-
   deleteAllNotifications(event: Event) {
     event.stopPropagation();
     this.notifications = [];

@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AssistenteService {
 
-  private apiUrl = 'http://localhost:8081/api/assistente';
+  private apiUrl = `${environment.baseUrl}/api/assistente`;
 
   constructor(private http: HttpClient) {}
 
@@ -39,9 +40,12 @@ export class AssistenteService {
     });
   }
 
+
   viewDepartmentMedicines(departmentId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/view-department-medicines/${departmentId}`);
   }
+
+
 
   getVeterinarianPatients(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/get-veterinarian-patients`);

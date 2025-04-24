@@ -6,12 +6,12 @@
     </div>
 
     <ul class="sidebar-menu">
-      <li><a routerLink="/assistente/pazienti"><i class="fas fa-user"></i> Pazienti Animali</a></li>
-      <li><a routerLink="/assistente/magazzino"><i class="fas fa-pills"></i> Magazzino</a></li>
-      <li><a routerLink="/assistente/somministrazioni"><i class="fas fa-syringe"></i> Somministrazioni</a></li>
-      <li><a routerLink="/assistente/appuntamenti"><i class="fas fa-calendar-alt"></i> Appuntamenti</a></li>
-      <li><a routerLink="/assistente/pagamenti"><i class="fas fa-credit-card"></i> Pagamenti</a></li>
-      <li><a routerLink="/assistente/profilo"><i class="fas fa-user-circle"></i> Profilo</a></li>
+      <li><a routerLink="/pazienti"><i class="fa-solid fa-paw"></i> Pazienti Animali</a></li>
+      <li><a routerLink="/magazzino"><i class="fa-solid fa-warehouse"></i> Magazzino</a></li>
+      <li><a routerLink="/somministrazioni"><i class="fas fa-syringe"></i> Somministrazioni</a></li>
+      <li><a routerLink="/appuntamenti"><i class="fas fa-calendar-alt"></i> Appuntamenti</a></li>
+      <li><a routerLink="/pagamenti"><i class="fas fa-credit-card"></i> Pagamenti</a></li>
+      <li><a routerLink="/profilo"><i class="fas fa-user-circle"></i> Profilo</a></li>
     </ul>
 
     <div class="sidebar-logout">
@@ -23,10 +23,37 @@
 
     <header class="top-bar">
       <div class="welcome">
-        <h2>Benvenuto, {{ assistenteUsername }} </h2>
+        <h2>Benvenuto {{ assistenteUsername }}</h2>
         <p>Assistente Veterinario</p>
       </div>
+
+      <div class="notifications-wrapper" (click)="toggleDropdown($event)">
+        <i class="fas fa-bell" style="color: #007b5e;"></i>
+        <span *ngIf="unreadNotifications > 0" class="notification-badge">{{ unreadNotifications }}</span>
+      </div>
+
+      <div class="notifications-dropdown" *ngIf="dropdownOpen">
+        <div class="dropdown-header">
+          <h3>Elenco Notifiche</h3>
+        </div>
+
+        <ul class="notifications-list">
+          <li *ngFor="let notification of notifications" [class.unread]="!notification.letta">
+            <div class="notification-content">
+              <p>{{ notification.messaggio }}</p>
+              <span class="time">{{ getRelativeTime(notification.dataOra) }}</span>
+            </div>
+            <button *ngIf="!notification.letta" class="mark-read-btn" (click)="markAllAsRead($event)">
+            </button>
+          </li>
+        </ul>
+
+        <div class="notification-buttons">
+          <button class="delete-all-btn" (click)="deleteAllNotifications($event)">Elimina tutte</button>
+        </div>
+      </div>
     </header>
+
 
     <section class="cards">
       <div class="card" (click)="navigateTo('pazienti-animali')">
