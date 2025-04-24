@@ -17,6 +17,7 @@ import { AssistenteComponent } from './assistente/assistente.component';
 import { ClienteComponent } from './cliente/cliente.component';
 import { CapoRepartoComponent } from './capo-reparto/capo-reparto.component';
 import { VeterinarioComponent } from './veterinario/veterinario.component';
+import { ProfiloComponent } from './profilo/profilo.component';
 
 export function initializeKeycloak(keycloak: KeycloakService, platformId: Object) {
   return () =>
@@ -46,6 +47,7 @@ export function initializeKeycloak(keycloak: KeycloakService, platformId: Object
   declarations: [
     AppComponent,
     HomeComponent,
+    ProfiloComponent,
     AdminComponent,
     ClienteComponent,
     CapoRepartoComponent,
@@ -57,6 +59,7 @@ export function initializeKeycloak(keycloak: KeycloakService, platformId: Object
     ClienteComponent,
     CapoRepartoComponent,
     VeterinarioComponent,
+    ProfiloComponent,
   ],
   imports: [
     BrowserModule,

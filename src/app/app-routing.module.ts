@@ -9,6 +9,7 @@ import {CapoRepartoComponent} from './capo-reparto/capo-reparto.component';
 import {VeterinarioComponent} from './veterinario/veterinario.component';
 import {AssistenteComponent} from './assistente/assistente.component';
 import {ClienteComponent} from './cliente/cliente.component';
+import {ProfiloComponent} from './profilo/profilo.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'veterinario', component: VeterinarioComponent, canActivate: [AuthGuard], data: { roles: ['veterinario'] } },
   { path: 'assistente', component: AssistenteComponent, canActivate: [AuthGuard], data: { roles: ['assistente'] } },
   { path: 'cliente', component: ClienteComponent, canActivate: [AuthGuard], data: { roles: ['cliente'] } },
+  { path: 'profile', component: ProfiloComponent, canActivate: [AuthGuard] },
   { path: 'error', component: ErrorComponent },
   { path: '**', redirectTo: 'error' }
 ];
