@@ -32,8 +32,10 @@ export class AnimaleService {
     return this.http.delete<string>(`${this.apiUrl}/delete/${animaleId}`);
   }
 
-  downloadMedicalRecord(animaleId: number): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/download-cartella-clinica/${animaleId}`, { responseType: 'blob' });
+  downloadMedicalRecord(pazienteId: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/download-cartella-clinica/${pazienteId}`, {
+      responseType: 'blob'
+    });
   }
 
 }

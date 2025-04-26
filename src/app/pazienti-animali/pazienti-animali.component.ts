@@ -49,20 +49,24 @@ export class PazientiAnimaliComponent implements OnInit {
     });
   }
 
-  downloadMedicalRecord(animaleId: number): void {
-    this.animaleService.downloadMedicalRecord(animaleId).subscribe({
+  downloadMedicalRecord(pazienteId: number): void {
+    this.animaleService.downloadMedicalRecord(pazienteId).subscribe({
       next: (blob: Blob) => {
+        if (blob.size === 0) {
+          this.toastr.error("Errore: il PDF è vuoto o non disponibile.", "Errore");
+          return;
+        }
+
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `Cartella_Clinica_${animaleId}.pdf`;
+        a.download = `Cartella_Clinica_${pazienteId}.pdf`;
         a.click();
         window.URL.revokeObjectURL(url);
-        this.toastr.success('Cartella clinica scaricata!');
+        this.toastr.success("Cartella clinica scaricata con successo!", "Successo");
       },
-      error: (err: any) => {
-        console.error('Errore nel download della cartella clinica', err);
-        this.toastr.error('Errore nel download della cartella clinica.');
+      error: (err) => {
+        this.toastr.error("Errore nel download della cartella clinica: " + err.message, "Errore");
       }
     });
   }

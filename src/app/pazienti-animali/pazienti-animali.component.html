@@ -27,8 +27,14 @@
           </span>
         </td>
         <td>
-          <button (click)="downloadMedicalRecord(animale.id!)">📄 Cartella</button>
-          <button (click)="loadAnimalHistory(animale.id!, animale.name)">🩺 Vedi Cronologia</button>
+          <div class="action-group">
+          <button class="action-btn" title="Scarica Cartella Clinica"  (click)="downloadMedicalRecord(animale.id!)">
+            <i class="fas fa-file-download"></i>
+          </button>
+          <button class="action-btn" title="Vedi Cronologia"  (click)="loadAnimalHistory(animale.id!, animale.name)">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            </button>
+          </div>
         </td>
       </tr>
       </tbody>
