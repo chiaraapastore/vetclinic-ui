@@ -12,7 +12,7 @@ import {Router} from '@angular/router';
   selector: 'app-pazienti-animali',
   standalone: false,
   templateUrl: './pazienti-animali.component.html',
-  styleUrl: './pazienti-animali.component.css'
+  styleUrls: ['./pazienti-animali.component.css']
 })
 export class PazientiAnimaliComponent implements OnInit {
 
@@ -20,6 +20,13 @@ export class PazientiAnimaliComponent implements OnInit {
   selectedAnimalHistory: CronologiaAnimale[] = [];
   selectedAnimalName: string = '';
   showHistorySection: boolean = false;
+  newEventType: string = '';
+  newEventDescription: string = '';
+  selectedAnimalId: number | null = null;
+  isLoading: boolean = false;
+
+
+
 
   constructor(
     private assistenteService: AssistenteService,
@@ -71,25 +78,83 @@ export class PazientiAnimaliComponent implements OnInit {
     });
   }
 
+
   loadAnimalHistory(animaleId: number, nomeAnimale: string): void {
+    console.log("Cliccato su cronologia per animaleId:", animaleId);
+    this.isLoading = true;
+
+    this.selectedAnimalId = animaleId;
+
     this.assistenteService.getAnimalFullHistory(animaleId).subscribe({
       next: (history: CronologiaAnimale[]) => {
-        this.selectedAnimalHistory = history.sort((a, b) =>
-          new Date(b.eventDate).getTime() - new Date(a.eventDate).getTime()
-        );
+        this.isLoading = false;
+        console.log("Risposta ricevuta:", history);
+
+        this.selectedAnimalHistory = history || [];
         this.selectedAnimalName = nomeAnimale;
         this.showHistorySection = true;
+
+        if (this.selectedAnimalHistory.length === 0) {
+          this.toastr.info(`Nessun evento registrato per ${nomeAnimale}.`, 'Cronologia vuota');
+        }
       },
       error: (err: any) => {
+        this.isLoading = false;
         console.error('Errore nel caricamento della cronologia', err);
         this.toastr.error('Errore nel caricamento della cronologia.');
       }
     });
   }
 
-  hideHistorySection(): void {
-    this.showHistorySection = false;
-    this.selectedAnimalHistory = [];
-    this.selectedAnimalName = '';
+
+
+
+  addNewEvent(): void {
+    if (!this.newEventType || !this.newEventDescription) {
+      this.toastr.error('Devi compilare tipo evento e descrizione.');
+      return;
+    }
+
+    if (!this.selectedAnimalId) {
+      this.toastr.error('Animale non selezionato correttamente.');
+      return;
+    }
+
+    this.assistenteService.addEventToAnimal(this.selectedAnimalId!, {
+      eventType: this.newEventType,
+      description: this.newEventDescription
+    }).subscribe({
+      next: () => {
+        this.toastr.success('Evento aggiunto correttamente!');
+        this.loadAnimalHistory(this.selectedAnimalId!, this.selectedAnimalName);
+        this.newEventType = '';
+        this.newEventDescription = '';
+      },
+      error: (err) => {
+        console.error('Errore aggiunta evento', err);
+        this.toastr.error('Errore durante l\'aggiunta.');
+      }
+    });
+
+
   }
+
+  toggleAnimalHistory(animaleId: number, nomeAnimale: string): void {
+    if (this.selectedAnimalId === animaleId && this.showHistorySection) {
+      this.showHistorySection = false;
+      this.selectedAnimalId = null;
+      this.selectedAnimalHistory = [];
+      this.selectedAnimalName = '';
+    } else {
+      this.loadAnimalHistory(animaleId, nomeAnimale);
+    }
+  }
+
+
+
+
+
+
+
+
 }

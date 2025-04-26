@@ -118,5 +118,11 @@ export class AssistenteService {
     return this.http.get<CronologiaAnimale[]>(`${environment.baseUrl}/api/cronologia/animal-history/${animaleId}`);
   }
 
+  addEventToAnimal(animaleId: number, event: { eventType: string; description: string }): Observable<any> {
+    return this.http.post(`${environment.baseUrl}/api/cronologia/add/${animaleId}`, event);
+  }
+
+
+
 
 }

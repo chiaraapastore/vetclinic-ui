@@ -74,11 +74,14 @@ export function initializeKeycloak(keycloak: KeycloakService, platformId: Object
     KeycloakAngularModule,
     CommonModule,
     ToastrModule.forRoot({
-      toastClass: 'ngx-toastr',
       positionClass: 'toast-top-right',
-      timeOut: 4000,
+      preventDuplicates: true,
       closeButton: true,
       progressBar: true,
+      timeOut: 3000,
+      easeTime: 300,
+      tapToDismiss: true,
+      newestOnTop: true
     })
   ],
   providers: [
