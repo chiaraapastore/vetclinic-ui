@@ -17,16 +17,16 @@ export class HomeComponent implements OnInit {
   isLoggedIn: boolean = false;
 
   constructor(
-      private router: Router,
-      private authService: AuthenticationService,
-      private keycloakService: KeycloakService,
-      private utenteService: UtenteService
+    private router: Router,
+    private authService: AuthenticationService,
+    private keycloakService: KeycloakService,
+    private utenteService: UtenteService
   ) {
 
     this.router.events
-        .pipe(filter((event: Event): event is NavigationEnd => event instanceof NavigationEnd))
-        .subscribe((event: NavigationEnd) => {
-        });
+      .pipe(filter((event: Event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+      });
   }
 
   async ngOnInit(): Promise<void> {
@@ -55,7 +55,7 @@ export class HomeComponent implements OnInit {
         } else if (roles.includes('capo-reparto')) {
           await this.router.navigate(['/capo-reparto']);
         }else if (roles.includes('veterinario')) {
-        await this.router.navigate(['/veterinario']);
+          await this.router.navigate(['/veterinario']);
         } else {
           console.warn("Ruolo sconosciuto:", roles);
           await this.router.navigate(['/error']);
@@ -92,7 +92,6 @@ export class HomeComponent implements OnInit {
         if (!exists) {
           this.saveUserToBackend(this.userDetails);
         } else {
-          console.log('Utente già esistente nel backend.');
         }
       },
       error: (error: any) => {
