@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.isLoggedIn = await this.keycloakService.isLoggedIn();
-    console.log(" Stato login:", this.isLoggedIn);
+
 
     if (this.isLoggedIn) {
       this.getUserDetails();

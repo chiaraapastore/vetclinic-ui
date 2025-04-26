@@ -1,9 +1,9 @@
-
 import { Animale } from './animale.model';
 
 export interface CronologiaAnimale {
   id: number;
+  eventDate: Date;
   description: string;
-  data: Date;
+  eventType: string;
   animale: Animale;
 }

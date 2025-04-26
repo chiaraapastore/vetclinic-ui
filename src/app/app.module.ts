@@ -18,6 +18,8 @@ import { ClienteComponent } from './cliente/cliente.component';
 import { CapoRepartoComponent } from './capo-reparto/capo-reparto.component';
 import { VeterinarioComponent } from './veterinario/veterinario.component';
 import { ProfiloComponent } from './profilo/profilo.component';
+import { PazientiAnimaliComponent } from './pazienti-animali/pazienti-animali.component';
+
 
 export function initializeKeycloak(keycloak: KeycloakService, platformId: Object) {
   return () =>
@@ -60,6 +62,7 @@ export function initializeKeycloak(keycloak: KeycloakService, platformId: Object
     CapoRepartoComponent,
     VeterinarioComponent,
     ProfiloComponent,
+    PazientiAnimaliComponent,
   ],
   imports: [
     BrowserModule,

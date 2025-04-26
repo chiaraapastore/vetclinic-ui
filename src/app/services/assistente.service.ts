@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
+import {CronologiaAnimale} from '../models/cronologia-animale.model';
 
 @Injectable({
   providedIn: 'root'
@@ -112,4 +113,10 @@ export class AssistenteService {
   getOrderHistory(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/order-history`);
   }
+
+  getAnimalFullHistory(animaleId: number): Observable<CronologiaAnimale[]> {
+    return this.http.get<CronologiaAnimale[]>(`${environment.baseUrl}/api/cronologia/animal-history/${animaleId}`);
+  }
+
+
 }

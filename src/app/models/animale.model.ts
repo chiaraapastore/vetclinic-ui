@@ -1,10 +1,11 @@
-import { Utente } from './utente.model';
+import {Utente} from './utente.model';
 
 export interface Animale {
   id?: number;
   name: string;
-  specie: string;
-  razza: string;
+  species: string;
+  breed: string;
   state?: string;
   owner?: Utente;
+  microchip:string;
 }

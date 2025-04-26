@@ -1,0 +1,63 @@
+<body>
+<button class="back-button" (click)="goBack()">Indietro</button>
+
+<div class="container">
+  <div class="table-container">
+    <table>
+      <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Specie</th>
+        <th>Razza</th>
+        <th>Microchip</th>
+        <th>Stato</th>
+        <th>Azioni</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let animale of animali">
+        <td>{{ animale.name }}</td>
+        <td>{{ animale.species }}</td>
+        <td>{{ animale.breed }}</td>
+        <td>{{ animale.microchip }}</td>
+
+        <td>
+          <span [ngClass]="animale.state === 'Dimesso' ? 'dimesso' : 'ricoverato'">
+            {{ animale.state }}
+          </span>
+        </td>
+        <td>
+          <button (click)="downloadMedicalRecord(animale.id!)">📄 Cartella</button>
+          <button (click)="loadAnimalHistory(animale.id!, animale.name)">🩺 Vedi Cronologia</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="selectedAnimalHistory.length > 0" class="history-container">
+    <h3>Cronologia Clinica di {{ selectedAnimalName }}</h3>
+    <table>
+      <thead>
+      <tr>
+        <th>Tipo Evento</th>
+        <th>Descrizione</th>
+        <th>Data</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let entry of selectedAnimalHistory">
+        <td>{{ entry.eventType }}</td>
+        <td>{{ entry.description }}</td>
+        <td>{{ entry.eventDate | date:'dd/MM/yyyy' }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>© 2025 VetEnterprise Solutions. Tutti i diritti riservati.</p>
+</footer>
+
+</body>
