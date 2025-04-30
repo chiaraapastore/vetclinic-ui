@@ -1,9 +1,14 @@
-<div class="calendar-container">
-  <h2 class="calendar-title">Calendario Appuntamenti</h2>
-  <full-calendar
-    #calendar
-    [options]="calendarOptions">
-  </full-calendar>
+<body>
+<button class="back-button" (click)="goBack()">Indietro</button>
 
+<main>
+  <div class="calendar-container">
+    <h2 class="calendar-title">Calendario Appuntamenti</h2>
+    <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+  </div>
+</main>
 
-</div>
+<footer class="footer">
+  <p>© 2025 VetEnterprise Solutions. Tutti i diritti riservati.</p>
+</footer>
+</body>

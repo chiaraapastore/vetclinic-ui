@@ -8,6 +8,7 @@ import interactionPlugin, {DateClickArg} from '@fullcalendar/interaction';
 import {ToastrService} from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import {FullCalendarComponent} from '@fullcalendar/angular';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-appuntamenti-assistente',
@@ -38,11 +39,16 @@ export class AppuntamentiAssistenteComponent implements OnInit {
 
   constructor(
     private appuntamentoService: AppuntamentoService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
     this.loadData();
+  }
+
+  goBack(): void {
+    this.router.navigate(['/assistente']);
   }
 
   private loadData(): void {
