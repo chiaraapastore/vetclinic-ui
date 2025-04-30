@@ -6,6 +6,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -19,6 +20,8 @@ import { CapoRepartoComponent } from './capo-reparto/capo-reparto.component';
 import { VeterinarioComponent } from './veterinario/veterinario.component';
 import { ProfiloComponent } from './profilo/profilo.component';
 import { PazientiAnimaliComponent } from './pazienti-animali/pazienti-animali.component';
+import { AppuntamentiAssistenteComponent } from './appuntamenti-assistente/appuntamenti-assistente.component';
+import {FullCalendarModule} from '@fullcalendar/angular';
 
 
 export function initializeKeycloak(keycloak: KeycloakService, platformId: Object) {
@@ -58,6 +61,7 @@ export function initializeKeycloak(keycloak: KeycloakService, platformId: Object
     ErrorComponent,
     AdminComponent,
     AssistenteComponent,
+    AppuntamentiAssistenteComponent,
     ClienteComponent,
     CapoRepartoComponent,
     VeterinarioComponent,
@@ -68,7 +72,9 @@ export function initializeKeycloak(keycloak: KeycloakService, platformId: Object
     BrowserModule,
     AppRoutingModule,
     RouterModule,
+    SweetAlert2Module.forRoot(),
     BrowserAnimationsModule,
+    FullCalendarModule,
     FormsModule,
     ReactiveFormsModule,
     KeycloakAngularModule,

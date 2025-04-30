@@ -1,0 +1,25 @@
+.calendar-container {
+  margin: 30px auto;
+  max-width: 1200px;
+  background: #f5f5f5;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.calendar-title {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #00695c;
+}
+
+.swal2-input, .swal2-select {
+  width: 80% !important;
+  margin: 10px auto !important;
+  display: block !important;
+}
+
+.swal2-popup {
+  border-radius: 20px !important;
+}
