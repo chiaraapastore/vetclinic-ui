@@ -40,7 +40,7 @@ export class AppuntamentiAssistenteComponent implements OnInit {
   constructor(
     private appuntamentoService: AppuntamentoService,
     private toastr: ToastrService,
-    private router: Router,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
