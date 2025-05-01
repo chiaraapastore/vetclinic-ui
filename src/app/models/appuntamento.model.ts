@@ -11,4 +11,5 @@ export interface Appuntamento {
   veterinarian: Veterinario;
   animal: Animale;
   appointmentDate:string;
+  reason: string;
 }
