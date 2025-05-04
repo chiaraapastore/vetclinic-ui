@@ -1,0 +1,42 @@
+<body>
+
+<button class="back-button" (click)="goBack()">Indietro</button>
+
+
+<div class="somministrazioni-container">
+  <h2>Somministrazione Farmaco</h2>
+
+  <div class="form-group">
+    <label>Seleziona Paziente:</label>
+    <select [(ngModel)]="selectedAnimaleId">
+      <option *ngFor="let p of pazienti" [value]="p.id">{{ p.name }}</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>Seleziona Farmaco:</label>
+    <select [(ngModel)]="selectedMedicineId">
+      <option *ngFor="let m of medicine" [value]="m.id">{{ m.name }}</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="quantita">Quantità:</label>
+    <div class="quantita-wrapper">
+      <input id="quantita" type="number" min="1" [(ngModel)]="quantita" />
+      <span class="unit-label">{{ getUnitForSelectedMedicine() }}</span>
+    </div>
+  </div>
+
+
+  <button class="button-somministra" (click)="somministraFarmaco()">Somministra</button>
+
+  <p class="messaggio">{{ messaggio }}</p>
+</div>
+
+</body>
+
+
+<footer class="footer">
+  <p>© 2025 VetEnterprise Solutions. Tutti i diritti riservati.</p>
+</footer>
