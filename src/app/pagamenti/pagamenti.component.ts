@@ -68,8 +68,7 @@ export class PagamentiComponent implements OnInit {
 
     this.pagamentoService.pagaAppuntamento(appuntamento.id, amount, appuntamento.cliente.id).subscribe({
       next: () => {
-        this.toastr.success('Pagamento registrato con successo');
-        this.caricaAppuntamenti();
+        this.toastr.success('Richiesta di pagamento inviata al cliente');
       },
       error: err => {
         console.error('Errore pagamento:', err);
@@ -92,7 +91,7 @@ export class PagamentiComponent implements OnInit {
       ...appuntamento,
       metodo: this.selectedMethod[appuntamento.id],
       cardType: this.cardType[appuntamento.id],
-      amount: this.selectedAmount[appuntamento.id] // <--- OK!
+      amount: this.selectedAmount[appuntamento.id]
     });
   }
 

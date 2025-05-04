@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment';
 import {CronologiaAnimale} from '../models/cronologia-animale.model';
+import {Veterinario} from '../models/veterinario.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,12 @@ export class AssistenteService {
   private apiUrl = `${environment.baseUrl}/api/assistente`;
 
   constructor(private http: HttpClient) {}
+
+  getVeterinariesByDepartment(departmentId: number): Observable<Veterinario[]> {
+    return this.http.get<Veterinario[]>(`${this.apiUrl}/get-veterinaries-by-department/${departmentId}`);
+  }
+
+
 
   createAppointment(animalId: number, veterinarianId: number, appointmentDate: Date, reason: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/create-appointment`, null, {
@@ -58,9 +65,6 @@ export class AssistenteService {
     });
   }
 
-  getVeterinariesByDepartment(departmentId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/get-veterinaries-by-department/${departmentId}`);
-  }
 
   getAssistentiByReparto(repartoId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/get-assistenti-by-reparto/${repartoId}`);

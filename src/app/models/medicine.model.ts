@@ -1,3 +1,6 @@
+import {Reparto} from './reparto.model';
+import {Magazzino} from './magazzino.model';
+
 export interface Medicine {
   id?: number;
   name: string;
@@ -8,5 +11,8 @@ export interface Medicine {
   currentStock?: number;
   pendingOrders?: number;
   unitsToReceive?: number;
-  departmentId?: number;
+  department: Reparto;
+  magazine: Magazzino;
+  dosage?: string;
+
 }

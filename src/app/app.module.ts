@@ -23,6 +23,7 @@ import { PazientiAnimaliComponent } from './pazienti-animali/pazienti-animali.co
 import { AppuntamentiAssistenteComponent } from './appuntamenti-assistente/appuntamenti-assistente.component';
 import {FullCalendarModule} from '@fullcalendar/angular';
 import { PagamentiComponent } from './pagamenti/pagamenti.component';
+import {SomministrazioniComponent} from './somministrazioni/somministrazioni.component';
 
 
 export function initializeKeycloak(keycloak: KeycloakService, platformId: Object) {
@@ -60,6 +61,7 @@ export function initializeKeycloak(keycloak: KeycloakService, platformId: Object
     VeterinarioComponent,
     AssistenteComponent,
     PagamentiComponent,
+    SomministrazioniComponent,
     ErrorComponent,
     AdminComponent,
     AssistenteComponent,
