@@ -6,6 +6,8 @@ import {AnimaleService} from '../services/animale.service';
 import {AssistenteService} from '../services/assistente.service';
 import {MedicineService} from '../services/medicine.service';
 import {Router} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
+import {Somministrazione} from '../models/somministrazione.model';
 
 @Component({
   selector: 'app-somministrazioni',
@@ -16,6 +18,7 @@ import {Router} from '@angular/router';
 export class SomministrazioniComponent implements OnInit {
   pazienti: Animale[] = [];
   medicine: Medicine[] = [];
+  somministrazioni: Somministrazione[] = [];
 
   selectedAnimaleId?: number;
   selectedMedicineId?: number;
@@ -27,7 +30,8 @@ export class SomministrazioniComponent implements OnInit {
     private animaleService: AnimaleService,
     private assistenteService: AssistenteService,
     private router: Router,
-    private medicineService: MedicineService
+    private medicineService: MedicineService,
+    private toastr: ToastrService
   ) {}
 
 
@@ -68,14 +72,20 @@ export class SomministrazioniComponent implements OnInit {
     this.somministrazioneService
       .somministraFarmaco(this.selectedAnimaleId, this.selectedMedicineId, this.quantita, veterinarioId)
       .subscribe({
-        next: res => this.messaggio = res.message,
-        error: () => this.messaggio = 'Errore nella somministrazione'
+        next: res => {
+          this.toastr.success('Somministrazione effettuata con successo');
+        },
+        error: () => {
+          this.toastr.error('Errore nella somministrazione');
+        }
       });
-  }
+    }
 
   getUnitForSelectedMedicine(): string {
     const med = this.medicine.find(m => m.id === this.selectedMedicineId);
     return med ? String(med.unitsToReceive) : 'unità';
   }
+
+
 
 }

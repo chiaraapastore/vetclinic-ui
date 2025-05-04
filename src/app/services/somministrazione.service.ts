@@ -29,4 +29,6 @@ export class SomministrazioneService {
 
     return this.http.post<{ message: string }>(`${this.assistenteUrl}/somministra-farmaco`, null, { params });
   }
+
+
 }
