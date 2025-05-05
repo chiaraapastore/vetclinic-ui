@@ -14,6 +14,7 @@ import {PazientiAnimaliComponent} from './pazienti-animali/pazienti-animali.comp
 import {AppuntamentiAssistenteComponent} from './appuntamenti-assistente/appuntamenti-assistente.component';
 import {PagamentiComponent} from './pagamenti/pagamenti.component';
 import {SomministrazioniComponent} from './somministrazioni/somministrazioni.component';
+import {MagazzinoAssistenteComponent} from './magazzino-assistente/magazzino-assistente.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -27,6 +28,7 @@ const routes: Routes = [
   {path: 'appuntamenti', component: AppuntamentiAssistenteComponent, canActivate: [AuthGuard], data: { roles: ['assistente'] } },
   {path: 'pagamenti', component: PagamentiComponent,canActivate: [AuthGuard], data: { roles: ['assistente'] } },
   {path: 'somministrazioni', component: SomministrazioniComponent, canActivate: [AuthGuard], data: { roles: ['assistente', 'veterinario'] } },
+  {path: 'magazzino-assistente', component:MagazzinoAssistenteComponent, canActivate: [AuthGuard], data: { roles: ['assistente'] } },
   { path: 'profile', component: ProfiloComponent, canActivate: [AuthGuard] },
   { path: 'error', component: ErrorComponent },
   { path: '**', redirectTo: 'error' }

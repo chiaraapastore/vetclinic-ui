@@ -24,6 +24,7 @@ import { AppuntamentiAssistenteComponent } from './appuntamenti-assistente/appun
 import {FullCalendarModule} from '@fullcalendar/angular';
 import { PagamentiComponent } from './pagamenti/pagamenti.component';
 import {SomministrazioniComponent} from './somministrazioni/somministrazioni.component';
+import { MagazzinoAssistenteComponent } from './magazzino-assistente/magazzino-assistente.component';
 
 
 export function initializeKeycloak(keycloak: KeycloakService, platformId: Object) {
@@ -61,6 +62,7 @@ export function initializeKeycloak(keycloak: KeycloakService, platformId: Object
     VeterinarioComponent,
     AssistenteComponent,
     PagamentiComponent,
+    MagazzinoAssistenteComponent,
     SomministrazioniComponent,
     ErrorComponent,
     AdminComponent,
@@ -72,6 +74,7 @@ export function initializeKeycloak(keycloak: KeycloakService, platformId: Object
     ProfiloComponent,
     PazientiAnimaliComponent,
     PagamentiComponent,
+    MagazzinoAssistenteComponent,
   ],
   imports: [
     BrowserModule,

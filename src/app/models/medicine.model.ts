@@ -2,12 +2,14 @@ import {Reparto} from './reparto.model';
 import {Magazzino} from './magazzino.model';
 
 export interface Medicine {
-  id?: number;
+  expirationDate: string | Date;
+  categoria: string;
+  id: number;
   name: string;
   description?: string;
   availableQuantity: number;
   quantity: number;
-  expiryDate?: Date;
+  expiryDate: string | Date;
   currentStock?: number;
   pendingOrders?: number;
   unitsToReceive?: number;
