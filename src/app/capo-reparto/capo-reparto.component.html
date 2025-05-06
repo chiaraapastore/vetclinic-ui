@@ -1,1 +1,90 @@
-<p>capo-reparto works!</p>
+<div class="dashboard">
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <img src="https://i.pinimg.com/736x/2d/04/9c/2d049c8f71b77f969b2190c51d822285.jpg" alt="Logo Clinica">
+    </div>
+
+    <ul class="sidebar-menu">
+      <li><a routerLink="/pazienti-animali-capo-reparto"><i class="fa-solid fa-paw"></i> Pazienti Animali</a></li>
+      <li><a routerLink="/magazzino-capo-reparto"><i class="fa-solid fa-warehouse"></i> Magazzino</a></li>
+      <li><a routerLink="/calendario-capo-reparto"><i class="fas fa-calendar-alt"></i> Calendario Turni & Ferie</a></li>
+      <li><a routerLink="/personale-reparto"><i class="fas fa-user-md"></i> Personale Reparto </a></li>
+      <li><a routerLink="/profilo-capo-reparto"><i class="fas fa-user-circle"></i> Profilo</a></li>
+    </ul>
+
+    <div class="sidebar-logout">
+      <button (click)="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+  </nav>
+
+  <div class="main">
+    <header class="top-bar">
+      <div class="welcome">
+        <h2>Benvenuto Dott. {{ headOfDepartmentUsername }}</h2>
+        <p>Capo Reparto</p>
+      </div>
+
+      <div class="notifications-wrapper" (click)="toggleDropdown($event)">
+        <i class="fas fa-bell" style="color: #007b5e;"></i>
+        <span *ngIf="unreadNotifications > 0" class="notification-badge">{{ unreadNotifications }}</span>
+      </div>
+
+      <div class="notifications-dropdown" *ngIf="dropdownOpen">
+        <div class="dropdown-header">
+          <h3>Elenco Notifiche</h3>
+        </div>
+        <ul class="notifications-list">
+          <li *ngFor="let notification of notifications" [class.unread]="!notification.letta">
+            <div class="notification-content">
+              <p>{{ notification.messaggio }}</p>
+              <span class="time">{{ getRelativeTime(notification.dataOra) }}</span>
+            </div>
+            <button *ngIf="!notification.letta" class="mark-read-btn" (click)="markAllAsRead($event)"></button>
+          </li>
+        </ul>
+        <div class="notification-buttons">
+          <button class="delete-all-btn" (click)="deleteAllNotifications($event)">Elimina tutte</button>
+        </div>
+      </div>
+    </header>
+
+
+    <section class="cards">
+      <div class="card" (click)="navigateTo( '/pazienti-capo-reparto')">
+        <i class="fa-solid fa-paw" style="color: #007b5e;"></i>
+        <h3>Pazienti Animali</h3>
+      </div>
+      <div class="card" (click)="navigateTo('/magazzino-capo-reparto')">
+        <i class="fa-solid fa-warehouse"style="color: #007b5e;"></i>
+        <h3>Magazzino</h3>
+      </div>
+      <div class="card" (click)="navigateTo('/calendario-capo-reparto')">
+        <i class="fas fa-calendar-alt"></i>
+        <h3>Calendario Turni & Ferie</h3>
+      </div>
+      <div class="card" (click)="navigateTo('/personale-reparto')">
+        <i class="fas fa-user-md"></i>
+        <h3>Personale Reparto</h3>
+      </div>
+    </section>
+
+
+
+    <section class="dashboard-content">
+      <div class="recent-activities">
+        <h3>Attività recenti</h3>
+        <ul>
+          <li *ngFor="let attivita of attivitaRecenti">
+            <i class="fas fa-check-circle"></i> {{ attivita.testo }}
+            <span class="time">{{ attivita.orario }}</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+
+    <footer class="footer">
+      <p>© 2025 VetEnterprise Solutions. Tutti i diritti riservati.</p>
+    </footer>
+  </div>
+</div>
