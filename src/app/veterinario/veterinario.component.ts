@@ -40,17 +40,21 @@ export class VeterinarioComponent implements OnInit {
   }
 
   loadAppuntamentiDelGiorno() {
-    this.appuntamentoService.getMyAppointments().subscribe({
+    this.appuntamentoService.getAppointmentsCreatedByAssistant().subscribe({
       next: (appointments) => {
         const oggi = new Date().toISOString().split('T')[0];
         this.appuntamentiOggi = appointments
-          .filter(app => app.appointmentDate?.startsWith(oggi))
+          .filter(app => {
+            const appDate = new Date(app.appointmentDate).toISOString().split('T')[0];
+            return appDate === oggi;
+          })
           .map(app => ({
             nome: app.animal?.name || 'Animale',
-            orario: app.appointmentDate?.substring(11, 16) || '—',
+            orario: new Date(app.appointmentDate).toISOString().substring(11, 16) || '—',
             tipo: app.reason || 'Visita',
             stato: app.status || 'In attesa'
           }));
+
       },
       error: () => {
         console.error('Errore nel recupero degli appuntamenti di oggi');

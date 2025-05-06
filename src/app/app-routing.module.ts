@@ -22,6 +22,7 @@ import {
 import {
   SomministrazioneVeterinarioComponent
 } from './somministrazione-veterinario/somministrazione-veterinario.component';
+import {AppuntamentiVeterinarioComponent} from './appuntamenti-veterinario/appuntamenti-veterinario.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -32,7 +33,7 @@ const routes: Routes = [
   { path: 'assistente', component: AssistenteComponent, canActivate: [AuthGuard], data: { roles: ['assistente'] } },
   { path: 'cliente', component: ClienteComponent, canActivate: [AuthGuard], data: { roles: ['cliente'] } },
   {path: 'pazienti', component: PazientiAnimaliComponent, canActivate: [AuthGuard], data: { roles: ['assistente'] } },
-  {path: 'appuntamenti', component: AppuntamentiAssistenteComponent, canActivate: [AuthGuard], data: { roles: ['assistente'] } },
+  {path: 'appuntamenti-assistente', component: AppuntamentiAssistenteComponent, canActivate: [AuthGuard], data: { roles: ['assistente', 'veterinario'] } },
   {path: 'pagamenti', component: PagamentiComponent,canActivate: [AuthGuard], data: { roles: ['assistente'] } },
   {path: 'somministrazioni', component: SomministrazioniComponent, canActivate: [AuthGuard], data: { roles: ['assistente', 'veterinario'] } },
   {path: 'magazzino-assistente', component:MagazzinoAssistenteComponent, canActivate: [AuthGuard], data: { roles: ['assistente'] } },
@@ -40,6 +41,7 @@ const routes: Routes = [
   { path: 'profilo-veterinario', component: ProfiloVeterinarioComponent, canActivate: [AuthGuard], data: { roles: ['veterinario'] } },
   {path: 'pazienti-animali-veterinario', component: PazientiAnimaliVeterinarioComponent, canActivate: [AuthGuard], data: { roles: ['veterinario'] } },
   {path: 'somministrazione-veterinario', component: SomministrazioneVeterinarioComponent, canActivate: [AuthGuard], data: { roles: ['veterinario'] } },
+  {path: 'appuntamenti-veterinario', component: AppuntamentiVeterinarioComponent, canActivate: [AuthGuard], data: { roles: ['veterinario'] } },
   { path: 'error', component: ErrorComponent },
   { path: '**', redirectTo: 'error' }
 ];
