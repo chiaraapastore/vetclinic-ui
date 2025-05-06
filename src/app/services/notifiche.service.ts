@@ -21,4 +21,9 @@ export class NotificheService {
     );
   }
 
+  getNotificationsForUser(): Observable<Notifiche[]> {
+    return this.http.get<Notifiche[]>(`${this.apiUrl}/list`);
+  }
+
+
 }

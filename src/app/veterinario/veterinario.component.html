@@ -1,1 +1,105 @@
-<p>veterinario works!</p>
+<div class="dashboard">
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <img src="https://i.pinimg.com/736x/0e/f1/e6/0ef1e673912e6b7b0fdddc60296a9242.jpg" alt="Logo Clinica">
+    </div>
+
+    <ul class="sidebar-menu">
+      <li><a routerLink="/pazienti-animali-veterinario"><i class="fa-solid fa-paw"></i> Pazienti Animali</a></li>
+      <li><a routerLink="/somministrazioni"><i class="fas fa-syringe"></i> Somministrazioni</a></li>
+      <li><a routerLink="/appuntamenti"><i class="fas fa-calendar-alt"></i> Appuntamenti</a></li>
+      <li><a routerLink="/profilo-veterinario"><i class="fas fa-user-circle"></i> Profilo</a></li>
+    </ul>
+
+    <div class="sidebar-logout">
+      <button (click)="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+  </nav>
+
+  <div class="main">
+    <header class="top-bar">
+      <div class="welcome">
+        <h2>Benvenuto Dott. {{ doctorUsername }}</h2>
+        <p>Veterinario</p>
+      </div>
+
+
+      <div class="notifications-wrapper" (click)="toggleDropdown($event)">
+        <i class="fas fa-bell" style="color: #007b5e;"></i>
+        <span *ngIf="unreadNotifications > 0" class="notification-badge">{{ unreadNotifications }}</span>
+      </div>
+
+      <div class="notifications-dropdown" *ngIf="dropdownOpen">
+        <div class="dropdown-header">
+          <h3>Elenco Notifiche</h3>
+        </div>
+        <ul class="notifications-list">
+          <li *ngFor="let notification of notifications" [class.unread]="!notification.letta">
+            <div class="notification-content">
+              <p>{{ notification.messaggio }}</p>
+              <span class="time">{{ getRelativeTime(notification.dataOra) }}</span>
+            </div>
+            <button *ngIf="!notification.letta" class="mark-read-btn" (click)="markAllAsRead($event)"></button>
+          </li>
+        </ul>
+        <div class="notification-buttons">
+          <button class="delete-all-btn" (click)="deleteAllNotifications($event)">Elimina tutte</button>
+        </div>
+      </div>
+    </header>
+
+    <section class="cards">
+      <div class="card" (click)="navigateTo('pazienti-animali-veterinario')">
+        <i class="fa-solid fa-paw"style="color: #007b5e;"></i>
+        <h3>Pazienti Animali</h3>
+      </div>
+      <div class="card" (click)="navigateTo('somministrazioni')">
+        <i class="fas fa-syringe"></i>
+        <h3>Somministrazioni</h3>
+      </div>
+      <div class="card" (click)="navigateTo('appuntamenti')">
+        <i class="fas fa-calendar-alt"></i>
+        <h3>Appuntamenti</h3>
+      </div>
+    </section>
+
+    <section class="dashboard-content">
+
+    <div class="today-appointments">
+        <h3>Appuntamenti di oggi</h3>
+        <table>
+          <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Orario</th>
+            <th>Tipo di visita</th>
+            <th>Stato</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let appuntamento of appuntamentiOggi">
+            <td>{{ appuntamento.nome }}</td>
+            <td>{{ appuntamento.orario }}</td>
+            <td>{{ appuntamento.tipo }}</td>
+            <td><span class="status-label">{{ appuntamento.stato }}</span></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="recent-activities">
+        <h3>Attività recenti</h3>
+        <ul>
+          <li *ngFor="let attivita of attivitaRecenti">
+            <i class="fas fa-check-circle"></i> {{ attivita.testo }}
+            <span class="time">{{ attivita.orario }}</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>© 2025 VetEnterprise Solutions. Tutti i diritti riservati.</p>
+    </footer>
+  </div>
+</div>

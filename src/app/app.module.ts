@@ -10,7 +10,8 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import {AppRoutingModule} from './app-routing.module';
+import { AppRoutingModule } from './app-routing.module';
+
 import { HomeComponent } from './home/home.component';
 import { ErrorComponent } from './error/error.component';
 import { AdminComponent } from './admin/admin.component';
@@ -21,33 +22,27 @@ import { VeterinarioComponent } from './veterinario/veterinario.component';
 import { ProfiloComponent } from './profilo/profilo.component';
 import { PazientiAnimaliComponent } from './pazienti-animali/pazienti-animali.component';
 import { AppuntamentiAssistenteComponent } from './appuntamenti-assistente/appuntamenti-assistente.component';
-import {FullCalendarModule} from '@fullcalendar/angular';
+import { FullCalendarModule } from '@fullcalendar/angular';
 import { PagamentiComponent } from './pagamenti/pagamenti.component';
-import {SomministrazioniComponent} from './somministrazioni/somministrazioni.component';
+import { SomministrazioniComponent } from './somministrazioni/somministrazioni.component';
 import { MagazzinoAssistenteComponent } from './magazzino-assistente/magazzino-assistente.component';
-
+import { ProfiloVeterinarioComponent } from './profilo-veterinario/profilo-vetterinario.component';
+import { PazientiAnimaliVeterinarioComponent } from './pazienti-animali-veterinario/pazienti-animali-veterinario.component';
 
 export function initializeKeycloak(keycloak: KeycloakService, platformId: Object) {
   return () =>
     isPlatformBrowser(platformId)
-      ? keycloak
-        .init({
-          config: {
-            url: 'http://localhost:8080',
-            realm: 'vetclinic-realm',
-            clientId: 'vetclinic-app',
-          },
-          initOptions: {
-            onLoad: 'check-sso',
-            checkLoginIframe: false,
-          },
-        })
-        .then(() => {
-          console.log('Keycloak inizializzato con successo');
-        })
-        .catch((err) => {
-          console.error('Errore inizializzazione Keycloak:', err);
-        })
+      ? keycloak.init({
+        config: {
+          url: 'http://localhost:8080',
+          realm: 'vetclinic-realm',
+          clientId: 'vetclinic-app',
+        },
+        initOptions: {
+          onLoad: 'check-sso',
+          checkLoginIframe: false,
+        },
+      })
       : Promise.resolve();
 }
 
@@ -59,22 +54,16 @@ export function initializeKeycloak(keycloak: KeycloakService, platformId: Object
     AdminComponent,
     ClienteComponent,
     CapoRepartoComponent,
-    VeterinarioComponent,
     AssistenteComponent,
     PagamentiComponent,
     MagazzinoAssistenteComponent,
+    VeterinarioComponent,
     SomministrazioniComponent,
     ErrorComponent,
-    AdminComponent,
-    AssistenteComponent,
     AppuntamentiAssistenteComponent,
-    ClienteComponent,
-    CapoRepartoComponent,
-    VeterinarioComponent,
-    ProfiloComponent,
+    ProfiloVeterinarioComponent,
     PazientiAnimaliComponent,
-    PagamentiComponent,
-    MagazzinoAssistenteComponent,
+    PazientiAnimaliVeterinarioComponent,
   ],
   imports: [
     BrowserModule,
@@ -115,4 +104,4 @@ export function initializeKeycloak(keycloak: KeycloakService, platformId: Object
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

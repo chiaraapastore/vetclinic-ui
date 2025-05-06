@@ -15,6 +15,10 @@ import {AppuntamentiAssistenteComponent} from './appuntamenti-assistente/appunta
 import {PagamentiComponent} from './pagamenti/pagamenti.component';
 import {SomministrazioniComponent} from './somministrazioni/somministrazioni.component';
 import {MagazzinoAssistenteComponent} from './magazzino-assistente/magazzino-assistente.component';
+import {ProfiloVeterinarioComponent} from './profilo-veterinario/profilo-vetterinario.component';
+import {
+  PazientiAnimaliVeterinarioComponent
+} from './pazienti-animali-veterinario/pazienti-animali-veterinario.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -24,12 +28,14 @@ const routes: Routes = [
   { path: 'veterinario', component: VeterinarioComponent, canActivate: [AuthGuard], data: { roles: ['veterinario'] } },
   { path: 'assistente', component: AssistenteComponent, canActivate: [AuthGuard], data: { roles: ['assistente'] } },
   { path: 'cliente', component: ClienteComponent, canActivate: [AuthGuard], data: { roles: ['cliente'] } },
-  {path: 'pazienti', component: PazientiAnimaliComponent, canActivate: [AuthGuard], data: { roles: ['assistente', 'veterinario'] } },
+  {path: 'pazienti', component: PazientiAnimaliComponent, canActivate: [AuthGuard], data: { roles: ['assistente'] } },
   {path: 'appuntamenti', component: AppuntamentiAssistenteComponent, canActivate: [AuthGuard], data: { roles: ['assistente'] } },
   {path: 'pagamenti', component: PagamentiComponent,canActivate: [AuthGuard], data: { roles: ['assistente'] } },
   {path: 'somministrazioni', component: SomministrazioniComponent, canActivate: [AuthGuard], data: { roles: ['assistente', 'veterinario'] } },
   {path: 'magazzino-assistente', component:MagazzinoAssistenteComponent, canActivate: [AuthGuard], data: { roles: ['assistente'] } },
-  { path: 'profile', component: ProfiloComponent, canActivate: [AuthGuard] },
+  { path: 'profile', component: ProfiloComponent, canActivate: [AuthGuard], data: { roles: ['assistente'] } },
+  { path: 'profilo-veterinario', component: ProfiloVeterinarioComponent, canActivate: [AuthGuard], data: { roles: ['veterinario'] } },
+  {path: 'pazienti-animali-veterinario', component: PazientiAnimaliVeterinarioComponent, canActivate: [AuthGuard], data: { roles: ['veterinario'] } },
   { path: 'error', component: ErrorComponent },
   { path: '**', redirectTo: 'error' }
 ];

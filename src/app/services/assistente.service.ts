@@ -34,8 +34,6 @@ export class AssistenteService {
   }
 
 
-
-
   getOrdini(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/list-order`);
   }
