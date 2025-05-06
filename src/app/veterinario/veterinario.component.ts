@@ -32,47 +32,37 @@ export class VeterinarioComponent implements OnInit {
 
   ngOnInit() {
     this.getDoctorUsername();
-    this.listenForNewNotifications();
     this.loadAppuntamentiDelGiorno();
   }
 
-  navigateTo(route: string): void {
-    this.router.navigate([`/${route}`]);
+  navigateTo(route: string) {
+    this.router.navigate([route]);
   }
 
   loadAppuntamentiDelGiorno() {
-    this.authenticationService.getUserInfo().subscribe(user => {
-      const vetId = user?.id;
-      if (!vetId) return;
-
-      this.userId = vetId;
-
-      this.appuntamentoService.getAppointmentsByVeterinarian(vetId).subscribe({
-        next: (appointments) => {
-          const oggi = new Date().toISOString().split('T')[0];
-          this.appuntamentiOggi = appointments
-            .filter(app => app.appointmentDate?.startsWith(oggi))
-            .map(app => ({
-              nome: app.animal?.name || 'Animale',
-              orario: app.appointmentDate?.substring(11, 16) || '—',
-              tipo: app.reason || 'Visita',
-              stato: app.status || 'In attesa'
-            }));
-        },
-        error: () => {
-          console.error('Errore nel recupero degli appuntamenti di oggi');
-        }
-      });
-
-      this.loadAttivitaRecenti();
+    this.appuntamentoService.getMyAppointments().subscribe({
+      next: (appointments) => {
+        const oggi = new Date().toISOString().split('T')[0];
+        this.appuntamentiOggi = appointments
+          .filter(app => app.appointmentDate?.startsWith(oggi))
+          .map(app => ({
+            nome: app.animal?.name || 'Animale',
+            orario: app.appointmentDate?.substring(11, 16) || '—',
+            tipo: app.reason || 'Visita',
+            stato: app.status || 'In attesa'
+          }));
+      },
+      error: () => {
+        console.error('Errore nel recupero degli appuntamenti di oggi');
+      }
     });
+    this.loadAttivitaRecenti();
   }
 
   loadAttivitaRecenti() {
     this.authenticationService.getUserInfo().subscribe(user => {
       const vetId = user?.id;
       if (!vetId) return;
-
 
       this.appuntamentoService.getVeterinarianPatients().subscribe({
         next: (pazienti) => {
@@ -92,20 +82,8 @@ export class VeterinarioComponent implements OnInit {
           });
         }
       });
-
-      this.notificationService.getNotificationsForUser().subscribe({
-        next: (notifiche) => {
-          const noti = notifiche.map((n: any) => ({
-            testo: n.messaggio,
-            orario: this.getRelativeTime(n.dataOra)
-          }));
-          this.attivitaRecenti.push(...noti);
-          this.attivitaRecenti.sort((a, b) => a.orario < b.orario ? 1 : -1);
-        }
-      });
     });
   }
-
 
   async getDoctorUsername() {
     try {
@@ -129,9 +107,10 @@ export class VeterinarioComponent implements OnInit {
 
   loadNotifications() {
     if (!this.userId) return;
-    this.notificationService.markAllNotificationsAsRead().subscribe({
+    this.notificationService.getNotificationsForUser().subscribe({
       next: (notifications) => {
         this.notifications = notifications;
+        this.unreadNotifications = notifications.filter(n => !n.letta).length;
       },
       error: (err) => console.error('Errore nel recupero notifiche:', err)
     });
@@ -140,7 +119,8 @@ export class VeterinarioComponent implements OnInit {
   markAllAsRead(event: Event) {
     event.stopPropagation();
     this.notificationService.markAllNotificationsAsRead().subscribe(() => {
-      this.loadNotifications();
+      this.notifications.forEach(n => n.letta = true);
+      this.unreadNotifications = 0;
     });
   }
 
@@ -167,13 +147,6 @@ export class VeterinarioComponent implements OnInit {
     if (diff < 86400) return `${Math.floor(diff / 3600)} ore fa`;
     return `${Math.floor(diff / 86400)} giorni fa`;
   }
-
-  listenForNewNotifications() {
-    setInterval(() => {
-      this.loadNotifications();
-    }, 5000);
-  }
-
 
   logout() {
     this.authenticationService.logout();

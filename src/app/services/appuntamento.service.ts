@@ -21,6 +21,10 @@ export class AppuntamentoService {
     return this.http.get<any[]>(`${this.assistenteUrl}/get-veterinarian-patients`);
   }
 
+  getMyAppointments(): Observable<Appuntamento[]> {
+    return this.http.get<Appuntamento[]>(`${this.appuntamentiUrl}/my`);
+  }
+
   createAppointment(appointment: {
     animalId: number;
     veterinarianId: number;

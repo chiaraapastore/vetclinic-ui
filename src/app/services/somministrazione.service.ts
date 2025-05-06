@@ -7,7 +7,7 @@ import { Somministrazione } from '../models/somministrazione.model';
   providedIn: 'root'
 })
 export class SomministrazioneService {
-  private somministrazioneUrl = 'http://localhost:8081/somministrazioni';
+  private somministrazioneUrl = 'http://localhost:8081/api/somministrazioni';
   private assistenteUrl = 'http://localhost:8081/api/assistente';
 
   constructor(private http: HttpClient) {}

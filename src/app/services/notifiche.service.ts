@@ -12,18 +12,15 @@ export class NotificheService {
 
   constructor(private http: HttpClient) {}
 
-  markAllNotificationsAsRead(): Observable<Notifiche[]> {
-    return this.http.get<Notifiche[]>(`${this.apiUrl}/mark-all-read`, {}).pipe(
-      catchError((err: any) => {
-        console.error("Errore nel segnare tutte le notifiche come lette:", err);
-        return throwError(() => new Error("Errore nel segnare tutte le notifiche come lette"));
-      })
-    );
-  }
+
 
   getNotificationsForUser(): Observable<Notifiche[]> {
     return this.http.get<Notifiche[]>(`${this.apiUrl}/list`);
   }
 
+
+  markAllNotificationsAsRead(): Observable<Notifiche[]> {
+    return this.http.get<Notifiche[]>(`${this.apiUrl}/mark-all-read`);
+  }
 
 }

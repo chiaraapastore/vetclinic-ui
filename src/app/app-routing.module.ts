@@ -19,6 +19,9 @@ import {ProfiloVeterinarioComponent} from './profilo-veterinario/profilo-vetteri
 import {
   PazientiAnimaliVeterinarioComponent
 } from './pazienti-animali-veterinario/pazienti-animali-veterinario.component';
+import {
+  SomministrazioneVeterinarioComponent
+} from './somministrazione-veterinario/somministrazione-veterinario.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -36,6 +39,7 @@ const routes: Routes = [
   { path: 'profile', component: ProfiloComponent, canActivate: [AuthGuard], data: { roles: ['assistente'] } },
   { path: 'profilo-veterinario', component: ProfiloVeterinarioComponent, canActivate: [AuthGuard], data: { roles: ['veterinario'] } },
   {path: 'pazienti-animali-veterinario', component: PazientiAnimaliVeterinarioComponent, canActivate: [AuthGuard], data: { roles: ['veterinario'] } },
+  {path: 'somministrazione-veterinario', component: SomministrazioneVeterinarioComponent, canActivate: [AuthGuard], data: { roles: ['veterinario'] } },
   { path: 'error', component: ErrorComponent },
   { path: '**', redirectTo: 'error' }
 ];
