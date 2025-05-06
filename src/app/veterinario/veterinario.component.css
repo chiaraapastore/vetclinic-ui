@@ -285,26 +285,35 @@
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  padding: 20px;
+  padding: 0 30px 60px 30px;
+  margin-top: 0;
   background-color: #f9fcfc;
+  flex-wrap: wrap;
+  box-sizing: border-box;
 }
 
-.today-appointments, .recent-activities {
+
+
+.today-appointments,
+.recent-activities {
   flex: 1;
+  min-width: 300px;
+  height: 250px;
+  max-height: 250px;
   background-color: #ffffff;
   border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  max-height: 400px;
+  padding: 15px;
+  box-shadow: 0 5px 20px rgba(0, 121, 107, 0.15);
   overflow-y: auto;
-  margin-top: -202px;
+  font-size: 13px;
+  margin-top: -80px;
 }
 
 .today-appointments h3,
 .recent-activities h3 {
-  font-size: 18px;
-  color: #333;
-  margin-bottom: 15px;
+  font-size: 16px;
+  color: #00796B;
+  margin-bottom: 12px;
   font-weight: 600;
 }
 
@@ -316,17 +325,17 @@
 .today-appointments th,
 .today-appointments td {
   text-align: left;
-  padding: 10px 8px;
+  padding: 6px 5px;
   border-bottom: 1px solid #e0e0e0;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .status-label {
   background-color: #e0f2f1;
   color: #00796b;
-  padding: 4px 10px;
+  padding: 3px 8px;
   border-radius: 12px;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   display: inline-block;
 }
@@ -341,9 +350,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 0;
+  padding: 6px 0;
   border-bottom: 1px solid #f0f0f0;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .recent-activities li i {
@@ -353,13 +362,13 @@
 
 .recent-activities .time {
   color: #757575;
-  font-size: 12px;
+  font-size: 11px;
   white-space: nowrap;
 }
-
 section.dashboard-content {
-  margin-top: 30px;
+  margin-top: 20px;
 }
+
 
 footer {
   background: #00796B;
@@ -376,3 +385,6 @@ footer {
   padding-left: 270px;
   box-sizing: border-box;
 }
+
+
+

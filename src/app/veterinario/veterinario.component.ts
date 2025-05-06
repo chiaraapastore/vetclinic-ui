@@ -33,6 +33,7 @@ export class VeterinarioComponent implements OnInit {
   ngOnInit() {
     this.getDoctorUsername();
     this.loadAppuntamentiDelGiorno();
+    this.loadAttivitaRecenti();
   }
 
   navigateTo(route: string) {
@@ -50,24 +51,21 @@ export class VeterinarioComponent implements OnInit {
           })
           .map(app => ({
             nome: app.animal?.name || 'Animale',
-            orario: new Date(app.appointmentDate).toISOString().substring(11, 16) || '—',
+            orario: new Date(app.appointmentDate).toISOString().substring(11, 16),
             tipo: app.reason || 'Visita',
             stato: app.status || 'In attesa'
           }));
-
       },
       error: () => {
         console.error('Errore nel recupero degli appuntamenti di oggi');
       }
     });
-    this.loadAttivitaRecenti();
   }
 
   loadAttivitaRecenti() {
     this.authenticationService.getUserInfo().subscribe(user => {
       const vetId = user?.id;
       if (!vetId) return;
-
       this.appuntamentoService.getVeterinarianPatients().subscribe({
         next: (pazienti) => {
           pazienti.forEach((paziente: any) => {
@@ -75,19 +73,38 @@ export class VeterinarioComponent implements OnInit {
 
             this.somministrazioneService.getSomministrazioniByPaziente(pazienteId).subscribe({
               next: (somministrazioni) => {
-                const recenti = somministrazioni.map((s: any) => ({
+                const somministrazioniRecenti = somministrazioni.map((s: any) => ({
                   testo: `Somministrato ${s.medicine.name} a ${s.animal.name}`,
                   orario: this.getRelativeTime(s.date)
                 }));
-                this.attivitaRecenti.push(...recenti);
-                this.attivitaRecenti.sort((a, b) => a.orario < b.orario ? 1 : -1);
+                this.attivitaRecenti.push(...somministrazioniRecenti);
+                this.sortAttivita();
               }
             });
           });
         }
       });
+
+      this.notificationService.getNotificationsForUser().subscribe({
+        next: (notifiche) => {
+          const recenti = notifiche.map(n => ({
+            testo: n.message,
+            orario: this.getRelativeTime(n.notificationDate)
+          }));
+          this.attivitaRecenti.push(...recenti);
+          this.attivitaRecenti.sort((a, b) => a.orario < b.orario ? 1 : -1);
+        },
+        error: () => {
+          console.error('Errore nel recupero delle notifiche recenti');
+        }
+      });
     });
   }
+
+  sortAttivita() {
+    this.attivitaRecenti.sort((a, b) => b.orario.localeCompare(a.orario));
+  }
+
 
   async getDoctorUsername() {
     try {
@@ -141,8 +158,8 @@ export class VeterinarioComponent implements OnInit {
     }
   }
 
-  getRelativeTime(dateString: string): string {
-    const date = new Date(dateString);
+  getRelativeTime(dateInput: string | Date): string {
+    const date = new Date(dateInput);
     const now = new Date();
     const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
 
@@ -151,6 +168,7 @@ export class VeterinarioComponent implements OnInit {
     if (diff < 86400) return `${Math.floor(diff / 3600)} ore fa`;
     return `${Math.floor(diff / 86400)} giorni fa`;
   }
+
 
   logout() {
     this.authenticationService.logout();
