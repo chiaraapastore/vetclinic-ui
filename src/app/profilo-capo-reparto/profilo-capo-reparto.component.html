@@ -1,0 +1,36 @@
+<body>
+<button class="back-button" (click)="goBack()">Indietro</button>
+<div class="profile-container">
+  <div class="profile-header">
+
+    <label for="fileInput" class="profile-image-label">
+      <img [src]="userDetails?.profileImage" alt="Profile" class="profile-image" (click)="triggerFileInput()" />
+    </label>
+
+
+    <input type="file" id="fileInput" (change)="onFileSelected($event)" #fileInput hidden />
+  </div>
+
+  <div class="profile-details">
+    <label><strong>Nome:</strong> <input type="text" [(ngModel)]="userDetails.firstName" /></label>
+    <label><strong>Cognome:</strong> <input type="text" [(ngModel)]="userDetails.lastName" /></label>
+
+    <label><strong>Email:</strong> <input type="email" [(ngModel)]="userDetails.email" /></label>
+    <label><strong>Matricola:</strong> <input type="text" [(ngModel)]="userDetails.registrationNumber" /></label>
+    <label><strong>Reparto:</strong>
+      <input type="text" [value]="userDetails.nameDepartment" disabled />
+    </label>
+
+
+
+
+  </div>
+
+  <button class="btn btn-save" (click)="updateProfile()">Salva Modifiche</button>
+</div>
+
+</body>
+<footer class="footer">
+  <p>© 2025 VetEnterprise Solutions. Tutti i diritti riservati.</p>
+</footer>
+<p>profilo-capo-reparto works!</p>
