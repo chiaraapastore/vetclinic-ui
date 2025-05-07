@@ -24,6 +24,7 @@ import {
 } from './somministrazione-veterinario/somministrazione-veterinario.component';
 import {AppuntamentiVeterinarioComponent} from './appuntamenti-veterinario/appuntamenti-veterinario.component';
 import {ProfiloCapoRepartoComponent} from './profilo-capo-reparto/profilo-capo-reparto.component';
+import {MagazzinoCapoRepartoComponent} from './magazzino-capo-reparto/magazzino-capo-reparto.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -38,6 +39,7 @@ const routes: Routes = [
   {path: 'pagamenti', component: PagamentiComponent,canActivate: [AuthGuard], data: { roles: ['assistente'] } },
   {path: 'somministrazioni', component: SomministrazioniComponent, canActivate: [AuthGuard], data: { roles: ['assistente', 'veterinario'] } },
   {path: 'magazzino-assistente', component:MagazzinoAssistenteComponent, canActivate: [AuthGuard], data: { roles: ['assistente'] } },
+  {path: 'magazzino-capo-reparto', component:MagazzinoCapoRepartoComponent, canActivate: [AuthGuard], data: { roles: ['capo-reparto'] } },
   { path: 'profile', component: ProfiloComponent, canActivate: [AuthGuard], data: { roles: ['assistente'] } },
   { path: 'profilo-veterinario', component: ProfiloVeterinarioComponent, canActivate: [AuthGuard], data: { roles: ['veterinario'] } },
   { path: 'profilo-capo-reparto', component: ProfiloCapoRepartoComponent, canActivate: [AuthGuard], data: { roles: ['capo-reparto'] } },

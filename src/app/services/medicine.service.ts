@@ -8,6 +8,7 @@ import { Medicine } from '../models/medicine.model';
 })
 export class MedicineService {
   private baseUrl = 'http://localhost:8081/api/medicines';
+  private urlMagazine = 'http://localhost:8081/api/magazine';
 
   constructor(private http: HttpClient) {}
 
@@ -24,6 +25,11 @@ export class MedicineService {
     return this.http.delete<void>(`${this.baseUrl}/delete/${id}`);
   }
 
+
+  updateStockAndSendReport(magazine: any): Observable<void> {
+    console.log("Inviando richiesta PUT a:", `${this.baseUrl}/update-stock-and-report`, magazine);
+    return this.http.put<void>(`${this.urlMagazine}/update-stock-and-report`, magazine);
+  }
 
 
 

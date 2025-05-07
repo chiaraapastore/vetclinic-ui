@@ -48,4 +48,12 @@ export class CapoRepartoService {
     const params = new HttpParams().set('repartoId', repartoId);
     return this.http.get<{ ferie: Ferie[] }>(`${this.apiUrl}/ferie-non-approvate`, { params });
   }
+
+  updateStockAndSendReport(magazine: any): Observable<{ message: string }> {
+    return this.http.put<{ message: string }>(`${this.apiUrl}/magazine/update-stock-and-report`, magazine);
+  }
+
+
+
+
 }
