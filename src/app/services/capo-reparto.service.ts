@@ -22,6 +22,9 @@ export class CapoRepartoService {
     return this.http.get<Reparto[]>(`${this.apiUrl}/reparti`);
   }
 
+
+
+
   aggiungiMedicinale(medicinale: Medicine): Observable<string> {
     return this.http.post(`${this.apiUrl}/aggiungi-medicinale`, medicinale, { responseType: 'text' });
   }
@@ -82,6 +85,35 @@ export class CapoRepartoService {
   addEventToAnimal(animaleId: number, event: { eventType: string; description: string }): Observable<any> {
     return this.http.post(`${environment.baseUrl}/api/cronologia/add/${animaleId}`, event);
   }
+
+  getFerieDisponibili(repartoId: number): Observable<string[]> {
+    const params = new HttpParams().set('repartoId', repartoId);
+    return this.http.get<string[]>(`${this.apiUrl}/ferie-approvate`, { params });
+  }
+
+
+  assegnaFerie(dottoreId: number, startDate: string, endDate: string): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/ferie`, null, {
+      params: {
+        dottoreId: dottoreId,
+        startDate: startDate,
+        endDate: endDate
+      }
+    });
+  }
+
+  assegnaTurno(utenteId: number, startDate: string, endDate: string): Observable<any> {
+    const params = new HttpParams()
+      .set('startDate', startDate)
+      .set('endDate', endDate)
+      .set('dottoreId', utenteId);
+
+    return this.http.post(`${this.apiUrl}/assegna-turno`, null, { params });
+  }
+
+
+
+
 
 
 }

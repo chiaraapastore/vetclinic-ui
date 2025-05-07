@@ -87,9 +87,11 @@ export class VeterinarioComponent implements OnInit {
 
       this.notificationService.getNotificationsForUser().subscribe({
         next: (notifiche) => {
+          console.log('Notifiche ricevute:', notifiche);
           const recenti = notifiche.map(n => ({
             testo: n.message,
-            orario: this.getRelativeTime(n.notificationDate)
+            orario: this.getRelativeTime(n.notificationDate),
+            tipo: n.type
           }));
           this.attivitaRecenti.push(...recenti);
           this.attivitaRecenti.sort((a, b) => a.orario < b.orario ? 1 : -1);

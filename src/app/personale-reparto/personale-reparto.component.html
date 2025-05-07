@@ -2,58 +2,152 @@
 <button class="back-button" (click)="goBack()">Indietro</button>
 
 <main class="main-content">
-<div class="section">
-  <h2>Veterinari</h2>
-  <div class="table-wrapper" *ngIf="veterinari.length > 0; else noVets">
-    <table>
-      <thead>
-      <tr>
-        <th>Nome</th>
-        <th>Cognome</th>
-        <th>Email</th>
-        <th>Matricola</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let vet of veterinari">
-        <td>{{ vet.firstName }}</td>
-        <td>{{ vet.lastName }}</td>
-        <td>{{ vet.email }}</td>
-        <td>{{ vet.registrationNumber }}</td>
+  <div class="section">
+    <h2>Veterinari</h2>
+    <div class="table-wrapper" *ngIf="veterinari.length > 0; else noVets">
+      <table>
+        <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Cognome</th>
+          <th>Email</th>
+          <th>Matricola</th>
+          <th>Azioni</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let vet of veterinari">
+          <td>{{ vet.firstName }}</td>
+          <td>{{ vet.lastName }}</td>
+          <td>{{ vet.email }}</td>
+          <td>{{ vet.registrationNumber }}</td>
+          <td>
+            <div class="action-group">
+              <button class="action-btn" title="Cambio Reparto" (click)="vet.showReparto = !vet.showReparto">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+              <select *ngIf="vet.showReparto" class="action-select" (change)="cambiaRepartoDottore(vet.id, $event)">
+                <option *ngFor="let reparto of reparti" [value]="reparto.id">{{ reparto.name }}</option>
+              </select>
 
-      </tr>
-      </tbody>
-    </table>
+              <button class="action-btn" title="Assegna Ferie" (click)="vet.showFerie = !vet.showFerie">
+                <i class="fas fa-calendar-check"></i>
+              </button>
+              <div *ngIf="vet.showFerie" class="ferie-date-inputs">
+                <input type="date" [(ngModel)]="vet.startDate" placeholder="Inizio">
+                <input type="date" [(ngModel)]="vet.endDate" placeholder="Fine">
+                <button class="confirm-btn" (click)="assegnaFerie(vet.id, vet.startDate, vet.endDate)">
+                  Conferma
+                </button>
+              </div>
+
+              <button class="action-btn" title="Assegna Turno" (click)="vet.showTurnoTable = !vet.showTurnoTable">
+                <i class="fas fa-user-clock"></i>
+              </button>
+            </div>
+            <div *ngIf="vet.showTurnoTable" class="turno-table-inline">
+              <table>
+                <thead>
+                <tr>
+                  <th>Giorno</th>
+                  <th *ngFor="let turno of turni">{{ turno }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let giorno of giorniSettimana">
+                  <td>{{ giorno }}</td>
+                  <td *ngFor="let turno of turni"
+                      (click)="assegnaTurno(vet.id, giorno, turno)"
+                      [ngStyle]="{ 'background-color': getTurnoColor(vet.id, giorno, turno) }"
+                      class="turno-cell">
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noVets>
+      <div class="no-data">Nessun veterinario trovato.</div>
+    </ng-template>
   </div>
-  <ng-template #noVets><div class="no-data">Nessun veterinario trovato.</div></ng-template>
-</div>
+
+  <div class="section">
+    <h2>Assistenti</h2>
+    <div class="table-wrapper" *ngIf="assistenti.length > 0; else noAssistants">
+      <table>
+        <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Cognome</th>
+          <th>Email</th>
+          <th>Matricola</th>
+          <th>Azioni</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let ass of assistenti">
+          <td>{{ ass.firstName }}</td>
+          <td>{{ ass.lastName }}</td>
+          <td>{{ ass.email }}</td>
+          <td>{{ ass.registrationNumber }}</td>
+          <td>
+            <div class="action-group">
+              <button class="action-btn" title="Cambio Reparto" (click)="ass.showReparto = !ass.showReparto">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+              <select *ngIf="ass.showReparto" class="action-select" (change)="cambiaRepartoDottore(ass.id, $event)">
+                <option *ngFor="let reparto of reparti" [value]="reparto.id">{{ reparto.name }}</option>
+              </select>
+
+              <button class="action-btn" title="Assegna Ferie" (click)="ass.showFerie = !ass.showFerie">
+                <i class="fas fa-calendar-check"></i>
+              </button>
+              <div *ngIf="ass.showFerie" class="ferie-date-inputs">
+                <input type="date" [(ngModel)]="ass.startDate" placeholder="Inizio">
+                <input type="date" [(ngModel)]="ass.endDate" placeholder="Fine">
+                <button class="confirm-btn" (click)="assegnaFerie(ass.id, ass.startDate, ass.endDate)">
+                  Conferma
+                </button>
+              </div>
 
 
-<div class="section">
-  <h2>Assistenti</h2>
-  <div class="table-wrapper" *ngIf="assistenti.length > 0; else noAssistants">
-    <table>
-      <thead>
-      <tr>
-        <th>Nome</th>
-        <th>Cognome</th>
-        <th>Email</th>
-        <th>Matricola</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let ass of assistenti">
-        <td>{{ ass.firstName }}</td>
-        <td>{{ ass.lastName }}</td>
-        <td>{{ ass.email }}</td>
-        <td>{{ ass.registrationNumber }}</td>
-      </tr>
-      </tbody>
-    </table>
+              <button class="action-btn" title="Assegna Turno" (click)="ass.showTurnoTable = !ass.showTurnoTable">
+                <i class="fas fa-user-clock"></i>
+              </button>
+            </div>
+            <div *ngIf="ass.showTurnoTable" class="turno-table-inline">
+              <table>
+                <thead>
+                <tr>
+                  <th>Giorno</th>
+                  <th *ngFor="let turno of turni">{{ turno }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let giorno of giorniSettimana">
+                  <td>{{ giorno }}</td>
+                  <td *ngFor="let turno of turni"
+                      (click)="assegnaTurno(ass.id, giorno, turno)"
+                      [ngStyle]="{ 'background-color': getTurnoColor(ass.id, giorno, turno) }"
+                      class="turno-cell">
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noAssistants>
+      <div class="no-data">Nessun assistente trovato.</div>
+    </ng-template>
   </div>
-  <ng-template #noAssistants><div class="no-data">Nessun assistente trovato.</div></ng-template>
-</div>
-
 </main>
 </body>
 

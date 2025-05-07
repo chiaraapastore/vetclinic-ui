@@ -10,6 +10,7 @@ import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
 import Swal from 'sweetalert2';
 import { Location } from '@angular/common';
+import {FerieTurniService} from '../services/ferie-turni.service';
 
 @Component({
   selector: 'app-appuntamenti-veterinario',
@@ -42,11 +43,14 @@ export class AppuntamentiVeterinarioComponent  implements OnInit {
     private appuntamentoService: AppuntamentoService,
     private toastr: ToastrService,
     private router: Router,
-    private location: Location
+    private location: Location,
+    private ferieTurniService: FerieTurniService
   ) {}
 
   ngOnInit(): void {
     this.loadData();
+    this.caricaFerie();
+    this.caricaTurni();
   }
 
   goBack(): void {
@@ -75,13 +79,78 @@ export class AppuntamentiVeterinarioComponent  implements OnInit {
       next: (appointments) => {
         console.log('Appuntamenti ricevuti:', appointments);
         this.appointments = appointments;
-        this.updateCalendarEvents();
+        this.loadFerieETurni();
       },
       error: () => {
         this.toastr.error('Errore caricando appuntamenti.');
       }
     });
   }
+
+  caricaTurni(): void {
+    this.ferieTurniService.getTurniUtente().subscribe(turni => {
+      const calendarApi = this.calendarComponent.getApi();
+      turni.forEach(t => {
+        calendarApi.addEvent({
+          title: 'Turno assegnato',
+          start: new Date(t.startTime),
+          end: new Date(t.endTime),
+          color: '#81c784'
+        });
+      });
+    });
+  }
+
+  caricaFerie(): void {
+    const oggi = new Date();
+    const startDate = new Date(oggi.getFullYear(), oggi.getMonth(), 1).toISOString().split('T')[0];
+    const endDate = new Date(oggi.getFullYear(), oggi.getMonth() + 1, 0).toISOString().split('T')[0];
+    this.ferieTurniService.getFerieUtente(startDate, endDate).subscribe(ferie => {
+      const calendarApi = this.calendarComponent.getApi();
+      ferie.forEach(f => {
+        calendarApi.addEvent({
+          title: 'Ferie',
+          start: new Date(f.startDate),
+          end: new Date(f.endDate),
+          color: '#f44336'
+        });
+      });
+    });
+  }
+
+  loadFerieETurni(): void {
+    const calendarApi = this.calendarComponent.getApi();
+    const oggi = new Date();
+    const startDate = new Date(oggi.getFullYear(), oggi.getMonth(), 1).toISOString().split('T')[0];
+    const endDate = new Date(oggi.getFullYear(), oggi.getMonth() + 1, 0).toISOString().split('T')[0];
+
+    this.updateCalendarEvents();
+
+    this.ferieTurniService.getFerieUtente(startDate, endDate).subscribe(ferie => {
+      ferie.forEach(f => {
+        calendarApi.addEvent({
+          title: 'Ferie',
+          start: f.startDate,
+          end: f.endDate,
+          color: '#ffccbc',
+          textColor: '#000000'
+        });
+      });
+    });
+
+    this.ferieTurniService.getTurniUtente().subscribe(turni => {
+      turni.forEach(t => {
+        calendarApi.addEvent({
+          title: 'Turno',
+          start: t.startDate,
+          end: t.endDate,
+          color: '#c8e6c9',
+          textColor: '#000000'
+        });
+      });
+    });
+  }
+
 
 
   updateCalendarEvents(): void {

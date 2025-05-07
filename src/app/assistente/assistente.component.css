@@ -178,7 +178,7 @@ footer {
 }
 
 .recent-activities.wide-activity-box {
-  width: calc(100% - 310px); /* sottrae la larghezza di una card (pagamenti) e gap */
+  width: calc(100% - 310px);
   min-width: 500px;
   height: 200px;
   background-color: #ffffff;
