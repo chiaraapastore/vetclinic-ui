@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import {FullCalendarComponent} from '@fullcalendar/angular';
 import {Router} from '@angular/router';
 import {FerieTurniService} from '../services/ferie-turni.service';
+import {AuthenticationService} from '../auth/authenticationService';
 
 @Component({
   selector: 'app-appuntamenti-assistente',
@@ -36,6 +37,8 @@ export class AppuntamentiAssistenteComponent implements OnInit {
 
   appointments: Appuntamento[] = [];
   patients: any[] = [];
+  startDate!: string;
+  endDate!: string;
 
 
 
@@ -43,7 +46,8 @@ export class AppuntamentiAssistenteComponent implements OnInit {
     private appuntamentoService: AppuntamentoService,
     private toastr: ToastrService,
     private router: Router,
-    private ferieTurniService: FerieTurniService
+    private ferieTurniService: FerieTurniService,
+    private authService: AuthenticationService
   ) {}
 
   ngOnInit(): void {
@@ -86,6 +90,28 @@ export class AppuntamentiAssistenteComponent implements OnInit {
     });
   }
 
+
+  richiediFerie(): void {
+    if (!this.startDate || !this.endDate) {
+      this.toastr.error('Inserisci una data di inizio e fine valida.');
+      return;
+    }
+
+    const start = new Date(this.startDate);
+    const end = new Date(this.endDate);
+
+    if (start >= end) {
+      this.toastr.error('La data di fine deve essere successiva alla data di inizio.');
+      return;
+    }
+
+    this.authService.getUserInfo().subscribe(user => {
+      this.ferieTurniService.richiediFerie(this.startDate, this.endDate, user.id).subscribe({
+        next: () => this.toastr.success('Richiesta ferie inviata.'),
+        error: () => this.toastr.error('Errore durante la richiesta ferie.')
+      });
+    });
+  }
 
   caricaTurni(): void {
 

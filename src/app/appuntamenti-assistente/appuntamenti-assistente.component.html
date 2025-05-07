@@ -6,6 +6,22 @@
     <h2 class="calendar-title">Calendario Appuntamenti</h2>
     <full-calendar #calendar [options]="calendarOptions"></full-calendar>
   </div>
+
+  <div class="richiesta-ferie-panel">
+    <h3>Richiedi Ferie</h3>
+    <form (ngSubmit)="richiediFerie()" #ferieForm="ngForm">
+      <div class="form-group">
+        <label for="start">Data Inizio</label>
+        <input type="date" id="start" name="start" [(ngModel)]="startDate" required />
+      </div>
+      <div class="form-group">
+        <label for="end">Data Fine</label>
+        <input type="date" id="end" name="end" [(ngModel)]="endDate" required />
+      </div>
+      <button type="submit" [disabled]="!ferieForm.form.valid">Invia Richiesta</button>
+    </form>
+  </div>
+
 </main>
 
 <footer class="footer">
