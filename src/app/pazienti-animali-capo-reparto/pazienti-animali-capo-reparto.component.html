@@ -1,0 +1,85 @@
+<body>
+
+<button class="back-button" (click)="goBack()">Indietro</button>
+
+<div class="container">
+  <div class="table-container">
+    <table>
+      <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Specie</th>
+        <th>Razza</th>
+        <th>Microchip</th>
+        <th>Stato</th>
+        <th>Azioni</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let animale of animali">
+        <td>{{ animale.name }}</td>
+        <td>{{ animale.species }}</td>
+        <td>{{ animale.breed }}</td>
+        <td>{{ animale.microchip }}</td>
+        <td>
+                    <span [ngClass]="animale.state === 'Dimesso' ? 'dimesso' : 'ricoverato'">
+                        {{ animale.state }}
+                    </span>
+        </td>
+        <td>
+          <div class="action-group">
+            <button class="action-btn" title="Scarica Cartella Clinica" (click)="downloadMedicalRecord(animale.id!)">
+              <i class="fas fa-file-download"></i>
+            </button>
+            <button class="action-btn" title="Vedi Cronologia" *ngIf="animale.id !== undefined"
+                    (click)="toggleAnimalHistory(animale.id!, animale.name || 'Animale')">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="isLoading" class="loader-container">
+    <div class="loader"></div>
+  </div>
+
+  <div *ngIf="showHistorySection" class="add-event-form">
+    <h2 class="cronologia-title">
+      🐾 Cronologia Clinica di {{ selectedAnimalName }}
+    </h2>
+
+    <h4>Aggiungi Nuovo Evento</h4>
+
+    <input class="input-small" type="text" [(ngModel)]="newEventType" placeholder="Tipo Evento (es: Operazione)">
+    <input class="input-large" type="text" [(ngModel)]="newEventDescription" placeholder="Descrizione evento">
+    <button class="btn-add" (click)="addNewEvent()">+ Aggiungi Evento</button>
+
+    <div *ngIf="selectedAnimalHistory.length > 0" class="history-container">
+      <table>
+        <thead>
+        <tr>
+          <th>Tipo Evento</th>
+          <th>Descrizione</th>
+          <th>Data</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let entry of selectedAnimalHistory">
+          <td>{{ entry.eventType }}</td>
+          <td>{{ entry.description }}</td>
+          <td>{{ entry.eventDate | date:'dd/MM/yyyy' }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</body>
+
+<footer class="footer">
+  <p>© 2025 VetEnterprise Solutions. Tutti i diritti riservati.</p>
+</footer>

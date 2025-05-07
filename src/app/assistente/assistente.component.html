@@ -7,7 +7,7 @@
 
     <ul class="sidebar-menu">
       <li><a routerLink="/pazienti"><i class="fa-solid fa-paw"></i> Pazienti Animali</a></li>
-      <li><a routerLink="/magazzino"><i class="fa-solid fa-warehouse"></i> Magazzino</a></li>
+      <li><a routerLink="/magazzino-assistente"><i class="fa-solid fa-warehouse"></i> Magazzino</a></li>
       <li><a routerLink="/somministrazioni"><i class="fas fa-syringe"></i> Somministrazioni</a></li>
       <li><a routerLink="/appuntamenti-assistente"><i class="fas fa-calendar-alt"></i> Appuntamenti</a></li>
       <li><a routerLink="/pagamenti"><i class="fas fa-credit-card"></i> Pagamenti</a></li>
@@ -27,32 +27,8 @@
         <p>Assistente Veterinario</p>
       </div>
 
-      <div class="notifications-wrapper" (click)="toggleDropdown($event)">
-        <i class="fas fa-bell" style="color: #007b5e;"></i>
-        <span *ngIf="unreadNotifications > 0" class="notification-badge">{{ unreadNotifications }}</span>
-      </div>
-
-      <div class="notifications-dropdown" *ngIf="dropdownOpen">
-        <div class="dropdown-header">
-          <h3>Elenco Notifiche</h3>
-        </div>
-
-        <ul class="notifications-list">
-          <li *ngFor="let notification of notifications" [class.unread]="!notification.letta">
-            <div class="notification-content">
-              <p>{{ notification.messaggio }}</p>
-              <span class="time">{{ getRelativeTime(notification.dataOra) }}</span>
-            </div>
-            <button *ngIf="!notification.letta" class="mark-read-btn" (click)="markAllAsRead($event)">
-            </button>
-          </li>
-        </ul>
-
-        <div class="notification-buttons">
-          <button class="delete-all-btn" (click)="deleteAllNotifications($event)">Elimina tutte</button>
-        </div>
-      </div>
     </header>
+
 
 
     <section class="cards">
@@ -76,7 +52,20 @@
         <i class="fas fa-credit-card"></i>
         <h3>Pagamenti</h3>
       </div>
+      <div class="recent-activities wide-activity-box">
+        <h3>Attività recenti</h3>
+        <ul *ngIf="attivitaRecenti.length > 0; else nessunaAttivita">
+          <li *ngFor="let attivita of attivitaRecenti">
+            <i class="fas fa-check-circle"></i> {{ attivita.testo }}
+            <span class="time">{{ attivita.orario }}</span>
+          </li>
+        </ul>
+        <ng-template #nessunaAttivita>
+          <p style="text-align:center; color: #999;">Nessuna attività recente</p>
+        </ng-template>
+      </div>
     </section>
+
 
     <footer class="footer">
       <p>© 2025 VetEnterprise Solutions. Tutti i diritti riservati.</p>

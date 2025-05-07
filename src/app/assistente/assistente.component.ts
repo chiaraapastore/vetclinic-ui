@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../auth/authenticationService';
 import { NotificheService } from '../services/notifiche.service';
 import { AssistenteService } from '../services/assistente.service';
+import {AppuntamentoService} from '../services/appuntamento.service';
+import {SomministrazioneService} from '../services/somministrazione.service';
 
 @Component({
   selector: 'app-assistente',
@@ -17,6 +19,7 @@ export class AssistenteComponent implements OnInit {
   medicinali: any[] = [];
   pazientiAnimali: any[] = [];
   assistenteUsername: string = '';
+  attivitaRecenti: any[] = [];
   unreadNotifications: number = 0;
   notifications: any[] = [];
   dropdownOpen: boolean = false;
@@ -29,7 +32,9 @@ export class AssistenteComponent implements OnInit {
     public authenticationService: AuthenticationService,
     private router: Router,
     private keycloakService: KeycloakService,
-    private notificationService: NotificheService
+    private notificationService: NotificheService,
+    private appuntamentoService: AppuntamentoService,
+    private somministrazioneService: SomministrazioneService,
   ) {}
 
   ngOnInit() {
@@ -37,7 +42,7 @@ export class AssistenteComponent implements OnInit {
     this.loadRepartoAndData();
     this.caricaPazientiAnimali();
     this.caricaOrdini();
-    this.listenForNewNotifications();
+    this.loadAttivitaRecenti();
   }
 
   loadRepartoAndData() {
@@ -50,6 +55,51 @@ export class AssistenteComponent implements OnInit {
       }
     });
   }
+
+
+  loadAttivitaRecenti() {
+    this.authenticationService.getUserInfo().subscribe(user => {
+      const vetId = user?.id;
+      if (!vetId) return;
+      this.appuntamentoService.getVeterinarianPatients().subscribe({
+        next: (pazienti) => {
+          pazienti.forEach((paziente: any) => {
+            const pazienteId = paziente.id;
+
+            this.somministrazioneService.getSomministrazioniByPaziente(pazienteId).subscribe({
+              next: (somministrazioni) => {
+                const somministrazioniRecenti = somministrazioni.map((s: any) => ({
+                  testo: `Somministrato ${s.medicine.name} a ${s.animal.name}`,
+                  orario: this.getRelativeTime(s.date)
+                }));
+                this.attivitaRecenti.push(...somministrazioniRecenti);
+                this.sortAttivita();
+              }
+            });
+          });
+        }
+      });
+
+      this.notificationService.getNotificationsForUser().subscribe({
+        next: (notifiche) => {
+          const recenti = notifiche.map(n => ({
+            testo: n.message,
+            orario: this.getRelativeTime(n.notificationDate)
+          }));
+          this.attivitaRecenti.push(...recenti);
+          this.attivitaRecenti.sort((a, b) => a.orario < b.orario ? 1 : -1);
+        },
+        error: () => {
+          console.error('Errore nel recupero delle notifiche recenti');
+        }
+      });
+    });
+  }
+
+  sortAttivita() {
+    this.attivitaRecenti.sort((a, b) => b.orario.localeCompare(a.orario));
+  }
+
 
 
 
@@ -87,32 +137,13 @@ export class AssistenteComponent implements OnInit {
 
   loadNotifications() {
     if (!this.userId) return;
-    this.notificationService.markAllNotificationsAsRead().subscribe({
+    this.notificationService.getNotificationsForUser().subscribe({
       next: (notifications) => {
         this.notifications = notifications;
+        this.unreadNotifications = notifications.filter(n => !n.letta).length;
       },
       error: (err) => console.error('Errore nel recupero notifiche:', err)
     });
-  }
-
-  markAllAsRead(event: Event) {
-    event.stopPropagation();
-    this.notificationService.markAllNotificationsAsRead().subscribe(() => {
-      this.loadNotifications();
-    });
-  }
-  deleteAllNotifications(event: Event) {
-    event.stopPropagation();
-    this.notifications = [];
-    this.unreadNotifications = 0;
-  }
-
-  toggleDropdown(event: Event) {
-    event.stopPropagation();
-    this.dropdownOpen = !this.dropdownOpen;
-    if (this.dropdownOpen) {
-      this.loadNotifications();
-    }
   }
 
   @HostListener('document:click', ['$event'])
@@ -122,8 +153,8 @@ export class AssistenteComponent implements OnInit {
     }
   }
 
-  getRelativeTime(dateString: string): string {
-    const date = new Date(dateString);
+  getRelativeTime(dateInput: string | Date): string {
+    const date = new Date(dateInput);
     const now = new Date();
     const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
 
@@ -133,11 +164,7 @@ export class AssistenteComponent implements OnInit {
     return `${Math.floor(diff / 86400)} giorni fa`;
   }
 
-  listenForNewNotifications() {
-    setInterval(() => {
-      this.loadNotifications();
-    }, 5000);
-  }
+
 
   navigateTo(route: string) {
     this.router.navigate([route]);

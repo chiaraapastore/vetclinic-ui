@@ -4,6 +4,9 @@ import {Observable, tap} from 'rxjs';
 import { Reparto } from '../models/reparto.model';
 import { Medicine } from '../models/medicine.model';
 import { Ferie } from '../models/ferie.model';
+import {Animale} from '../models/animale.model';
+import {CronologiaAnimale} from '../models/cronologia-animale.model';
+import {environment} from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -66,4 +69,19 @@ export class CapoRepartoService {
       tap(data => console.log("Dati utente ricevuti:", data))
     );
   }
+
+
+  getPazientiDelReparto(): Observable<Animale[]> {
+    return this.http.get<Animale[]>(`${this.apiUrl}/animali-reparto`);
+  }
+
+  getAnimalFullHistory(animaleId: number): Observable<CronologiaAnimale[]> {
+    return this.http.get<CronologiaAnimale[]>(`${environment.baseUrl}/api/cronologia/animal-history/${animaleId}`);
+  }
+
+  addEventToAnimal(animaleId: number, event: { eventType: string; description: string }): Observable<any> {
+    return this.http.post(`${environment.baseUrl}/api/cronologia/add/${animaleId}`, event);
+  }
+
+
 }
