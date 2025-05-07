@@ -137,20 +137,6 @@ export class VeterinarioComponent implements OnInit {
     });
   }
 
-  markAllAsRead(event: Event) {
-    event.stopPropagation();
-    this.notificationService.markAllNotificationsAsRead().subscribe(() => {
-      this.notifications.forEach(n => n.letta = true);
-      this.unreadNotifications = 0;
-    });
-  }
-
-  deleteAllNotifications(event: Event) {
-    event.stopPropagation();
-    this.notifications = [];
-    this.unreadNotifications = 0;
-  }
-
   @HostListener('document:click', ['$event'])
   closeDropdown(event: Event) {
     if (!event.target || !(event.target as HTMLElement).closest('.notifications-wrapper')) {

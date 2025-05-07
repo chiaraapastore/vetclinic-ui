@@ -32,6 +32,7 @@ import { SomministrazioneVeterinarioComponent } from './somministrazione-veterin
 import { AppuntamentiVeterinarioComponent } from './appuntamenti-veterinario/appuntamenti-veterinario.component';
 import { ProfiloCapoRepartoComponent } from './profilo-capo-reparto/profilo-capo-reparto.component';
 import { MagazzinoCapoRepartoComponent } from './magazzino-capo-reparto/magazzino-capo-reparto.component';
+import { PersonaleRepartoComponent } from './personale-reparto/personale-reparto.component';
 
 export function initializeKeycloak(keycloak: KeycloakService, platformId: Object) {
   return () =>
@@ -72,6 +73,7 @@ export function initializeKeycloak(keycloak: KeycloakService, platformId: Object
     AppuntamentiVeterinarioComponent,
     ProfiloCapoRepartoComponent,
     MagazzinoCapoRepartoComponent,
+    PersonaleRepartoComponent,
   ],
   imports: [
     BrowserModule,

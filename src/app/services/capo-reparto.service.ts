@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {Observable, tap} from 'rxjs';
 import { Reparto } from '../models/reparto.model';
 import { Medicine } from '../models/medicine.model';
 import { Ferie } from '../models/ferie.model';
@@ -11,6 +11,7 @@ import { Ferie } from '../models/ferie.model';
 export class CapoRepartoService {
 
   private apiUrl = 'http://localhost:8081/api/capo-reparto';
+  private urlUtente = 'http://localhost:8081/api/utente';
 
   constructor(private http: HttpClient) {}
 
@@ -53,7 +54,16 @@ export class CapoRepartoService {
     return this.http.put<{ message: string }>(`${this.apiUrl}/magazine/update-stock-and-report`, magazine);
   }
 
+  getPersonaleDelReparto(repartoId: number): Observable<{ veterinari: any[], assistenti: any[] }> {
+    return this.http.get<{ veterinari: any[], assistenti: any[] }>(
+      `${this.apiUrl}/personale-reparto/${repartoId}`
+    );
+  }
 
 
-
+  getUserInfo(): Observable<any> {
+    return this.http.get<any>(`${this.urlUtente}/user-info`).pipe(
+      tap(data => console.log("Dati utente ricevuti:", data))
+    );
+  }
 }

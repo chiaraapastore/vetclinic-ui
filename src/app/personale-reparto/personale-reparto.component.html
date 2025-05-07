@@ -1,0 +1,64 @@
+<body>
+<button class="back-button" (click)="goBack()">Indietro</button>
+
+<main class="main-content">
+<div class="section">
+  <h2>Veterinari</h2>
+  <div class="table-wrapper" *ngIf="veterinari.length > 0; else noVets">
+    <table>
+      <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Cognome</th>
+        <th>Email</th>
+        <th>Matricola</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let vet of veterinari">
+        <td>{{ vet.firstName }}</td>
+        <td>{{ vet.lastName }}</td>
+        <td>{{ vet.email }}</td>
+        <td>{{ vet.registrationNumber }}</td>
+
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <ng-template #noVets><div class="no-data">Nessun veterinario trovato.</div></ng-template>
+</div>
+
+
+<div class="section">
+  <h2>Assistenti</h2>
+  <div class="table-wrapper" *ngIf="assistenti.length > 0; else noAssistants">
+    <table>
+      <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Cognome</th>
+        <th>Email</th>
+        <th>Matricola</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let ass of assistenti">
+        <td>{{ ass.firstName }}</td>
+        <td>{{ ass.lastName }}</td>
+        <td>{{ ass.email }}</td>
+        <td>{{ ass.registrationNumber }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <ng-template #noAssistants><div class="no-data">Nessun assistente trovato.</div></ng-template>
+</div>
+
+</main>
+</body>
+
+<footer>
+  <div class="footer-bottom">
+    <p>© 2025 HospitalCare. Tutti i diritti riservati.</p>
+  </div>
+</footer>

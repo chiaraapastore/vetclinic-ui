@@ -145,28 +145,6 @@ export class CapoRepartoComponent implements OnInit {
     });
   }
 
-  markAllAsRead(event: Event) {
-    event.stopPropagation();
-    this.notificationService.markAllNotificationsAsRead().subscribe(() => {
-      this.notifications.forEach(n => n.letta = true);
-      this.unreadNotifications = 0;
-    });
-  }
-
-  deleteAllNotifications(event: Event) {
-    event.stopPropagation();
-    this.notifications = [];
-    this.unreadNotifications = 0;
-  }
-
-  toggleDropdown(event: Event) {
-    event.stopPropagation();
-    this.dropdownOpen = !this.dropdownOpen;
-    if (this.dropdownOpen) {
-      this.loadNotifications();
-    }
-  }
-
 
   @HostListener('document:click', ['$event'])
   closeDropdown(event: Event) {
