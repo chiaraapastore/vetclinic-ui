@@ -223,10 +223,15 @@ export class CapoRepartoComponent implements OnInit {
           `Le ferie di ${attivita.utente.firstName} ${attivita.utente.lastName} dal ${attivita.startDate} al ${attivita.endDate} sono state approvate.`,
           attivita.utente.id
         ).subscribe();
+      this.attivitaRecenti = this.attivitaRecenti.filter(a =>
+        !(a.id === attivita.id && a.isFerie)
+      );
 
-      this.attivitaRecenti = this.attivitaRecenti.filter(a => a.id !== attivita.id);
       this.feriePendenti = this.feriePendenti.filter(f => f.id !== attivita.id);
+      this.caricaFeriePendenti();
+
     });
+
   }
 
   rifiuta(attivita: any) {
@@ -243,10 +248,13 @@ export class CapoRepartoComponent implements OnInit {
           `Le ferie di ${attivita.utente.firstName} ${attivita.utente.lastName} dal ${attivita.startDate} al ${attivita.endDate} sono state rifiutate.`,
           attivita.utente.id
         ).subscribe();
+      this.caricaFeriePendenti();
+      this.loadAttivitaRecenti();
 
       this.attivitaRecenti = this.attivitaRecenti.filter(a => a.id !== attivita.id);
       this.feriePendenti = this.feriePendenti.filter(f => f.id !== attivita.id);
     });
+
   }
 
 

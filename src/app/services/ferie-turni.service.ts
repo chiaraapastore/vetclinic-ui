@@ -39,4 +39,12 @@ export class FerieTurniService {
       .set('endDate', endDate);
     return this.http.post<any>(`${this.urlBase}/richiedi-ferie`, null, {params});
   }
+
+  getFerieApprovate(startDate: string, endDate: string): Observable<any[]> {
+    const params = new HttpParams()
+      .set('startDate', startDate)
+      .set('endDate', endDate);
+
+    return this.http.get<any[]>(`${this.urlFerie}/ferie-approvate-dettagliate`, { params });
+  }
 }

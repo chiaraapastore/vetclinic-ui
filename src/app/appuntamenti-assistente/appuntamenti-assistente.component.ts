@@ -52,8 +52,6 @@ export class AppuntamentiAssistenteComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
-    this.caricaFerie();
-    this.caricaTurni();
   }
 
   goBack(): void {
@@ -149,21 +147,37 @@ export class AppuntamentiAssistenteComponent implements OnInit {
 
 
   loadFerieETurni(): void {
-    const oggi = new Date();
     const calendarApi = this.calendarComponent.getApi();
+    calendarApi.removeAllEvents();
+
+    const oggi = new Date();
     const startDate = new Date(oggi.getFullYear(), oggi.getMonth(), 1).toISOString().split('T')[0];
     const endDate = new Date(oggi.getFullYear(), oggi.getMonth() + 1, 0).toISOString().split('T')[0];
 
-    this.updateCalendarEvents();
 
     this.ferieTurniService.getFerieUtente(startDate, endDate).subscribe(ferie => {
+      ferie
+        .filter(f => !f.approvato)
+        .forEach(f => {
+          calendarApi.addEvent({
+            title: 'Ferie richieste',
+            start: f.startDate,
+            end: f.endDate,
+            color: '#ffcc80',
+            textColor: '#000000'
+          });
+        });
+    });
+
+
+    this.ferieTurniService.getFerieApprovate(startDate, endDate).subscribe(ferie => {
       ferie.forEach(f => {
         calendarApi.addEvent({
-          title: 'Ferie',
-          start: f.startDate,
-          end: f.endDate,
-          color: '#ffccbc',
-          textColor: '#000000'
+          title: 'Ferie approvate',
+          start: new Date(f.startDate),
+          end: new Date(f.endDate),
+          color: '#64b5f6',
+          textColor: '#ffffff'
         });
       });
     });
@@ -180,6 +194,7 @@ export class AppuntamentiAssistenteComponent implements OnInit {
       });
     });
   }
+
 
 
   updateCalendarEvents(): void {
