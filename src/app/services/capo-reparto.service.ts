@@ -53,8 +53,16 @@ export class CapoRepartoService {
 
   getFerieNonApprovate(repartoId: number): Observable<{ ferie: Ferie[] }> {
     const params = new HttpParams().set('repartoId', repartoId);
-    return this.http.get<{ ferie: Ferie[] }>(`${this.apiUrl}/ferie-non-approvate`, { params });
+    return this.http.get<{ ferie: Ferie[] }>(`${this.apiUrl}/ferie-non-approvate-capo`, { params });
   }
+
+  rifiutaFerie(ferieId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/rifiuta-ferie/${ferieId}`, {
+      responseType: 'text'
+    });
+  }
+
+
 
   updateStockAndSendReport(magazine: any): Observable<{ message: string }> {
     return this.http.put<{ message: string }>(`${this.apiUrl}/magazine/update-stock-and-report`, magazine);

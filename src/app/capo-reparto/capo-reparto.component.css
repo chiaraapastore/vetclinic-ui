@@ -288,4 +288,26 @@ footer {
 }
 
 
+.ferie-pendenti ul {
+  list-style: none;
+  padding: 0;
+}
+.ferie-pendenti li {
+  margin: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.btn-approva, .btn-rifiuta {
+  border: none;
+  cursor: pointer;
+  font-size: 1.2em;
+  margin-left: 10px;
+}
+.btn-approva {
+  color: green;
+}
+.btn-rifiuta {
+  color: red;
+}
 

@@ -7,6 +7,7 @@ import {CapoRepartoService} from '../services/capo-reparto.service';
 import {AuthenticationService} from '../auth/authenticationService';
 import {AppuntamentoService} from '../services/appuntamento.service';
 import {SomministrazioneService} from '../services/somministrazione.service';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-capo-reparto',
@@ -27,6 +28,7 @@ export class CapoRepartoComponent implements OnInit {
   dropdownOpen: boolean = false;
   selectedRepartoId!: number;
   selectedPatientName: string = '';
+  feriePendenti: any[] = [];
 
   constructor(
     private doctorService: VeterinarioService,
@@ -37,6 +39,7 @@ export class CapoRepartoComponent implements OnInit {
     private appuntamentoService: AppuntamentoService,
     private notificationService: NotificheService,
     private headOfDepartmentService: CapoRepartoService,
+    private toastr: ToastrService,
   ) {}
 
   ngOnInit() {
@@ -45,9 +48,8 @@ export class CapoRepartoComponent implements OnInit {
     this.listenForNewNotifications();
     this.loadAppuntamentiDelGiorno();
     this.loadAttivitaRecenti();
+    this.caricaFeriePendenti();
   }
-
-
 
   caricaDottori() {
     if (!this.selectedRepartoId) return;
@@ -68,7 +70,6 @@ export class CapoRepartoComponent implements OnInit {
     }
   }
 
-
   loadNotifications() {
     if (!this.userId) return;
     this.notificationService.getNotificationsForUser().subscribe({
@@ -81,19 +82,21 @@ export class CapoRepartoComponent implements OnInit {
   }
 
   loadAttivitaRecenti() {
+    this.attivitaRecenti = [];
+
     this.authenticationService.getUserInfo().subscribe(user => {
-      const vetId = user?.id;
-      if (!vetId) return;
+      const repartoId = user?.repartoId;
+      if (!user?.id || !repartoId) return;
+
       this.appuntamentoService.getVeterinarianPatients().subscribe({
         next: (pazienti) => {
           pazienti.forEach((paziente: any) => {
-            const pazienteId = paziente.id;
-
-            this.somministrazioneService.getSomministrazioniByPaziente(pazienteId).subscribe({
+            this.somministrazioneService.getSomministrazioniByPaziente(paziente.id).subscribe({
               next: (somministrazioni) => {
                 const somministrazioniRecenti = somministrazioni.map((s: any) => ({
                   testo: `Somministrato ${s.medicine.name} a ${s.animal.name}`,
-                  orario: this.getRelativeTime(s.date)
+                  orario: this.getRelativeTime(s.date),
+                  isFerie: false
                 }));
                 this.attivitaRecenti.push(...somministrazioniRecenti);
                 this.sortAttivita();
@@ -107,13 +110,27 @@ export class CapoRepartoComponent implements OnInit {
         next: (notifiche) => {
           const recenti = notifiche.map(n => ({
             testo: n.message,
-            orario: this.getRelativeTime(n.notificationDate)
+            orario: this.getRelativeTime(n.notificationDate),
+            isFerie: false
           }));
           this.attivitaRecenti.push(...recenti);
-          this.attivitaRecenti.sort((a, b) => a.orario < b.orario ? 1 : -1);
-        },
-        error: () => {
-          console.error('Errore nel recupero delle notifiche recenti');
+          this.sortAttivita();
+        }
+      });
+
+      this.headOfDepartmentService.getFerieNonApprovate(repartoId).subscribe({
+        next: (res) => {
+          const ferie = res.ferie || [];
+
+          const richiesteFerie = ferie.map((f: any) => ({
+            ...f,
+            testo: `${f.utente.firstName} ${f.utente.lastName} ha richiesto ferie dal ${f.startDate} al ${f.endDate}`,
+            orario: this.getRelativeTime(f.startDate),
+            isFerie: true
+          }));
+
+          this.attivitaRecenti.push(...richiesteFerie);
+          this.sortAttivita();
         }
       });
     });
@@ -145,7 +162,6 @@ export class CapoRepartoComponent implements OnInit {
     });
   }
 
-
   @HostListener('document:click', ['$event'])
   closeDropdown(event: Event) {
     if (!event.target || !(event.target as HTMLElement).closest('.notifications-wrapper')) {
@@ -167,6 +183,7 @@ export class CapoRepartoComponent implements OnInit {
   logout() {
     this.authenticationService.logout();
   }
+
   listenForNewNotifications() {
     setInterval(() => {
       this.loadNotifications();
@@ -176,5 +193,61 @@ export class CapoRepartoComponent implements OnInit {
   navigateTo(route: string) {
     this.router.navigate([route]);
   }
+
+  caricaFeriePendenti() {
+    this.authenticationService.getUserInfo().subscribe(user => {
+      const repartoId = user?.repartoId;
+      if (!repartoId) return;
+
+      this.headOfDepartmentService.getFerieNonApprovate(repartoId).subscribe({
+        next: (res) => {
+          console.log('Ferie ricevute:', res);
+          this.feriePendenti = res.ferie;
+        }
+      });
+    });
+  }
+
+  approva(attivita: any) {
+    if (!attivita?.id || !attivita?.utente?.id) {
+      this.toastr.error('Dati ferie non validi');
+      return;
+    }
+
+    this.headOfDepartmentService.approvaFerie(attivita.id).subscribe(() => {
+      this.toastr.success('Ferie approvate');
+
+
+      this.notificationService
+        .sendNotificationToUserId(
+          `Le ferie di ${attivita.utente.firstName} ${attivita.utente.lastName} dal ${attivita.startDate} al ${attivita.endDate} sono state approvate.`,
+          attivita.utente.id
+        ).subscribe();
+
+      this.attivitaRecenti = this.attivitaRecenti.filter(a => a.id !== attivita.id);
+      this.feriePendenti = this.feriePendenti.filter(f => f.id !== attivita.id);
+    });
+  }
+
+  rifiuta(attivita: any) {
+    if (!attivita?.id || !attivita?.utente?.id) {
+      this.toastr.error('Dati ferie non validi');
+      return;
+    }
+
+    this.headOfDepartmentService.rifiutaFerie(attivita.id).subscribe(() => {
+      this.toastr.info('Ferie rifiutate');
+
+      this.notificationService
+        .sendNotificationToUserId(
+          `Le ferie di ${attivita.utente.firstName} ${attivita.utente.lastName} dal ${attivita.startDate} al ${attivita.endDate} sono state rifiutate.`,
+          attivita.utente.id
+        ).subscribe();
+
+      this.attivitaRecenti = this.attivitaRecenti.filter(a => a.id !== attivita.id);
+      this.feriePendenti = this.feriePendenti.filter(f => f.id !== attivita.id);
+    });
+  }
+
 
 }
