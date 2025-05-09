@@ -1,0 +1,74 @@
+<body>
+<button class="back-button" (click)="goBack()">Indietro</button>
+
+<div class="pagamenti-container">
+  <h2 class="title">Gestione Pagamenti</h2>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Data</th>
+      <th>Animale</th>
+      <th>Cliente</th>
+      <th>Stato</th>
+      <th>Prezzo</th>
+      <th>Metodo</th>
+      <th>Tipo Carta</th>
+      <th>Azioni</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let app of getAppuntamentiFiltrati()">
+      <td>{{ app.appointmentDate | date: 'short' }}</td>
+      <td>{{ app.animal.name }}</td>
+      <td>{{ app.cliente.firstName }} {{ app.cliente.lastName }}</td>
+      <td>
+            <span class="badge" [ngClass]="{'badge-paid': app.status === 'PAID', 'badge-unpaid': app.status !== 'PAID'}">
+              {{ app.status || 'DA PAGARE' }}
+            </span>
+      </td>
+      <td>
+        <select [(ngModel)]="selectedAmount[app.id]">
+          <option [ngValue]="null" disabled>Seleziona importo</option>
+          <option [value]="50">€50</option>
+          <option [value]="55">€55</option>
+          <option [value]="60">€60</option>
+          <option [value]="65">€65</option>
+          <option [value]="70">€70</option>
+          <option [value]="80">€80</option>
+          <option [value]="85">€85</option>
+          <option [value]="90">€90</option>
+          <option [value]="95">€95</option>
+          <option [value]="100">€100</option>
+          <option [value]="150">€150</option>
+          <option [value]="200">€200</option>
+          <option [value]="250">€250</option>
+          <option [value]="320">€320</option>
+        </select>
+      </td>
+      <td>
+        <select [(ngModel)]="selectedMethod[app.id]">
+          <option value="Contanti">Contanti</option>
+          <option value="Carta">Carta</option>
+        </select>
+      </td>
+      <td>
+        <input
+          *ngIf="selectedMethod[app.id] === 'Carta'"
+          [(ngModel)]="cardType[app.id]"
+          placeholder="Tipo carta (es. Visa)"
+        />
+      </td>
+      <td>
+        <button *ngIf="app.status !== 'PAID'" (click)="pagaPagamento(app)">Paga</button>
+        <button *ngIf="app.status === 'PAID'" (click)="scaricaFattura(app)">Scarica Fattura</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<footer class="footer">
+  <p>© 2025 VetEnterprise Solutions. Tutti i diritti riservati.</p>
+</footer>
+</body>
