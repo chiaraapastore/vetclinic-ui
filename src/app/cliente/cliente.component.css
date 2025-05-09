@@ -357,3 +357,23 @@ footer {
   margin-right: 10px;
   color: #26a69a;
 }
+
+.scrollable-box .scroll-container {
+  max-height: 120px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+
+.scrollable-box .scroll-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollable-box .scroll-container::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+.scrollable-box .scroll-container::-webkit-scrollbar-thumb:hover {
+  background-color: #aaa;
+}

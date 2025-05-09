@@ -71,14 +71,16 @@
       </div>
 
 
-      <div class="recent-activities wide-activity-box">
-        <h3>Notifiche recenti</h3>
-        <ul *ngIf="notificheRecenti.length > 0; else nessunaNotifica">
-          <li *ngFor="let notifica of notificheRecenti">
-            <i class="fas fa-bell"></i> {{ notifica.testo }}
-            <span class="time">{{ notifica.orario }}</span>
-          </li>
-        </ul>
+      <div class="recent-activities wide-activity-box scrollable-box">
+        <h3>Notifiche Recenti</h3>
+        <div class="scroll-container">
+          <ul *ngIf="notificheRecenti.length > 0; else nessunaNotifica">
+            <li *ngFor="let notifica of notificheRecenti">
+              <i class="fas fa-bell"></i> {{ notifica.testo }}
+              <span class="time">{{ notifica.orario }}</span>
+            </li>
+          </ul>
+        </div>
         <ng-template #nessunaNotifica>
           <p style="text-align:center; color: #999;">Nessuna notifica recente</p>
         </ng-template>
@@ -87,7 +89,7 @@
 
 
 
-    <footer class="footer">
+      <footer class="footer">
       <p>© 2025 VetEnterprise Solutions. Tutti i diritti riservati.</p>
     </footer>
 
