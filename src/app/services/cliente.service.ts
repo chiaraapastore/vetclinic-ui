@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {Appuntamento} from '../models/appuntamento.model';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,7 @@ import { Observable } from 'rxjs';
 export class ClienteService {
 
   private baseUrl = 'http://localhost:8081/api/cliente';
+  private appuntamentiUrl = 'http://localhost:8081/api/appuntamenti';
 
   constructor(private http: HttpClient) {}
 
@@ -34,4 +36,9 @@ export class ClienteService {
       params: form
     });
   }
+
+  getAppuntamentiCliente(): Observable<Appuntamento[]> {
+    return this.http.get<Appuntamento[]>(`${this.appuntamentiUrl}/cliente/miei-appuntamenti`);
+  }
+
 }

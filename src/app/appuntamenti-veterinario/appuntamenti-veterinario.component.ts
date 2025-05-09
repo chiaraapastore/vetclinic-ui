@@ -269,12 +269,15 @@ export class AppuntamentiVeterinarioComponent  implements OnInit {
         const giorno = arg.dateStr.split('T')[0];
         const oraCompleta = ora.length === 5 ? `${ora}:00` : ora;
         const fullDateTimeString = `${giorno}T${oraCompleta}`;
+        const amount = parseFloat((document.getElementById('amount') as HTMLInputElement).value);
+
 
         this.appuntamentoService.createAppointment({
           animalId: animaleId,
           veterinarianId: veterinarianId,
           appointmentDate: fullDateTimeString,
-          reason: motivo
+          reason: motivo,
+          amount: amount
         }).subscribe({
           next: (createdAppointment) => {
             this.toastr.success('Appuntamento creato!', 'Successo');

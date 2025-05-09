@@ -309,3 +309,51 @@ footer {
   background-color: #26a69a;
 }
 
+
+
+.recent-activities.wide-activity-box {
+  width: calc(100% - 310px);
+  min-width: 500px;
+  height: 200px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 20px 24px;
+  box-shadow: 0 6px 20px rgba(0, 121, 107, 0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.recent-activities.wide-activity-box h3 {
+  font-size: 15px;
+  color: #00796B;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.recent-activities.wide-activity-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recent-activities.wide-activity-box li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 13px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.recent-activities.wide-activity-box .time {
+  color: #757575;
+  font-size: 11px;
+}
+
+.recent-activities.wide-activity-box li i {
+  margin-right: 10px;
+  color: #26a69a;
+}

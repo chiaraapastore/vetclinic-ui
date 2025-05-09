@@ -240,34 +240,36 @@ export class AppuntamentiAssistenteComponent implements OnInit {
       title: '<strong style="color: #1976d2;">Crea Appuntamento</strong>',
       background: 'linear-gradient(135deg, #e0f7fa, #ffffff)',
       html: `
-      <input id="motivo" class="swal2-input" placeholder="Motivo" style="margin-bottom: 10px;">
-      <input type="time" id="ora" class="swal2-input" style="margin-bottom: 10px;">
-      <select id="animalId" class="swal2-select" style="margin-top: 10px;">
-        <option value="">Seleziona un animale</option>
-        ${animalOptions}
-      </select>
-    `,
+    <input id="motivo" class="swal2-input" placeholder="Motivo" style="margin-bottom: 10px;">
+    <input type="time" id="ora" class="swal2-input" style="margin-bottom: 10px;">
+    <input id="amount" class="swal2-input" placeholder="Costo (€)" type="number" step="0.01" style="margin-bottom: 10px;">
+    <select id="animalId" class="swal2-select" style="margin-top: 10px;">
+      <option value="">Seleziona un animale</option>
+      ${animalOptions}
+    </select>
+  `,
       confirmButtonText: 'Crea',
       confirmButtonColor: '#43a047',
       focusConfirm: false,
       preConfirm: () => {
         const motivo = (document.getElementById('motivo') as HTMLInputElement).value.trim();
         const ora = (document.getElementById('ora') as HTMLInputElement).value.trim();
+        const amount = parseFloat((document.getElementById('amount') as HTMLInputElement).value.trim());
         const animaleSelect = document.getElementById('animalId') as HTMLSelectElement;
         const animaleId = animaleSelect.value;
         const selectedOption = animaleSelect.options[animaleSelect.selectedIndex];
         const veterinarianId = Number(selectedOption.getAttribute('data-vetid'));
 
-        if (!motivo || !ora || !animaleId || isNaN(veterinarianId) || veterinarianId <= 0) {
-          Swal.showValidationMessage('Compila tutti i campi e seleziona un animale valido!');
+        if (!motivo || !ora || !animaleId || isNaN(veterinarianId) || veterinarianId <= 0 || isNaN(amount)) {
+          Swal.showValidationMessage('Compila tutti i campi correttamente!');
           return null;
         }
 
-        return { motivo, ora, animaleId: Number(animaleId), veterinarianId };
+        return { motivo, ora, animaleId: Number(animaleId), veterinarianId, amount };
       }
     }).then(result => {
       if (result.isConfirmed && result.value) {
-        const { motivo, ora, animaleId, veterinarianId } = result.value;
+        const { motivo, ora, animaleId, veterinarianId, amount } = result.value;
         const giorno = arg.dateStr.split('T')[0];
         const oraCompleta = ora.length === 5 ? `${ora}:00` : ora;
         const fullDateTimeString = `${giorno}T${oraCompleta}`;
@@ -276,7 +278,8 @@ export class AppuntamentiAssistenteComponent implements OnInit {
           animalId: animaleId,
           veterinarianId: veterinarianId,
           appointmentDate: fullDateTimeString,
-          reason: motivo
+          reason: motivo,
+          amount: amount
         }).subscribe({
           next: (createdAppointment) => {
             this.toastr.success('Appuntamento creato!', 'Successo');

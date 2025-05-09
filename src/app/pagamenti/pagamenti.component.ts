@@ -37,45 +37,45 @@ export class PagamentiComponent implements OnInit {
     });
   }
 
-  paga(appuntamento: Appuntamento): void {
-    const method = this.selectedMethod[appuntamento.id];
-    const card = this.cardType[appuntamento.id] || '';
-    const amount = this.selectedAmount[appuntamento.id];
-
-    if (!method) {
-      this.toastr.warning('Seleziona metodo di pagamento', 'Attenzione');
-      return;
-    }
-
-
-    if (!amount || isNaN(amount)) {
-      this.toastr.warning('Seleziona un importo valido', 'Attenzione');
-      return;
-    }
-
-
-
-    if (!appuntamento.cliente || !appuntamento.cliente.id) {
-      this.toastr.error('Cliente non valido');
-      return;
-    }
-
-    if (method === 'Carta' && !card) {
-      this.toastr.warning('Specifica il tipo di carta', 'Attenzione');
-      return;
-    }
-
-
-    this.pagamentoService.pagaAppuntamento(appuntamento.id, amount, appuntamento.cliente.id).subscribe({
-      next: () => {
-        this.toastr.success('Richiesta di pagamento inviata al cliente');
-      },
-      error: err => {
-        console.error('Errore pagamento:', err);
-        this.toastr.error('Errore nel pagamento');
-      }
-    });
-  }
+  // paga(appuntamento: Appuntamento): void {
+  //   const method = this.selectedMethod[appuntamento.id];
+  //   const card = this.cardType[appuntamento.id] || '';
+  //   const amount = this.selectedAmount[appuntamento.id];
+  //
+  //   if (!method) {
+  //     this.toastr.warning('Seleziona metodo di pagamento', 'Attenzione');
+  //     return;
+  //   }
+  //
+  //
+  //   if (!amount || isNaN(amount)) {
+  //     this.toastr.warning('Seleziona un importo valido', 'Attenzione');
+  //     return;
+  //   }
+  //
+  //
+  //
+  //   if (!appuntamento.cliente || !appuntamento.cliente.id) {
+  //     this.toastr.error('Cliente non valido');
+  //     return;
+  //   }
+  //
+  //   if (method === 'Carta' && !card) {
+  //     this.toastr.warning('Specifica il tipo di carta', 'Attenzione');
+  //     return;
+  //   }
+  //
+  //
+  //   this.pagamentoService.pagaAppuntamento(appuntamento.id, amount, appuntamento.cliente.id).subscribe({
+  //     next: () => {
+  //       this.toastr.success('Richiesta di pagamento inviata al cliente');
+  //     },
+  //     error: err => {
+  //       console.error('Errore pagamento:', err);
+  //       this.toastr.error('Errore nel pagamento');
+  //     }
+  //   });
+  // }
 
 
 
@@ -95,5 +95,19 @@ export class PagamentiComponent implements OnInit {
     });
   }
 
+
+  inviaPromemoria(appuntamento: Appuntamento): void {
+    const message = `Gentile ${appuntamento.cliente.firstName}, ti ricordiamo di completare il pagamento per l'appuntamento del ${new Date(appuntamento.appointmentDate).toLocaleDateString()}.`;
+
+    this.pagamentoService.inviaNotificaPagamento(appuntamento.cliente.id, message).subscribe({
+      next: () => {
+        this.toastr.success('Promemoria inviato al cliente');
+      },
+      error: err => {
+        console.error('Errore invio promemoria:', err);
+        this.toastr.error('Errore nell’invio del promemoria');
+      }
+    });
+  }
 
 }

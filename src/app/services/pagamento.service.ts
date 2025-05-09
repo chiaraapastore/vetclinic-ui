@@ -9,6 +9,7 @@ import { Pagamento } from '../models/pagamento.model';
 export class PagamentoService {
   private basePagamentiUrl = 'http://localhost:8081/api/pagamenti';
   private baseAssistenteUrl = 'http://localhost:8081/api/assistente';
+  private baseNotificheUrl = 'http://localhost:8081/api/notifications';
 
   constructor(private http: HttpClient) {}
 
@@ -16,11 +17,18 @@ export class PagamentoService {
     return this.http.get<Appuntamento[]>(`${this.baseAssistenteUrl}/my-appointments`);
   }
 
-  pagaAppuntamento(appointmentId: number, amount: number, clienteId: number): Observable<Pagamento> {
-    const params = new HttpParams()
-      .set('amount', amount.toString())
-      .set('clienteId', clienteId.toString());
-
-    return this.http.post<Pagamento>(`${this.basePagamentiUrl}/process/${appointmentId}`, null, { params });
+  pagaAppuntamento(appointmentId: number): Observable<Pagamento> {
+    return this.http.post<Pagamento>(`${this.basePagamentiUrl}/process/${appointmentId}`, {});
   }
+
+
+
+  inviaNotificaPagamento(clienteId: number, message: string): Observable<any> {
+    return this.http.post(`${this.baseNotificheUrl}/send-to-user`, {
+      userId: clienteId,
+      message: message
+    });
+  }
+
+
 }

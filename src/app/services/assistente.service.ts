@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 import { environment } from '../environments/environment';
 import {CronologiaAnimale} from '../models/cronologia-animale.model';
@@ -78,5 +78,15 @@ export class AssistenteService {
   aggiornaStatoOrdine(ordineId: number, stato: string): Observable<any> {
     return this.http.put(`${this.apiUrl}/ordini/${ordineId}/stato`, { stato });
   }
+
+  updateAppointmentAmount(appointmentId: number, amount: number) {
+    if (amount == null) {
+      throw new Error('L\'importo non può essere null o undefined');
+    }
+
+    const params = new HttpParams().set('amount', amount.toString());
+    return this.http.put(`${this.apiUrl}/update-amount/${appointmentId}`, null, { params });
+  }
+
 
 }

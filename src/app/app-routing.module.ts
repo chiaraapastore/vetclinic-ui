@@ -31,6 +31,7 @@ import {
 } from './pazienti-animali-capo-reparto/pazienti-animali-capo-reparto.component';
 import {ProfiloClienteComponent} from './profilo-cliente/profilo-cliente.component';
 import {AnimaliClienteComponent} from './animali-cliente/animali-cliente.component';
+import {PagamentiClienteComponent} from './pagamenti-cliente/pagamenti-cliente.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -55,7 +56,7 @@ const routes: Routes = [
   { path: 'personale-reparto', component: PersonaleRepartoComponent, canActivate: [AuthGuard], data: { roles: ['capo-reparto'] } },
   {path: 'pazienti-animali-capo-reparto', component: PazientiAnimaliCapoRepartoComponent, canActivate: [AuthGuard], data: { roles: ['capo-reparto'] } },
   {path: 'animali-cliente', component: AnimaliClienteComponent, canActivate: [AuthGuard], data: { roles: ['cliente'] } },
-
+  {path: 'pagamenti-cliente', component: PagamentiClienteComponent,canActivate: [AuthGuard], data: { roles: ['cliente'] } },
   { path: 'profilo-cliente', component: ProfiloClienteComponent, canActivate: [AuthGuard], data: { roles: ['cliente'] } },
 
 

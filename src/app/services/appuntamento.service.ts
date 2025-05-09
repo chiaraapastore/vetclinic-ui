@@ -35,15 +35,18 @@ export class AppuntamentoService {
     veterinarianId: number;
     appointmentDate: string;
     reason: string;
+    amount: number;
   }) {
     const params = new HttpParams()
       .set('animalId', appointment.animalId)
       .set('veterinarianId', appointment.veterinarianId)
       .set('appointmentDate', appointment.appointmentDate)
-      .set('reason', appointment.reason);
+      .set('reason', appointment.reason)
+      .set('amount', appointment.amount.toString());
 
     return this.http.post<Appuntamento>(`${this.assistenteUrl}/create-appointment`, null, { params });
   }
+
 
 
 
