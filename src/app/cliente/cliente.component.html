@@ -1,1 +1,95 @@
-<p>cliente works!</p>
+<div class="dashboard">
+
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <img src="https://i.pinimg.com/736x/ef/b7/50/efb7509e73b3c4312ef59873879d2301.jpg" alt="Logo Clinica">
+    </div>
+
+    <ul class="sidebar-menu">
+      <ul class="sidebar-menu">
+        <li><a routerLink="/animali-cliente"><i class="fa-solid fa-paw"></i> I miei animali</a></li>
+        <li><a routerLink="/appuntamenti-cliente"><i class="fas fa-calendar-alt"></i> Appuntamenti</a></li>
+      </ul><li><a routerLink="/pagamenti-cliente"><i class="fas fa-credit-card"></i> Pagamenti</a></li>
+      <li><a routerLink="/profilo-cliente"><i class="fas fa-user-circle"></i> Profilo</a></li>
+    </ul>
+
+    <div class="sidebar-logout">
+      <button (click)="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+  </nav>
+
+  <div class="main">
+
+    <header class="top-bar">
+      <div class="welcome">
+        <h2>Benvenuto {{ clienteUsername }}</h2>
+        <p>Cliente</p>
+      </div>
+
+    </header>
+
+
+
+    <section class="cards">
+      <div class="card" (click)="navigateTo('animali-cliente')">
+        <i class="fa-solid fa-paw"style="color: #007b5e;"></i>
+        <h3>I miei Animali</h3>
+      </div>
+
+      <div class="recent-activities appointment-box">
+        <h3> Prossimo Appuntamento</h3>
+        <ul>
+          <li>
+            <i class="fas fa-stethoscope"></i> <strong>Motivo:</strong> {{ prossimoAppuntamento?.reason || 'N/A' }}
+          </li>
+          <li>
+            <i class="fas fa-calendar-day"></i> <strong>Data:</strong> {{ prossimoAppuntamento?.date | date:'fullDate' }}
+          </li>
+          <li>
+            <i class="fas fa-clock"></i> <strong>Ora:</strong> {{ prossimoAppuntamento?.date | date:'shortTime' }}
+          </li>
+          <li>
+            <i class="fas fa-user-md"></i> <strong>Veterinario:</strong> Dr. {{ prossimoAppuntamento?.veterinarianName || 'N/A' }}
+          </li>
+        </ul>
+
+
+        <div style="width: 100%; display: flex; justify-content: center;">
+          <button class="modern-btn" (click)="navigateTo('appuntamenti-cliente')">
+            Gestisci Appuntamento
+          </button>
+        </div>
+      </div>
+
+
+
+
+
+      <div class="card" (click)="navigateTo('pagamenti-cliente')">
+        <i class="fas fa-credit-card"></i>
+        <h3>I miei Pagamenti</h3>
+      </div>
+
+
+      <div class="recent-activities wide-activity-box">
+        <h3>Notifiche recenti</h3>
+        <ul *ngIf="notificheRecenti.length > 0; else nessunaNotifica">
+          <li *ngFor="let notifica of notificheRecenti">
+            <i class="fas fa-bell"></i> {{ notifica.testo }}
+            <span class="time">{{ notifica.orario }}</span>
+          </li>
+        </ul>
+        <ng-template #nessunaNotifica>
+          <p style="text-align:center; color: #999;">Nessuna notifica recente</p>
+        </ng-template>
+      </div>
+    </section>
+
+
+    <footer class="footer">
+      <p>© 2025 VetEnterprise Solutions. Tutti i diritti riservati.</p>
+    </footer>
+
+  </div>
+
+</div>
