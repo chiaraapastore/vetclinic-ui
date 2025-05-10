@@ -64,10 +64,6 @@ export class AppuntamentoService {
   }
 
 
-  // getAppointmentsForAssistant(): Observable<Appuntamento[]> {
-  //   return this.http.get<Appuntamento[]>(`${this.assistenteUrl}/my-appointments`);
-  // }
-
   getAppointmentsForAssistant(): Observable<Appuntamento[]> {
     return this.http.get<Appuntamento[]>(`${this.appuntamentiUrl}/assistente/miei-appuntamenti`);
   }

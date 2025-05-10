@@ -51,6 +51,12 @@ export class AssistenteComponent implements OnInit {
     this.caricaRichieste();
   }
 
+
+  ngAfterViewInit(): void {
+    setTimeout(() => this.updateCalendarEvents(), 0);
+  }
+
+
   loadRepartoAndData() {
     this.authenticationService.getUserInfo().subscribe(user => {
       if (user.repartoId) {
@@ -153,8 +159,8 @@ export class AssistenteComponent implements OnInit {
       next: (appuntamento) => {
         this.toastr.success("Richiesta rifiutata.");
         this.rimuoviRichiesta(attivita.id);
-        this.appointments.push(appuntamento);  // Aggiunge localmente
-        this.updateCalendarEvents();          // Aggiorna visivamente il calendario
+        this.appointments.push(appuntamento);
+        this.updateCalendarEvents();
       },
       error: (error) => {
         if (error.status === 400 && error.error?.message?.includes("già stata gestita")) {
@@ -227,7 +233,16 @@ export class AssistenteComponent implements OnInit {
   }
 
   updateCalendarEvents(): void {
+    if (!this.calendarComponent) {
+      return;
+    }
+
     const calendarApi = this.calendarComponent.getApi();
+    if (!calendarApi) {
+      console.warn('calendarApi non disponibile');
+      return;
+    }
+
     calendarApi.removeAllEvents();
 
     this.appointments.forEach(appointment => {
@@ -242,6 +257,7 @@ export class AssistenteComponent implements OnInit {
       });
     });
   }
+
 
 
   getRelativeTime(dateInput: string | Date): string {
