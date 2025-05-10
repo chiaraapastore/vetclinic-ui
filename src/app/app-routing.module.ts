@@ -33,6 +33,8 @@ import {ProfiloClienteComponent} from './profilo-cliente/profilo-cliente.compone
 import {AnimaliClienteComponent} from './animali-cliente/animali-cliente.component';
 import {PagamentiClienteComponent} from './pagamenti-cliente/pagamenti-cliente.component';
 import {AppuntamentiClienteComponent} from './appuntamenti-cliente/appuntamenti-cliente.component';
+import {ProfiloAdminComponent} from './profilo-admin/profilo-admin.component';
+import {PersonaleVetclinicComponent} from './personale-vetclinic/personale-vetclinic.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -60,8 +62,8 @@ const routes: Routes = [
   {path: 'pagamenti-cliente', component: PagamentiClienteComponent,canActivate: [AuthGuard], data: { roles: ['cliente'] } },
   { path: 'profilo-cliente', component: ProfiloClienteComponent, canActivate: [AuthGuard], data: { roles: ['cliente'] } },
   {path: 'appuntamenti-cliente', component: AppuntamentiClienteComponent, canActivate: [AuthGuard], data: { roles: ['cliente'] } },
-
-
+  { path: 'profile-admin', component: ProfiloAdminComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
+  { path: 'personale-vetclinic', component: PersonaleVetclinicComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
   { path: 'error', component: ErrorComponent },
   { path: '**', redirectTo: 'error' }
 ];

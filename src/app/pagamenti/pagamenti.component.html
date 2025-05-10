@@ -27,8 +27,8 @@
     <tbody>
     <tr *ngFor="let app of getAppuntamentiFiltrati()">
       <td>{{ app.appointmentDate | date: 'short' }}</td>
-      <td>{{ app.animal?.name }}</td>
-      <td>{{ app.cliente?.firstName }} {{ app.cliente?.lastName }}</td>
+      <td>{{ app.animal.name }}</td>
+      <td>{{ app.cliente.firstName }} {{ app.cliente.lastName }}</td>
       <td>
             <span class="badge" [ngClass]="{
               'badge-paid': app.status === 'PAID',

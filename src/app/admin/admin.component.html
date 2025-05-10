@@ -1,1 +1,80 @@
-<p>admin works!</p>
+<div class="dashboard">
+
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <img src="https://i.pinimg.com/736x/92/33/35/923335e51ecad5c425eb9791590bce65.jpg" alt="Logo Clinica">
+    </div>
+
+    <ul class="sidebar-menu">
+      <li><a routerLink="/pazienti-vetclinic"><i class="fa-solid fa-paw"></i> Pazienti Animali</a></li>
+      <li><a routerLink="/magazzino-admin"><i class="fa-solid fa-warehouse"></i> Magazzino</a></li>
+      <li><a routerLink="/personale-vetclin"><i class="fas fa-user-md"></i> Personale Clinica </a></li>
+      <li><a routerLink="/dati-statistiche"><i class="fas fa-chart-bar"></i> Dati e Statistiche</a></li>
+      <li><a routerLink="/profile-admin"><i class="fas fa-user-circle"></i> Profilo</a></li>
+    </ul>
+
+    <div class="sidebar-logout">
+      <button (click)="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+  </nav>
+
+  <div class="main">
+
+    <header class="top-bar">
+      <div class="welcome">
+        <h2>Benvenuto {{ adminUsername }}</h2>
+        <p>Admin</p>
+      </div>
+
+    </header>
+
+
+
+    <section class="cards">
+      <div class="card" (click)="navigateTo('pazienti-vetclinic')">
+        <i class="fa-solid fa-paw"style="color: #007b5e;"></i>
+        <h3>Pazienti Animali</h3>
+      </div>
+      <div class="card" (click)="navigateTo('magazzino-admin')">
+        <i class="fa-solid fa-warehouse"style="color: #007b5e;"></i>
+        <h3>Magazzino</h3>
+      </div>
+      <div class="card" (click)="navigateTo('personale-vetclinic')">
+        <i class="fas fa-user-md"></i>
+        <h3>Personale Clinica</h3>
+      </div>
+      <div class="card" (click)="navigateTo('/dati-statistiche')">
+        <i class="fas fa-chart-bar"></i>
+        <h3>Dati e Statistiche</h3>
+      </div>
+
+
+      <section class="dashboard-content">
+        <div class="recent-activities">
+          <h3>Attività recenti</h3>
+          <ul>
+            <li *ngFor="let attivita of attivitaRecenti">
+              <i class="fas fa-check-circle"></i> {{ attivita.testo }}
+              <span class="time">{{ attivita.orario }}</span>
+<!--              <ng-container *ngIf="attivita.isAppuntamento">-->
+<!--                <button class="btn-approva" (click)="approva(attivita)">✔️</button>-->
+<!--                <button class="btn-rifiuta" (click)="rifiuta(attivita)">❌</button>-->
+<!--              </ng-container>-->
+
+            </li>
+          </ul>
+          <ng-template #nessunaAttivita>
+            <p style="text-align:center; color: #999;">Nessuna attività recente</p>
+          </ng-template>
+        </div>
+      </section>
+    </section>
+
+
+
+    <footer class="footer">
+      <p>© 2025 VetEnterprise Solutions. Tutti i diritti riservati.</p>
+    </footer>
+  </div>
+
+</div>
