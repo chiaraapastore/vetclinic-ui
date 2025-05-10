@@ -6,6 +6,7 @@ import {CronologiaAnimale} from '../models/cronologia-animale.model';
 import {Medicine} from '../models/medicine.model';
 import {catchError} from 'rxjs/operators';
 import {ToastrService} from 'ngx-toastr';
+import {Appuntamento} from '../models/appuntamento.model';
 
 @Injectable({
   providedIn: 'root'
@@ -87,6 +88,18 @@ export class AssistenteService {
     const params = new HttpParams().set('amount', amount.toString());
     return this.http.put(`${this.apiUrl}/update-amount/${appointmentId}`, null, { params });
   }
+
+  getRichiesteNonApprovate(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/richieste-appuntamenti/non-approvate`);
+  }
+  approvaRichiesta(id: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/richieste-appuntamenti/approva/${id}`, null);
+  }
+
+  rifiutaRichiesta(id: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/richieste-appuntamenti/rifiuta/${id}`, null);
+  }
+
 
 
 }

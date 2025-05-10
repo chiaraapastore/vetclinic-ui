@@ -41,4 +41,12 @@ export class ClienteService {
     return this.http.get<Appuntamento[]>(`${this.appuntamentiUrl}/cliente/miei-appuntamenti`);
   }
 
+  richiediAppuntamento(richiesta: {
+    animalId: number;
+    motivo: string;
+    dataRichiesta: string;
+  }): Observable<any> {
+    return this.http.post(`${this.baseUrl}/richiedi-appuntamento`, richiesta);
+  }
+
 }

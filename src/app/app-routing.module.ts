@@ -32,6 +32,7 @@ import {
 import {ProfiloClienteComponent} from './profilo-cliente/profilo-cliente.component';
 import {AnimaliClienteComponent} from './animali-cliente/animali-cliente.component';
 import {PagamentiClienteComponent} from './pagamenti-cliente/pagamenti-cliente.component';
+import {AppuntamentiClienteComponent} from './appuntamenti-cliente/appuntamenti-cliente.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -58,6 +59,7 @@ const routes: Routes = [
   {path: 'animali-cliente', component: AnimaliClienteComponent, canActivate: [AuthGuard], data: { roles: ['cliente'] } },
   {path: 'pagamenti-cliente', component: PagamentiClienteComponent,canActivate: [AuthGuard], data: { roles: ['cliente'] } },
   { path: 'profilo-cliente', component: ProfiloClienteComponent, canActivate: [AuthGuard], data: { roles: ['cliente'] } },
+  {path: 'appuntamenti-cliente', component: AppuntamentiClienteComponent, canActivate: [AuthGuard], data: { roles: ['cliente'] } },
 
 
   { path: 'error', component: ErrorComponent },

@@ -34,6 +34,13 @@ export class ClienteComponent implements OnInit {
     this.caricaNotificheRecenti();
     this.caricaAnimali();
     this.caricaProssimoAppuntamento();
+    this.caricaNotificheRecenti();
+
+    setInterval(() => {
+      this.caricaNotificheRecenti();
+      this.caricaProssimoAppuntamento();
+    }, 30000);
+
   }
 
   async getClienteUsername() {

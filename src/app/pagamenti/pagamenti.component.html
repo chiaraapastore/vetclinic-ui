@@ -21,8 +21,6 @@
       <th>Cliente</th>
       <th>Stato</th>
       <th>Prezzo</th>
-      <th>Metodo</th>
-      <th>Tipo Carta</th>
       <th>Azioni</th>
     </tr>
     </thead>
@@ -60,26 +58,6 @@
         </select>
       </td>
 
-      <!-- Metodo pagamento -->
-      <td>
-        <select [(ngModel)]="selectedMethod[app.id]">
-          <option value="">Seleziona</option>
-          <option value="Contanti">Contanti</option>
-          <option value="Carta">Carta</option>
-        </select>
-      </td>
-
-      <!-- Tipo carta -->
-      <td *ngIf="selectedMethod[app.id] === 'Carta'">
-        <select [(ngModel)]="cardType[app.id]">
-          <option value="Visa">Visa</option>
-          <option value="MasterCard">MasterCard</option>
-          <option value="American Express">American Express</option>
-        </select>
-      </td>
-      <td *ngIf="selectedMethod[app.id] !== 'Carta'">–</td>
-
-      <!-- Azioni -->
       <td>
         <button *ngIf="app.status !== 'PAID'" (click)="inviaPromemoria(app)">Invia Promemoria</button>
         <button *ngIf="app.status === 'PAID'" (click)="scaricaFattura(app)">Scarica Fattura</button>

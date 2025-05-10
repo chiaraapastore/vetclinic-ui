@@ -49,8 +49,6 @@ export class AppuntamentoService {
 
 
 
-
-
   deleteAppointment(id: number): Observable<any> {
     return this.http.delete(`${this.appuntamentiUrl}/delete-appointment/${id}`);
   }
@@ -66,11 +64,18 @@ export class AppuntamentoService {
   }
 
 
+  // getAppointmentsForAssistant(): Observable<Appuntamento[]> {
+  //   return this.http.get<Appuntamento[]>(`${this.assistenteUrl}/my-appointments`);
+  // }
+
   getAppointmentsForAssistant(): Observable<Appuntamento[]> {
-   return this.http.get<Appuntamento[]>(`${this.assistenteUrl}/my-appointments`);
+    return this.http.get<Appuntamento[]>(`${this.appuntamentiUrl}/assistente/miei-appuntamenti`);
   }
+
 
   getAppuntamentiCliente(): Observable<any[]> {
     return this.http.get<any[]>(`${this.appuntamentiUrl}/cliente/miei-appuntamenti`);
   }
+
+
 }

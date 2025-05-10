@@ -36,34 +36,10 @@
         <h3>I miei Animali</h3>
       </div>
 
-      <div class="recent-activities appointment-box">
-        <h3> Prossimo Appuntamento</h3>
-        <ul>
-          <li>
-            <i class="fas fa-stethoscope"></i> <strong>Motivo:</strong> {{ prossimoAppuntamento?.reason || 'N/A' }}
-          </li>
-          <li>
-            <i class="fas fa-calendar-day"></i> <strong>Data:</strong> {{ prossimoAppuntamento?.date | date:'fullDate' }}
-          </li>
-          <li>
-            <i class="fas fa-clock"></i> <strong>Ora:</strong> {{ prossimoAppuntamento?.date | date:'shortTime' }}
-          </li>
-          <li>
-            <i class="fas fa-user-md"></i> <strong>Veterinario:</strong> Dr. {{ prossimoAppuntamento?.veterinarianName || 'N/A' }}
-          </li>
-        </ul>
-
-
-        <div style="width: 100%; display: flex; justify-content: center;">
-          <button class="modern-btn" (click)="navigateTo('appuntamenti-cliente')">
-            Gestisci Appuntamento
-          </button>
-        </div>
+      <div class="card" (click)="navigateTo('/appuntamenti-cliente')">
+        <i class="fas fa-calendar-alt"></i>
+        <h3>Appuntamenti</h3>
       </div>
-
-
-
-
 
       <div class="card" (click)="navigateTo('pagamenti-cliente')">
         <i class="fas fa-credit-card"></i>
@@ -84,12 +60,11 @@
         <ng-template #nessunaNotifica>
           <p style="text-align:center; color: #999;">Nessuna notifica recente</p>
         </ng-template>
+
       </div>
     </section>
 
-
-
-      <footer class="footer">
+    <footer class="footer">
       <p>© 2025 VetEnterprise Solutions. Tutti i diritti riservati.</p>
     </footer>
 

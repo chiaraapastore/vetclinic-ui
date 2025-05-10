@@ -52,12 +52,34 @@
         <i class="fas fa-credit-card"></i>
         <h3>Pagamenti</h3>
       </div>
-      <div class="recent-activities wide-activity-box">
+
+
+<!--      <div class="recent-activities wide-activity-box">-->
+<!--        <h3>Attività recenti</h3>-->
+<!--        <ul *ngIf="attivitaRecenti.length > 0; else nessunaAttivita">-->
+<!--          <li *ngFor="let attivita of attivitaRecenti">-->
+<!--            <i class="fas fa-check-circle"></i> {{ attivita.testo }}-->
+<!--            <span class="time">{{ attivita.orario }}</span>-->
+<!--          </li>-->
+<!--        </ul>-->
+<!--        <ng-template #nessunaAttivita>-->
+<!--          <p style="text-align:center; color: #999;">Nessuna attività recente</p>-->
+<!--        </ng-template>-->
+<!--      </div>-->
+<!--    </section>-->
+
+    <section class="dashboard-content">
+      <div class="recent-activities">
         <h3>Attività recenti</h3>
-        <ul *ngIf="attivitaRecenti.length > 0; else nessunaAttivita">
+        <ul>
           <li *ngFor="let attivita of attivitaRecenti">
             <i class="fas fa-check-circle"></i> {{ attivita.testo }}
             <span class="time">{{ attivita.orario }}</span>
+            <ng-container *ngIf="attivita.isAppuntamento">
+              <button class="btn-approva" (click)="approva(attivita)">✔️</button>
+              <button class="btn-rifiuta" (click)="rifiuta(attivita)">❌</button>
+            </ng-container>
+
           </li>
         </ul>
         <ng-template #nessunaAttivita>
@@ -65,12 +87,13 @@
         </ng-template>
       </div>
     </section>
+    </section>
+
 
 
     <footer class="footer">
       <p>© 2025 VetEnterprise Solutions. Tutti i diritti riservati.</p>
     </footer>
-
   </div>
 
 </div>

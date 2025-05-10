@@ -1,0 +1,22 @@
+<body>
+<button class="back-button" (click)="goBack()">Indietro</button>
+
+<main>
+  <div class="calendar-container">
+    <h2 class="calendar-title">Calendario Appuntamenti</h2>
+    <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+  </div>
+
+  <div class="richiesta-ferie-panel">
+    <form (ngSubmit)="richiediAppuntamento()" #ferieForm="ngForm">
+      <button type="submit" [disabled]="!ferieForm.form.valid">Invia Richiesta</button>
+    </form>
+  </div>
+
+
+</main>
+
+<footer class="footer">
+  <p>© 2025 VetEnterprise Solutions. Tutti i diritti riservati.</p>
+</footer>
+</body>
