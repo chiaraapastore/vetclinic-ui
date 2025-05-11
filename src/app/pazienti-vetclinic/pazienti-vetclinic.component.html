@@ -28,7 +28,7 @@
     <table>
       <thead>
       <tr>
-        <th>ID</th><th>Nome</th><th>Specie</th><th>Razza</th><th>Peso</th><th>Reparto</th><th>Cliente</th>
+        <th>ID</th><th>Nome</th><th>Specie</th><th>Razza</th><th>Peso</th><th>Reparto</th><th>Cliente</th><th>Azioni</th>
       </tr>
       </thead>
       <tbody>
@@ -40,6 +40,11 @@
         <td>{{ a.weight }} kg</td>
         <td>{{ a.reparto?.name || 'Non assegnato' }}</td>
         <td>{{ a.cliente.email }}</td>
+        <td>
+          <button class="btn btn-danger btn-sm" (click)="eliminaAnimale(a.id)">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
       </tr>
       </tbody>
     </table>

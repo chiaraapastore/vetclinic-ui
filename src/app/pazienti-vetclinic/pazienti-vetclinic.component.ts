@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AdminService} from '../services/admin.service';
 import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-pazienti-vetclinic',
@@ -119,6 +120,34 @@ export class PazientiVetclinicComponent implements OnInit {
       );
     });
   }
+
+  eliminaAnimale(id: number): void {
+    Swal.fire({
+      title: 'Sei sicuro?',
+      text: 'Il paziente verrà eliminato in modo permanente!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#00796b',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sì, elimina!',
+      cancelButtonText: 'Annulla'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.adminService.deleteAnimal(id).subscribe({
+          next: () => {
+            this.toastr.success('Animale eliminato con successo!');
+            this.caricaDati();
+          },
+          error: (err) => {
+            console.error(err);
+            this.toastr.error("Errore durante l'eliminazione del paziente.");
+          }
+        });
+      }
+    });
+  }
+
+
 
   reset(): void {
     this.searchKeyword = '';

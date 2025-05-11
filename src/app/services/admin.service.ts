@@ -141,5 +141,10 @@ export class AdminService {
     return this.http.delete(`${this.apiUrl}/delete-department/${repartoId}`);
   }
 
+  deleteAnimal(id: number) {
+    return this.http.delete<any>(`${this.apiUrl}/delete-animal/${id}`);
+  }
+
+
 
 }
