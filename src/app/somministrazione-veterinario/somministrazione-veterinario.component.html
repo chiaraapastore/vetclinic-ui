@@ -4,35 +4,34 @@
 
 
 <div class="somministrazioni-container">
-  <h2>Somministrazione Farmaco</h2>
 
-  <div class="form-group">
-    <label>Seleziona Paziente:</label>
-    <select [(ngModel)]="selectedAnimaleId">
-      <option *ngFor="let p of pazienti" [value]="p.id">{{ p.name }}</option>
-    </select>
-  </div>
+  <div class="card p-4 shadow">
+    <h4 class="mb-3">Somministrazione Farmaco</h4>
 
-  <div class="form-group">
-    <label>Seleziona Farmaco:</label>
-    <select [(ngModel)]="selectedMedicineId">
-      <option *ngFor="let m of medicine" [value]="m.id">{{ m.name }}</option>
-    </select>
-  </div>
-
-  <div class="form-group">
-    <label for="quantita">Quantità:</label>
-    <div class="quantita-wrapper">
-      <input id="quantita" type="number" min="1" [(ngModel)]="quantita" />
-      <span class="unit-label">{{ getUnitForSelectedMedicine() }}</span>
+    <div class="form-group mb-3">
+      <label for="paziente">Seleziona Paziente:</label>
+      <select id="paziente" class="form-control" [(ngModel)]="selectedAnimaleId">
+        <option [ngValue]="null">-- Seleziona --</option>
+        <option *ngFor="let paziente of pazienti" [ngValue]="paziente.id">{{ paziente.name }}</option>
+      </select>
     </div>
+
+    <div class="form-group mb-3">
+      <label for="farmaco">Seleziona Farmaco:</label>
+      <select id="farmaco" class="form-control" [(ngModel)]="selectedMedicineId">
+        <option [ngValue]="null">-- Seleziona --</option>
+        <option *ngFor="let med of medicine" [ngValue]="med.id">{{ med.name }}</option>
+      </select>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="quantita">Quantità:</label>
+      <input type="number" id="quantita" class="form-control" [(ngModel)]="quantita" min="1" />
+      <small class="form-text text-muted">{{ getUnitForSelectedMedicine() }}</small>
+    </div>
+
+    <button class="btn btn-success w-100" (click)="somministraFarmaco()">Somministra</button>
   </div>
-
-
-  <button class="button-somministra" (click)="somministraFarmaco()">Somministra</button>
-
-
-  <p class="messaggio">{{ messaggio }}</p>
 </div>
 
 </body>

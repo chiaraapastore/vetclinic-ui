@@ -6,4 +6,5 @@ export interface Reparto {
   headOfDepartment?: Utente;
   veterinario?: Utente;
   assistente?: Utente;
+  capoRepartoId: number;
 }

@@ -42,6 +42,8 @@ import { ProfiloAdminComponent } from './profilo-admin/profilo-admin.component';
 import { PersonaleVetclinicComponent } from './personale-vetclinic/personale-vetclinic.component';
 import { PazientiVetclinicComponent } from './pazienti-vetclinic/pazienti-vetclinic.component';
 import { RepartiAdminComponent } from './reparti-admin/reparti-admin.component';
+import { DatiStatisticheComponent } from './dati-statistiche/dati-statistiche.component';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 
 export function initializeKeycloak(keycloak: KeycloakService, platformId: Object) {
   return () =>
@@ -92,6 +94,7 @@ export function initializeKeycloak(keycloak: KeycloakService, platformId: Object
     PersonaleVetclinicComponent,
     PazientiVetclinicComponent,
     RepartiAdminComponent,
+    DatiStatisticheComponent,
   ],
   imports: [
     BrowserModule,
@@ -101,6 +104,7 @@ export function initializeKeycloak(keycloak: KeycloakService, platformId: Object
     BrowserAnimationsModule,
     FullCalendarModule,
     FormsModule,
+    NgxChartsModule,
     ReactiveFormsModule,
     KeycloakAngularModule,
     CommonModule,

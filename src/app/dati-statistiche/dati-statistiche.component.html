@@ -1,0 +1,68 @@
+<body>
+
+<button class="back-button" (click)="goBack()">Indietro</button>
+
+
+<div class="dashboard-container" *ngIf="!loading; else loadingTemplate">
+
+  <div class="card-chart">
+    <h3>Consumi dei Farmaci nel Tempo</h3>
+    <ngx-charts-line-chart
+      *ngIf="consumiNelTempo.length > 0"
+      [view]="[700, 400]"
+      [results]="consumiNelTempo"
+      [scheme]="'cool'"
+      [legend]="true"
+      [animations]="true"
+      [xAxis]="true"
+      [yAxis]="true"
+      [autoScale]="true">
+    </ngx-charts-line-chart>
+    <p *ngIf="consumiNelTempo.length === 0">Nessun dato disponibile.</p>
+  </div>
+
+  <div class="card-chart">
+    <h3>Riordini e Stockout</h3>
+    <ngx-charts-bar-vertical
+      *ngIf="riordiniStockout.length > 0"
+      [view]="[700, 400]"
+      [results]="riordiniStockout"
+      [scheme]="'cool'"
+      [legend]="true"
+      [animations]="true"
+      [xAxis]="true"
+      [yAxis]="true">
+    </ngx-charts-bar-vertical>
+    <p *ngIf="riordiniStockout.length === 0">Nessun dato disponibile.</p>
+  </div>
+
+  <div class="card-chart">
+    <h3>Distribuzione per Reparto</h3>
+    <ngx-charts-pie-chart
+      *ngIf="distribuzionePerReparto.length > 0"
+      [view]="[400, 400]"
+      [results]="distribuzionePerReparto"
+      [scheme]="'cool'"
+      [legend]="true"
+      [labels]="true"
+      [doughnut]="true"
+      [animations]="true">
+    </ngx-charts-pie-chart>
+    <p *ngIf="distribuzionePerReparto.length === 0">Nessun dato disponibile.</p>
+  </div>
+
+</div>
+
+<ng-template #loadingTemplate>
+  <div class="loading-message">
+    <p>Caricamento in corso...</p>
+  </div>
+</ng-template>
+
+
+
+<footer class="footer">
+  <p>© 2025 VetEnterprise Solutions. Tutti i diritti riservati.</p>
+</footer>
+
+</body>

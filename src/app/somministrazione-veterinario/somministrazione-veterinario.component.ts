@@ -1,13 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {Animale} from '../models/animale.model';
-import {Medicine} from '../models/medicine.model';
-import {Somministrazione} from '../models/somministrazione.model';
-import {SomministrazioneService} from '../services/somministrazione.service';
-import {AnimaleService} from '../services/animale.service';
-import {AssistenteService} from '../services/assistente.service';
-import {Router} from '@angular/router';
-import {MedicineService} from '../services/medicine.service';
-import {ToastrService} from 'ngx-toastr';
+import { Component, OnInit } from '@angular/core';
+import { Animale } from '../models/animale.model';
+import { Medicine } from '../models/medicine.model';
+import { SomministrazioneService } from '../services/somministrazione.service';
+import { AssistenteService } from '../services/assistente.service';
+import { Router } from '@angular/router';
+import { MedicineService } from '../services/medicine.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-somministrazione-veterinario',
@@ -18,74 +16,60 @@ import {ToastrService} from 'ngx-toastr';
 export class SomministrazioneVeterinarioComponent implements OnInit {
   pazienti: Animale[] = [];
   medicine: Medicine[] = [];
-  somministrazioni: Somministrazione[] = [];
-
   selectedAnimaleId?: number;
   selectedMedicineId?: number;
   quantita: number = 1;
-  messaggio: string = '';
 
   constructor(
     private somministrazioneService: SomministrazioneService,
-    private animaleService: AnimaleService,
     private assistenteService: AssistenteService,
     private router: Router,
     private medicineService: MedicineService,
     private toastr: ToastrService
   ) {}
 
-
   ngOnInit(): void {
     this.assistenteService.getVeterinarianPatients().subscribe(p => {
       console.log("Pazienti ricevuti:", p);
       this.pazienti = p;
     });
-    this.medicineService.getAvailableMedicines().subscribe(m => this.medicine = m);
-  }
 
+    this.medicineService.getAvailableMedicines().subscribe(m => {
+      console.log("Medicine ricevute:", m);
+      this.medicine = m;
+    });
+  }
 
   goBack(): void {
     this.router.navigate(['/veterinario']);
   }
 
-
   somministraFarmaco(): void {
     if (!this.selectedAnimaleId || !this.selectedMedicineId || !this.quantita) {
-      this.messaggio = 'Compila tutti i campi';
+      this.toastr.warning('Compila tutti i campi');
       return;
     }
 
-    const selectedId = Number(this.selectedAnimaleId);
-    const animaleSelezionato = this.pazienti.find(a => a.id === selectedId);
-    console.log("Animale selezionato:", animaleSelezionato);
+    const animale = this.pazienti.find(a => a.id === this.selectedAnimaleId);
 
-    if (!animaleSelezionato || !animaleSelezionato.veterinario || !animaleSelezionato.veterinario.id) {
-      this.messaggio = 'Veterinario non assegnato al paziente';
+    const capoRepartoId = animale?.reparto?.['capoRepartoId'];
+    console.log("Capo Reparto ID:", capoRepartoId);
+
+    if (!capoRepartoId) {
+      this.toastr.error('Capo reparto non assegnato');
       return;
     }
-
-    console.log("Veterinario dell'animale:", animaleSelezionato?.veterinario);
-
-
-    const veterinarioId = animaleSelezionato.veterinario.id;
 
     this.somministrazioneService
-      .somministraFarmaco(this.selectedAnimaleId, this.selectedMedicineId, this.quantita, veterinarioId)
+      .somministraFarmacoVeterinario(this.selectedAnimaleId, this.selectedMedicineId, this.quantita, capoRepartoId)
       .subscribe({
-        next: res => {
-          this.toastr.success('Somministrazione effettuata con successo');
-        },
-        error: () => {
-          this.toastr.error('Errore nella somministrazione');
-        }
+        next: () => this.toastr.success('Somministrazione effettuata con successo'),
+        error: () => this.toastr.error('Animale o medicina non trovati')
       });
   }
 
   getUnitForSelectedMedicine(): string {
     const med = this.medicine.find(m => m.id === this.selectedMedicineId);
-    return med ? String(med.unitsToReceive) : 'unità';
+    return med ? String(med.unitsToReceive || 'unità') : 'unità';
   }
-
-
-
 }
