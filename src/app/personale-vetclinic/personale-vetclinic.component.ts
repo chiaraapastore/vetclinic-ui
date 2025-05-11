@@ -15,7 +15,6 @@ export class PersonaleVetclinicComponent implements OnInit{
   capoReparti: any[] = [];
   reparti: any[] = [];
   assistenti: any[] = [];
-  nuovoReparto: string = '';
   nuovoDottoreNome: string = '';
   nuovoDottoreCognome: string = '';
   nuovoDottoreUsername: string = '';
@@ -31,7 +30,15 @@ export class PersonaleVetclinicComponent implements OnInit{
   nuovoAssistenteNomeReparto: string = '';
   nuovoAssistenteUsername: string = '';
   nuovoCapoRepartoUsername: string = '';
-  repartoDottore: any;
+  mostraTabella: boolean = false;
+  nuovoDottoreRegistrationNumber: string = '';
+  nuovoCapoRepartoRegistrationNumber: string = '';
+  nuovoAssistenteRegistrationNumber: string = '';
+  mostraDottore: boolean = false;
+  mostraCapo: boolean = false;
+  mostraAssistente: boolean = false;
+
+
 
   turni: string[] = ['Mattina', 'Pomeriggio', 'Notte', 'Monto', 'Smonto'];
   giorniSettimana: string[] = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'];
@@ -86,7 +93,7 @@ export class PersonaleVetclinicComponent implements OnInit{
   }
 
   aggiungiDottore() {
-    if (!this.nuovoDottoreNome || !this.nuovoDottoreCognome || !this.nuovoDottoreUsername || !this.nuovoDottoreEmail || !this.nuovoDottoreRepartoNome ) {
+    if (!this.nuovoDottoreNome || !this.nuovoDottoreCognome || !this.nuovoDottoreUsername || !this.nuovoDottoreEmail || !this.nuovoDottoreRepartoNome || !this.nuovoDottoreRegistrationNumber ) {
       console.error("Tutti i campi sono obbligatori, incluso il reparto.");
       return;
     }
@@ -98,7 +105,8 @@ export class PersonaleVetclinicComponent implements OnInit{
       lastName: this.nuovoDottoreCognome,
       username: this.nuovoDottoreUsername,
       email: this.nuovoDottoreEmail,
-      repartoNome: this.nuovoDottoreRepartoNome
+      repartoNome: this.nuovoDottoreRepartoNome,
+      registration_number: this.nuovoDottoreRegistrationNumber || undefined
     };
 
     console.log("Inviando il nuovo dottore al backend:", nuovoDottore);
@@ -128,7 +136,7 @@ export class PersonaleVetclinicComponent implements OnInit{
 
 
   aggiungiCapoReparto() {
-    if (!this.nuovoCapoRepartoNome || !this.nuovoCapoRepartoCognome || !this.nuovoCapoRepartoUsername || !this.nuovoCapoRepartoEmail || !this.nuovoCapoRepartoNomeReparto) {
+    if (!this.nuovoCapoRepartoNome || !this.nuovoCapoRepartoCognome || !this.nuovoCapoRepartoUsername || !this.nuovoCapoRepartoEmail || !this.nuovoCapoRepartoNomeReparto || !this.nuovoCapoRepartoRegistrationNumber) {
       console.error("Tutti i campi sono obbligatori, incluso il reparto.");
       return;
     }
@@ -138,7 +146,8 @@ export class PersonaleVetclinicComponent implements OnInit{
       lastName: this.nuovoCapoRepartoCognome,
       username: this.nuovoCapoRepartoUsername,
       email: this.nuovoCapoRepartoEmail,
-      repartoNome: this.nuovoCapoRepartoNomeReparto
+      repartoNome: this.nuovoCapoRepartoNomeReparto,
+      registration_number: this.nuovoCapoRepartoRegistrationNumber || undefined
     };
 
 
@@ -234,7 +243,8 @@ export class PersonaleVetclinicComponent implements OnInit{
         console.log("Tutti i dottori ricevuti:", data);
         this.dottori = data.map(dottore => ({
           ...dottore,
-          reparto: dottore.reparto || 'Nessun reparto'
+          reparto: dottore.reparto || 'Nessun reparto',
+          showReparto: false
         }));
       },
       error: (err: any) => console.error('Errore nel caricamento dei dottori', err)
@@ -259,9 +269,10 @@ export class PersonaleVetclinicComponent implements OnInit{
     this.adminService.getAllAssistants().subscribe({
       next: (data: any[]) => {
         console.log("Dati ricevuti dal backend per capi reparto:", data);
-        this.capoReparti = data.map(capo => ({
-          ...capo,
-          reparto: capo.repartoNome || "Nessun reparto"
+        this.assistenti = data.map(assistente => ({
+          ...assistente,
+          reparto: assistente.reparto?.name || "Nessun reparto",
+          showReparto: false
         }));
       },
       error: (err: any) => console.error("Errore nel caricamento dei capi reparto", err)
@@ -329,7 +340,7 @@ export class PersonaleVetclinicComponent implements OnInit{
   }
 
   aggiungiAssistente() {
-    if (!this.nuovoAssistenteNome || !this.nuovoAssistenteCognome || !this.nuovoAssistenteUsername || !this.nuovoAssistenteEmail || !this.nuovoAssistenteNomeReparto) {
+    if (!this.nuovoAssistenteNome || !this.nuovoAssistenteCognome || !this.nuovoAssistenteUsername || !this.nuovoAssistenteEmail || !this.nuovoAssistenteNomeReparto || !this.nuovoAssistenteNomeReparto) {
       console.error("Tutti i campi sono obbligatori, incluso il reparto.");
       return;
     }
@@ -341,7 +352,8 @@ export class PersonaleVetclinicComponent implements OnInit{
       lastName: this.nuovoAssistenteCognome,
       username: this.nuovoAssistenteUsername,
       email: this.nuovoAssistenteEmail,
-      repartoName: this.nuovoAssistenteNomeReparto
+      repartoName: this.nuovoAssistenteNomeReparto,
+      registration_number: this.nuovoAssistenteRegistrationNumber || undefined
     };
 
 

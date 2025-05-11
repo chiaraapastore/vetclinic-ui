@@ -35,7 +35,6 @@ export class MagazzinoAssistenteComponent implements OnInit {
   storicoOrdini: any[] = [];
   editableMedicineId: number | null = null;
   categorieFiltrate: string[] = [];
-
   emergenze: any[] = [];
 
   constructor(

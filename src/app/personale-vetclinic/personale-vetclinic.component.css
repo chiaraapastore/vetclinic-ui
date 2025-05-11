@@ -13,8 +13,7 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  min-height: 80vh;
-  margin-top: 50px;
+  margin-top: 190px;
 }
 
 
@@ -141,7 +140,7 @@ select {
   background-color: white;
   font-size: 14px;
   cursor: pointer;
-  width: 140px;
+  width: 220px;
   text-align: center;
 }
 
@@ -318,27 +317,6 @@ footer {
   max-width: 940px;
   width: 100%;
 }
-
-.add-section {
-  background-color: #ffffff;
-  border-radius: 12px;
-  padding: 24px 30px;
-  margin-bottom: 30px;
-  width: 100%;
-  max-width: 900px;
-  box-shadow: 0 6px 18px rgba(0, 121, 107, 0.2);
-  transition: all 0.3s ease;
-}
-
-.add-section h3 {
-  font-size: 18px;
-  font-weight: 700;
-  color: #00796b;
-  margin-bottom: 20px;
-  text-align: center;
-  letter-spacing: 0.5px;
-}
-
 .input {
   display: flex;
   flex-wrap: wrap;
@@ -373,7 +351,7 @@ footer {
   font-size: 16px;
   padding: 10px 14px;
   width: 50px;
-  height: 42px;
+  height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -462,17 +440,34 @@ footer {
   width: 100%;
   margin-bottom: 15px;
 }
-
 .btn-icon-aggiungi {
-  width: 20%;
-  height: 30px;
-  max-width: 180px;
+  width: 100%;
+  max-width: 240px;
+  height: auto;
+  padding: 10px 16px;
+  margin-top: 10px;
   border-radius: 8px;
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #00796b;
+  color: white;
+  border: none;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
+  transition: background-color 0.3s ease;
 }
+
+.btn-icon-aggiungi i {
+  font-size: 16px;
+}
+
+.btn-icon-aggiungi:hover {
+  background-color: #004d40;
+}
+
 
 .table-container {
   width: 100%;
@@ -563,4 +558,106 @@ footer {
 }
 
 
+.toggle-button {
+  margin: 10px 0;
+  padding: 8px 16px;
+  font-size: 16px;
+  background-color: #26a69a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
+.toggle-button:hover {
+  background-color: #1f8d82;
+}
+
+.accordion-toggle {
+  background-color: #26a69a;
+  color: white;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  margin: 10px auto;
+  display: block;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.form-container {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+input, select {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.form-button-container {
+  text-align: right;
+}
+
+.btn-aggiungi {
+  background-color: #2e7d32;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-aggiungi i {
+  margin-right: 5px;
+}
+
+.card-buttons-container {
+  display: flex;
+  flex-direction: column; /* cambia da row a column */
+  align-items: center;
+  gap: 30px;
+  margin: 30px 0;
+}
+
+.aggiungi-buttons-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #e0f7f6;
+  padding: 20px;
+  border-radius: 12px;
+  width: 240px;
+  box-shadow: 0 4px 12px rgba(0, 121, 107, 0.2);
+  font-weight: bold;
+  font-size: 16px;
+  color: #004d40;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, background 0.3s;
+  text-align: center;
+}
+
+.card-button:hover {
+  background-color: #b2dfdb;
+  transform: scale(1.05);
+}

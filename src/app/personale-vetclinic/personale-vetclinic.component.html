@@ -2,7 +2,31 @@
 <button class="back-button" (click)="goBack()">Indietro</button>
 
 <div class="container">
-  <div class="table-container">
+
+  <div class="card-buttons-container">
+    <div class="card-button" (click)="mostraTabella = !mostraTabella">
+      <i class="fas fa-users"></i>
+      <span>{{ mostraTabella ? 'Nascondi Personale' : 'Mostra Personale' }}</span>
+    </div>
+
+    <div class="aggiungi-buttons-container">
+      <div class="card-button" (click)="mostraDottore = !mostraDottore">
+        <i class="fas fa-user-md"></i>
+        <span>{{ mostraDottore ? 'Nascondi Form Dottore' : 'Aggiungi Nuovo Dottore' }}</span>
+      </div>
+      <div class="card-button" (click)="mostraCapo = !mostraCapo">
+        <i class="fas fa-user-tie"></i>
+        <span>{{ mostraCapo ? 'Nascondi Form Capo Reparto' : 'Aggiungi Nuovo CapoReparto' }}</span>
+      </div>
+      <div class="card-button" (click)="mostraAssistente = !mostraAssistente">
+        <i class="fas fa-user-nurse"></i>
+        <span>{{ mostraAssistente ? 'Nascondi Form Assistente' : 'Aggiungi Nuovo Assistente' }}</span>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="table-container" *ngIf="mostraTabella">
     <table>
       <thead>
       <tr>
@@ -25,34 +49,40 @@
         <td>{{ vet.registrationNumber }}</td>
         <td>{{ vet.reparto?.name || 'Nessun reparto' }}</td>
         <td>Veterinario</td>
-      </tr>
+        <td>
+          <div class="azioni-container">
+            <button class="action-btn" (click)="vet.showReparto = !vet.showReparto" title="Cambia Reparto">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+            <select *ngIf="vet.showReparto" (change)="assegnaDottoreAReparto(vet.id, $event)">
+              <option *ngFor="let reparto of reparti" [value]="reparto.id">{{ reparto.name }}</option>
 
+            </select>
+          </div>
+        </td>
+
+      </tr>
 
       <tr *ngFor="let capoReparto of capoReparti">
         <td>{{ capoReparto.id }}</td>
         <td>{{ capoReparto.firstName }}</td>
         <td>{{ capoReparto.lastName }}</td>
         <td>{{ capoReparto.email }}</td>
-        <td>{{ capoReparto.registrationNumber  }}</td>
+        <td>{{ capoReparto.registrationNumber }}</td>
         <td>{{ capoReparto.reparto || 'Nessun reparto' }}</td>
-
-
-
         <td>Capo Reparto</td>
-
         <td>
           <div class="azioni-container">
-            <button class="action-btn" title="Cambia Reparto" (click)="capoReparto.showReparto = !capoReparto.showReparto">
+            <button class="action-btn" (click)="capoReparto.showReparto = !capoReparto.showReparto" title="Cambia Reparto">
               <i class="fas fa-sync-alt"></i>
             </button>
-            <button class="action-btn" title="Assegna Turno" (click)="toggleTurnoTable(capoReparto.id)">
+            <button class="action-btn" (click)="toggleTurnoTable(capoReparto.id)" title="Assegna Turno">
               <i class="fas fa-user-clock"></i>
             </button>
             <select *ngIf="capoReparto.showReparto" (change)="assegnaCapoReparto(capoReparto.id, $event)">
               <option *ngFor="let reparto of reparti" [value]="reparto.id">{{ reparto.name }}</option>
             </select>
           </div>
-
           <div *ngIf="capoReparto.showTurnoTable" class="turno-table">
             <table>
               <thead>
@@ -67,90 +97,94 @@
                 <td *ngFor="let turno of turni"
                     (click)="assegnaTurno(capoReparto.id, giorno, turno)"
                     [ngStyle]="{'background-color': getTurnoColor(capoReparto.id, giorno, turno)}"
-                    class="turno-cell">
-                </td>
+                    class="turno-cell"></td>
               </tr>
               </tbody>
             </table>
           </div>
         </td>
-
       </tr>
+
       <tr *ngFor="let assist of assistenti">
         <td>{{ assist.id }}</td>
         <td>{{ assist.firstName }}</td>
         <td>{{ assist.lastName }}</td>
         <td>{{ assist.email }}</td>
-        <td>{{ assist.registrationNumber  }}</td>
+        <td>{{ assist.registrationNumber }}</td>
         <td>{{ assist.reparto }}</td>
         <td>Assistente</td>
+        <td>
+          <div class="azioni-container">
+            <button class="action-btn" (click)="assist.showReparto = !assist.showReparto" title="Cambia Reparto">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+            <select *ngIf="assist.showReparto" (change)="assegnaAssistenteAReparto(assist.id, $event)">
+              <option *ngFor="let reparto of reparti" [value]="reparto.id">{{ reparto.name }}</option>
+            </select>
+          </div>
+        </td>
+
+      </tr>
       </tbody>
     </table>
   </div>
-  <div class="add-container">
+</div>
 
 
-    <div class="add-section">
-      <h3>Aggiungi Nuovo Dottore</h3>
-      <div class="input">
-        <input type="text" [(ngModel)]="nuovoDottoreNome" placeholder="Nome" />
-        <input type="text" [(ngModel)]="nuovoDottoreCognome" placeholder="Cognome" />
-        <input type="text" [(ngModel)]="nuovoDottoreUsername" placeholder="Username" />
-        <input type="text" [(ngModel)]="nuovoDottoreEmail" placeholder="Email" />
-        <select [(ngModel)]="nuovoDottoreRepartoNome">
-          <option value="" disabled selected>Seleziona reparto</option>
-          <option *ngFor="let reparto of reparti" [value]="reparto.name">{{ reparto.name }}</option>
-        </select>
-        <button class="btn-icon-aggiungi" (click)="aggiungiDottore()">
-          <i class="fas fa-plus"></i>
-        </button>
-      </div>
+<div class="accordion-section" *ngIf="mostraDottore">
+  <div class="form-container">
+    <div class="form-grid">
+      <input type="text" [(ngModel)]="nuovoDottoreNome" placeholder="Nome" />
+      <input type="text" [(ngModel)]="nuovoDottoreCognome" placeholder="Cognome" />
+      <input type="text" [(ngModel)]="nuovoDottoreUsername" placeholder="Username" />
+      <input type="text" [(ngModel)]="nuovoDottoreEmail" placeholder="Email" />
+      <input type="text" [(ngModel)]="nuovoDottoreRegistrationNumber" placeholder="RegistrationNumber" />
+      <select [(ngModel)]="nuovoDottoreRepartoNome">
+        <option value="" disabled selected>Seleziona reparto</option>
+        <option *ngFor="let reparto of reparti" [value]="reparto.name">{{ reparto.name }}</option>
+      </select>
+      <button class="btn-icon-aggiungi" (click)="aggiungiDottore()">Aggiungi Dottore</button>
     </div>
-
-
-
-    <div class="add-section">
-      <h3>Aggiungi Nuovo Capo Reparto</h3>
-      <div class="input">
-        <input type="text" [(ngModel)]="nuovoCapoRepartoNome" placeholder="Nome" />
-        <input type="text" [(ngModel)]="nuovoCapoRepartoCognome" placeholder="Cognome" />
-        <input type="text" [(ngModel)]="nuovoCapoRepartoUsername" placeholder="Username" />
-        <input type="text" [(ngModel)]="nuovoCapoRepartoEmail" placeholder="Email" />
-        <select [(ngModel)]="nuovoCapoRepartoNomeReparto">
-          <option value="" disabled selected>Seleziona reparto</option>
-          <option *ngFor="let reparto of reparti" [value]="reparto.name">{{ reparto.name }}</option>
-        </select>
-        <button class="btn-icon-aggiungi" (click)="aggiungiCapoReparto(); ">
-          <i class="fas fa-plus"></i>
-        </button>
-      </div>
-    </div>
-
-
-
-    <div class="add-section">
-      <h3>Aggiungi Nuovo Assistente</h3>
-      <div class="input">
-        <input type="text" [(ngModel)]="nuovoAssistenteNome" placeholder="Nome" />
-        <input type="text" [(ngModel)]="nuovoAssistenteCognome" placeholder="Cognome" />
-        <input type="text" [(ngModel)]="nuovoAssistenteUsername" placeholder="Username" />
-        <input type="text" [(ngModel)]="nuovoAssistenteEmail" placeholder="Email" />
-        <select [(ngModel)]="nuovoAssistenteNomeReparto">
-          <option value="" disabled selected>Seleziona reparto</option>
-          <option *ngFor="let reparto of reparti" [value]="reparto.name">{{ reparto.name }}</option>
-        </select>
-        <button class="btn-icon-aggiungi" (click)="aggiungiAssistente()">
-          <i class="fas fa-plus"></i>
-        </button>
-      </div>
-    </div>
-
   </div>
 </div>
-</body>
+
+<div class="accordion-section" *ngIf="mostraCapo">
+  <div class="form-container">
+    <div class="form-grid">
+      <input type="text" [(ngModel)]="nuovoCapoRepartoNome" placeholder="Nome" />
+      <input type="text" [(ngModel)]="nuovoCapoRepartoCognome" placeholder="Cognome" />
+      <input type="text" [(ngModel)]="nuovoCapoRepartoUsername" placeholder="Username" />
+      <input type="text" [(ngModel)]="nuovoCapoRepartoEmail" placeholder="Email" />
+      <input type="text" [(ngModel)]="nuovoCapoRepartoRegistrationNumber" placeholder="RegistrationNumber" />
+      <select [(ngModel)]="nuovoCapoRepartoNomeReparto">
+        <option value="" disabled selected>Seleziona reparto</option>
+        <option *ngFor="let reparto of reparti" [value]="reparto.name">{{ reparto.name }}</option>
+      </select>
+      <button class="btn-icon-aggiungi" (click)="aggiungiCapoReparto()">Aggiungi Capo Reparto</button>
+    </div>
+  </div>
+</div>
+
+<div class="accordion-section" *ngIf="mostraAssistente">
+  <div class="form-container">
+    <div class="form-grid">
+      <input type="text" [(ngModel)]="nuovoAssistenteNome" placeholder="Nome" />
+      <input type="text" [(ngModel)]="nuovoAssistenteCognome" placeholder="Cognome" />
+      <input type="text" [(ngModel)]="nuovoAssistenteUsername" placeholder="Username" />
+      <input type="text" [(ngModel)]="nuovoAssistenteEmail" placeholder="Email" />
+      <input type="text" [(ngModel)]="nuovoAssistenteRegistrationNumber" placeholder="RegistrationNumber" />
+      <select [(ngModel)]="nuovoAssistenteNomeReparto">
+        <option value="" disabled selected>Seleziona reparto</option>
+        <option *ngFor="let reparto of reparti" [value]="reparto.name">{{ reparto.name }}</option>
+      </select>
+      <button class="btn-icon-aggiungi" (click)="aggiungiAssistente()">Aggiungi Assistente</button>
+    </div>
+  </div>
+</div>
 
 <footer>
   <div class="footer-bottom">
     <p>© 2025 HospitalCare. Tutti i diritti riservati.</p>
   </div>
 </footer>
+</body>
