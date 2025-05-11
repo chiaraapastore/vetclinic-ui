@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {StatisticheService} from '../services/statistiche.service';
+import { LegendPosition } from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'app-dati-statistiche',
@@ -13,6 +14,8 @@ export class DatiStatisticheComponent implements OnInit {
   riordiniStockout: any[] = [];
   distribuzionePerReparto: any[] = [];
   loading: boolean = true;
+  legendPosition = LegendPosition.Right;
+
 
   constructor(
     private statisticheService: StatisticheService,
@@ -38,7 +41,7 @@ export class DatiStatisticheComponent implements OnInit {
       this.distribuzionePerReparto = Array.isArray(data)
         ? data.map(item => ({
           name: item.reparto,
-          value: Number(item.consumo)
+          value: Number(item.totale)
         }))
         : [];
       this.loading = false;
@@ -47,6 +50,7 @@ export class DatiStatisticheComponent implements OnInit {
       this.loading = false;
     });
   }
+
 
   goBack(): void {
     this.router.navigate(['/admin']);

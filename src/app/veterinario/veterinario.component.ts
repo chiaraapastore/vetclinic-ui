@@ -74,7 +74,7 @@ export class VeterinarioComponent implements OnInit {
             this.somministrazioneService.getSomministrazioniByPaziente(pazienteId).subscribe({
               next: (somministrazioni) => {
                 const somministrazioniRecenti = somministrazioni.map((s: any) => ({
-                  testo: `Somministrato ${s.medicine.name} a ${s.animal.name}`,
+                  testo: `Somministrato ${s.medicine?.name} a ${s.animal?.name}`,
                   orario: this.getRelativeTime(s.date)
                 }));
                 this.attivitaRecenti.push(...somministrazioniRecenti);

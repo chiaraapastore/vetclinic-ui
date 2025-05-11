@@ -40,12 +40,13 @@
     <h3>Distribuzione per Reparto</h3>
     <ngx-charts-pie-chart
       *ngIf="distribuzionePerReparto.length > 0"
-      [view]="[400, 400]"
+      [view]="[600, 400]"
       [results]="distribuzionePerReparto"
       [scheme]="'cool'"
       [legend]="true"
+      [legendPosition]="legendPosition"
       [labels]="true"
-      [doughnut]="true"
+      [doughnut]="false"
       [animations]="true">
     </ngx-charts-pie-chart>
     <p *ngIf="distribuzionePerReparto.length === 0">Nessun dato disponibile.</p>

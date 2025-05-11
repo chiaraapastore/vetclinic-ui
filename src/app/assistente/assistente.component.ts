@@ -79,7 +79,7 @@ export class AssistenteComponent implements OnInit {
             this.somministrazioneService.getSomministrazioniByPaziente(pazienteId).subscribe({
               next: (somministrazioni) => {
                 const somministrazioniRecenti = somministrazioni.map((s: any) => ({
-                  testo: `Somministrato ${s.medicine.name} a ${s.animal.name}`,
+                  testo: `Somministrato ${s.medicine.name} a ${s.animal?.name || 'Animale sconosciuto'}`,
                   orario: this.getRelativeTime(s.date)
                 }));
                 this.attivitaRecenti.push(...somministrazioniRecenti);
@@ -186,9 +186,10 @@ export class AssistenteComponent implements OnInit {
 
   caricaPazientiAnimali() {
     this.assistenteService.getVeterinarianPatients().subscribe((data: any[]) => {
-      this.pazientiAnimali = data;
+      this.pazientiAnimali = data.filter(p => p && p.nome);
     });
   }
+
 
   caricaMedicinali(repartoId: number) {
     this.assistenteService.viewDepartmentMedicines(repartoId).subscribe((data: any[]) => {

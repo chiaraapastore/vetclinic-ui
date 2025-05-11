@@ -178,7 +178,7 @@ footer {
 }
 
 .recent-activities.wide-activity-box {
-  width: calc(100% - 310px);
+  width: calc(100% - 110px);
   min-width: 500px;
   height: 200px;
   background-color: #ffffff;
@@ -188,6 +188,7 @@ footer {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  margin-top: 20px;
 }
 
 .recent-activities.wide-activity-box h3 {
@@ -256,10 +257,22 @@ footer {
   justify-content: space-between;
   gap: 20px;
   padding: 0 30px 60px 30px;
-  margin-top: 0;
+  margin-top: -10px;
   background-color: #f9fcfc;
   flex-wrap: wrap;
   box-sizing: border-box;
+}
+
+.recent-activities.wide-activity-box {
+  width: 100%;
+  max-width: 1000px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 20px 24px;
+  box-shadow: 0 6px 20px rgba(0, 121, 107, 0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 
@@ -279,6 +292,15 @@ footer {
 }
 
 
+.recent-activities-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 60px;
+  padding: 0 30px;
+  box-sizing: border-box;
+}
 
 
 .recent-activities h3 {

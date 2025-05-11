@@ -21,15 +21,16 @@ export class SomministrazioneService {
     return this.http.get<Somministrazione[]>(`${this.somministrazioneUrl}/paziente/${pazienteId}`);
   }
 
-  somministraFarmaco(animaleId: number, medicineId: number, quantita: number, assistenteId: number): Observable<{ message: string }> {
+  somministraFarmaco(animaleId: number, medicineId: number, quantita: number, veterinarianId: number): Observable<{ message: string }> {
     const params = new HttpParams()
       .set('animaleId', animaleId.toString())
       .set('medicineId', medicineId.toString())
       .set('quantita', quantita.toString())
-      .set('assistenteId', assistenteId.toString());
+      .set('veterinarianId', veterinarianId.toString());
 
     return this.http.post<{ message: string }>(`${this.assistenteUrl}/somministra-farmaco`, null, { params });
   }
+
 
 
   somministraFarmacoVeterinario(pazienteId: number, medicineId: number, quantita: number, capoRepartoId: number) {
