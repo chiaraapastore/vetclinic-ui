@@ -15,6 +15,7 @@ export class PersonaleVetclinicComponent implements OnInit{
   dottori: any[] = [];
   capoReparti: any[] = [];
   reparti: any[] = [];
+  page: number = 1;
   assistenti: any[] = [];
   nuovoDottoreNome: string = '';
   nuovoDottoreCognome: string = '';
@@ -38,6 +39,12 @@ export class PersonaleVetclinicComponent implements OnInit{
   mostraDottore: boolean = false;
   mostraCapo: boolean = false;
   mostraAssistente: boolean = false;
+  searchKeyword: string = '';
+
+  originalDottori: any[] = [];
+  originalAssistenti: any[] = [];
+  originalCapoReparti: any[] = [];
+
 
 
 
@@ -54,8 +61,63 @@ export class PersonaleVetclinicComponent implements OnInit{
     this.caricaReparti();
     this.loadDottori();
     this.loadAssistente();
+    this.loadPersonale();
+    this.originalDottori = [...this.dottori];
+    this.originalAssistenti = [...this.assistenti];
+    this.originalCapoReparti = [...this.capoReparti];
+
 
   }
+
+  loadPersonale(): void {
+    this.adminService.getAllVeterinaries().subscribe(data => {
+      this.dottori = data;
+      this.originalDottori = [...data];
+    });
+
+    this.adminService.getAllAssistants().subscribe(data => {
+      this.assistenti = data;
+      this.originalAssistenti = [...data];
+    });
+
+    this.adminService.getHeadOfDepartments().subscribe(data => {
+      this.capoReparti = data;
+      this.originalCapoReparti = [...data];
+    });
+  }
+
+  applyFilters(): void {
+    const term = this.searchKeyword.toLowerCase();
+
+    this.dottori = this.originalDottori.filter(p =>
+      p.firstName.toLowerCase().includes(term) ||
+      p.lastName.toLowerCase().includes(term) ||
+      p.email.toLowerCase().includes(term)
+    );
+
+    this.assistenti = this.originalAssistenti.filter(p =>
+      p.firstName.toLowerCase().includes(term) ||
+      p.lastName.toLowerCase().includes(term) ||
+      p.email.toLowerCase().includes(term)
+    );
+
+    this.capoReparti = this.originalCapoReparti.filter(p =>
+      p.firstName.toLowerCase().includes(term) ||
+      p.lastName.toLowerCase().includes(term) ||
+      p.email.toLowerCase().includes(term)
+    );
+  }
+
+  searchPersonale(): void {
+    this.applyFilters();
+  }
+
+  resetFilters(): void {
+    this.searchKeyword = '';
+    this.page = 1;
+    this.loadPersonale();
+  }
+
 
   caricaDati(): void {
     this.adminService.getAllVeterinaries().subscribe(data => {

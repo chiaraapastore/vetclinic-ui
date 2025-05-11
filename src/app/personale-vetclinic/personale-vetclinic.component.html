@@ -26,7 +26,16 @@
   </div>
 
 
-  <div class="table-container" *ngIf="mostraTabella">
+  <div *ngIf="mostraTabella" class="table-container">
+    <div class="search-container centered-search">
+      <input [(ngModel)]="searchKeyword" name="searchKeyword" type="text" class="search-bar" placeholder="Cerca per nome, cognome o email...">
+      <button class="btn btn-success search-btn" (click)="searchPersonale()">
+        <i class="fas fa-search"></i>
+      </button>
+      <button class="reset-button" (click)="resetFilters()" title="Ricarica">
+        <i class="fas fa-sync-alt"></i>
+      </button>
+    </div>
     <table>
       <thead>
       <tr>
@@ -71,7 +80,7 @@
         <td>{{ capoReparto.lastName }}</td>
         <td>{{ capoReparto.email }}</td>
         <td>{{ capoReparto.registrationNumber }}</td>
-        <td>{{ capoReparto.reparto || 'Nessun reparto' }}</td>
+        <td>{{ capoReparto.reparto.name  || 'Nessun reparto' }}</td>
         <td>Capo Reparto</td>
         <td>
           <div class="azioni-container">
@@ -116,7 +125,7 @@
         <td>{{ assist.lastName }}</td>
         <td>{{ assist.email }}</td>
         <td>{{ assist.registrationNumber }}</td>
-        <td>{{ assist.reparto }}</td>
+        <td>{{ assist.reparto.name  }}</td>
         <td>Assistente</td>
         <td>
           <div class="azioni-container">

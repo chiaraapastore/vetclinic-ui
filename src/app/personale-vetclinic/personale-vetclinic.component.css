@@ -664,3 +664,87 @@ input, select {
   background-color: #b2dfdb;
   transform: scale(1.05);
 }
+
+
+.btn-success {
+  background-color: #2c8a88;
+  border: none;
+}
+
+.btn-success:hover {
+  background-color:#2c8a88;
+}
+
+.btn-outline-primary {
+  border-color: #2c8a88;
+  color: #2c8a88;
+}
+
+.btn-outline-primary:hover {
+  background-color: #2c8a88;
+  color: white;
+}
+.centered-search {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 0;
+    margin-left: 30%;
+}
+
+.search-bar {
+  padding: 10px 14px;
+  border: 2px solid #00796b;
+  border-radius: 10px;
+  font-size: 16px;
+  width: 320px;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.search-bar:focus {
+  outline: none;
+  box-shadow: 0 0 6px rgba(0, 121, 107, 0.4);
+  border-color: #004d40;
+}
+
+.search-btn,
+.reset-button {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 2px solid #00796b;
+  background: white;
+  color: #00796b;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+  font-size: 16px;
+}
+
+.search-btn:hover,
+.reset-button:hover {
+  background-color: #00796b;
+  color: white;
+}
+
+.table-container {
+  background: transparent;
+  box-shadow: none;
+}
+
+
+.reset-button {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: #ffffff;
+  border: 2px solid #00796b;
+  color: #00796b;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.reset-button:hover {
+  background-color: #00796b;
+  color: #ffffff;
+  transform: scale(1.05);
+}
