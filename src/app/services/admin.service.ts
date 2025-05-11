@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {CapoReparto} from '../models/capo-reparto.model';
+import {NuovoAnimaleDTO} from '../models/nuovo-animale-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -121,6 +122,15 @@ export class AdminService {
 
   eliminaUtente(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/elimina-utente/${id}`);
+  }
+
+  addAnimalWithClient(dto: NuovoAnimaleDTO): Observable<any> {
+    return this.http.post(`${this.apiUrl}/animali`, dto);
+  }
+
+
+  getAllAnimals(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/animali`);
   }
 
 }

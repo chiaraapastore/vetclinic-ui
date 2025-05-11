@@ -1,0 +1,75 @@
+<body>
+
+<button class="back-button" (click)="goBack()">Indietro</button>
+
+<div class="container">
+  <div class="card-buttons-container">
+    <div class="card-button" (click)="mostraTabella = !mostraTabella">
+      <i class="fas fa-paw"></i>
+      <span>{{ mostraTabella ? 'Nascondi Pazienti' : 'Mostra Pazienti' }}</span>
+    </div>
+    <div class="card-button" (click)="mostraForm = !mostraForm">
+      <i class="fas fa-plus-circle"></i>
+      <span>{{ mostraForm ? 'Nascondi Form' : 'Aggiungi Paziente' }}</span>
+    </div>
+  </div>
+
+  <div *ngIf="mostraTabella" class="table-container">
+    <div class="centered-search">
+      <input [(ngModel)]="searchKeyword" type="text" placeholder="Cerca per nome/specie/email cliente...">
+      <button class="btn btn-success search-btn" (click)="searchAnimali()">
+        <i class="fas fa-search"></i>
+      </button>
+      <button class="reset-button" (click)="resetFilters()" title="Ricarica">
+        <i class="fas fa-sync-alt"></i>
+      </button>
+    </div>
+
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th><th>Nome</th><th>Specie</th><th>Razza</th><th>Peso</th><th>Reparto</th><th>Cliente</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let a of animali">
+        <td>{{ a.id }}</td>
+        <td>{{ a.name }}</td>
+        <td>{{ a.species }}</td>
+        <td>{{ a.breed }}</td>
+        <td>{{ a.weight }} kg</td>
+        <td>{{ a.reparto?.name || 'Non assegnato' }}</td>
+        <td>{{ a.cliente.email }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="mostraForm" class="form-container">
+    <div class="form-grid">
+      <input type="text" [(ngModel)]="nuovoAnimale.nome" placeholder="Nome Animale" />
+      <input type="text" [(ngModel)]="nuovoAnimale.specie" placeholder="Specie" />
+      <input type="text" [(ngModel)]="nuovoAnimale.razza" placeholder="Razza" />
+      <input type="number" [(ngModel)]="nuovoAnimale.peso" placeholder="Peso (kg)" />
+      <select [(ngModel)]="nuovoAnimale.repartoId">
+        <option value="" disabled selected>Seleziona reparto</option>
+        <option *ngFor="let reparto of reparti" [value]="reparto.id">{{ reparto.name }}</option>
+      </select>
+
+      <input type="text" [(ngModel)]="nuovoAnimale.clienteNome" placeholder="Nome Cliente" />
+      <input type="text" [(ngModel)]="nuovoAnimale.clienteCognome" placeholder="Cognome Cliente" />
+      <input type="text" [(ngModel)]="nuovoAnimale.clienteUsername" placeholder="Username Cliente" />
+      <input type="email" [(ngModel)]="nuovoAnimale.clienteEmail" placeholder="Email Cliente" />
+
+      <button class="btn-icon-aggiungi" (click)="aggiungiAnimale()">Registra Paziente</button>
+    </div>
+  </div>
+</div>
+
+
+<footer>
+  <div class="footer-bottom">
+    <p>© 2025 HospitalCare. Tutti i diritti riservati.</p>
+  </div>
+</footer>
+</body>
