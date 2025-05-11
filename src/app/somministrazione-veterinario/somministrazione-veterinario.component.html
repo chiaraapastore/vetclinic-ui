@@ -2,41 +2,40 @@
 
 <button class="back-button" (click)="goBack()">Indietro</button>
 
-
 <div class="somministrazioni-container">
+  <div class="form-wrapper">
+    <h2 class="title">Somministrazione Farmaco</h2>
 
-  <div class="card p-4 shadow">
-    <h4 class="mb-3">Somministrazione Farmaco</h4>
-
-    <div class="form-group mb-3">
-      <label for="paziente">Seleziona Paziente:</label>
+    <div class="form-group">
+      <label for="paziente">Paziente</label>
       <select id="paziente" class="form-control" [(ngModel)]="selectedAnimaleId">
         <option [ngValue]="null">-- Seleziona --</option>
         <option *ngFor="let paziente of pazienti" [ngValue]="paziente.id">{{ paziente.name }}</option>
       </select>
     </div>
 
-    <div class="form-group mb-3">
-      <label for="farmaco">Seleziona Farmaco:</label>
+    <div class="form-group">
+      <label for="farmaco">Farmaco</label>
       <select id="farmaco" class="form-control" [(ngModel)]="selectedMedicineId">
         <option [ngValue]="null">-- Seleziona --</option>
         <option *ngFor="let med of medicine" [ngValue]="med.id">{{ med.name }}</option>
       </select>
     </div>
 
-    <div class="form-group mb-3">
-      <label for="quantita">Quantità:</label>
-      <input type="number" id="quantita" class="form-control" [(ngModel)]="quantita" min="1" />
-      <small class="form-text text-muted">{{ getUnitForSelectedMedicine() }}</small>
+    <div class="form-group">
+      <label for="quantita">Quantità</label>
+      <div class="quantita-wrapper">
+        <input type="number" id="quantita" class="form-control" [(ngModel)]="quantita" min="1" />
+        <span class="unit-label">{{ getUnitForSelectedMedicine() }}</span>
+      </div>
     </div>
 
-    <button class="btn btn-success w-100" (click)="somministraFarmaco()">Somministra</button>
+    <button class="button-somministra" (click)="somministraFarmaco()">Somministra</button>
   </div>
 </div>
-
-</body>
-
 
 <footer class="footer">
   <p>© 2025 VetEnterprise Solutions. Tutti i diritti riservati.</p>
 </footer>
+
+</body>
