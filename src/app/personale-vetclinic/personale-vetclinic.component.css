@@ -15,6 +15,9 @@ body {
   flex-direction: column;
   margin-top: 190px;
 }
+.action-btn i.fa-trash-alt {
+  color: white;
+}
 
 
 table {

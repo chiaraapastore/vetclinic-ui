@@ -118,4 +118,9 @@ export class AdminService {
   getAllAssistants(): Observable<any> {
     return this.http.get(`${this.apiUrl}/assistants`);
   }
+
+  eliminaUtente(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/elimina-utente/${id}`);
+  }
+
 }

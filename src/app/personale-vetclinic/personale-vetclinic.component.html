@@ -47,7 +47,7 @@
         <td>{{ vet.lastName }}</td>
         <td>{{ vet.email }}</td>
         <td>{{ vet.registrationNumber }}</td>
-        <td>{{ vet.reparto?.name || 'Nessun reparto' }}</td>
+        <td>{{ vet.reparto.name || 'Nessun reparto' }}</td>
         <td>Veterinario</td>
         <td>
           <div class="azioni-container">
@@ -56,8 +56,10 @@
             </button>
             <select *ngIf="vet.showReparto" (change)="assegnaDottoreAReparto(vet.id, $event)">
               <option *ngFor="let reparto of reparti" [value]="reparto.id">{{ reparto.name }}</option>
-
             </select>
+            <button class="action-btn" (click)="eliminaUtente(vet.id)" title="Elimina">
+              <i class="fas fa-trash-alt"></i>
+            </button>
           </div>
         </td>
 
@@ -82,6 +84,9 @@
             <select *ngIf="capoReparto.showReparto" (change)="assegnaCapoReparto(capoReparto.id, $event)">
               <option *ngFor="let reparto of reparti" [value]="reparto.id">{{ reparto.name }}</option>
             </select>
+            <button class="action-btn" (click)="eliminaUtente(capoReparto.id)" title="Elimina">
+              <i class="fas fa-trash-alt"></i>
+            </button>
           </div>
           <div *ngIf="capoReparto.showTurnoTable" class="turno-table">
             <table>
@@ -121,6 +126,10 @@
             <select *ngIf="assist.showReparto" (change)="assegnaAssistenteAReparto(assist.id, $event)">
               <option *ngFor="let reparto of reparti" [value]="reparto.id">{{ reparto.name }}</option>
             </select>
+            <button class="action-btn" (click)="eliminaUtente(assist.id)" title="Elimina">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+
           </div>
         </td>
 

@@ -3,6 +3,7 @@ import {AdminService} from '../services/admin.service';
 import {CapoRepartoService} from '../services/capo-reparto.service';
 import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-personale-vetclinic',
@@ -376,5 +377,33 @@ export class PersonaleVetclinicComponent implements OnInit{
     });
 
   }
+
+  eliminaUtente(utenteId: number): void {
+    Swal.fire({
+      title: 'Sei sicuro?',
+      text: 'Questa operazione rimuoverà l\'utente dal sistema!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#00796b',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sì, elimina!',
+      cancelButtonText: 'Annulla'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.adminService.eliminaUtente(utenteId).subscribe({
+          next: () => {
+            this.toastr.success('Utente eliminato con successo!');
+            this.caricaDati();
+          },
+          error: (error) => {
+            console.error('Errore durante l\'eliminazione:', error);
+            this.toastr.error('Errore durante l\'eliminazione.');
+          }
+        });
+      }
+    });
+  }
+
+
 }
 
