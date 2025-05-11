@@ -4,6 +4,7 @@ import {CapoRepartoService} from '../services/capo-reparto.service';
 import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
 import Swal from 'sweetalert2';
+import {NotificheService} from '../services/notifiche.service';
 
 @Component({
   selector: 'app-personale-vetclinic',
@@ -53,7 +54,7 @@ export class PersonaleVetclinicComponent implements OnInit{
   turniAssegnati: { [key: number]: { [giorno: string]: string } } = {};
 
 
-  constructor(private adminService: AdminService,  private router: Router, private headOfDepartmentService: CapoRepartoService, private toastr: ToastrService) {}
+  constructor(private adminService: AdminService, private notificheService: NotificheService ,private router: Router, private headOfDepartmentService: CapoRepartoService, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.caricaDati();
@@ -234,6 +235,8 @@ export class PersonaleVetclinicComponent implements OnInit{
 
   assegnaDottoreAReparto(utenteId: number, event: Event): void {
     const repartoId = parseInt((event.target as HTMLSelectElement).value, 10);
+    const reparto = this.reparti.find(r => r.id === repartoId);
+    const repartoNome = reparto ? reparto.name : 'il nuovo reparto';
 
     if (isNaN(repartoId)) {
       this.toastr.error('Errore: Seleziona un reparto valido.');
@@ -244,6 +247,7 @@ export class PersonaleVetclinicComponent implements OnInit{
       .subscribe({
         next: () => {
           this.toastr.success('Dottore assegnato al reparto con successo!');
+          this.notificheService.inviaNotifica(utenteId, `Sei stato spostato nel reparto: ${repartoNome}`).subscribe();
           this.loadDottori();
         },
         error: (error: any) => {
@@ -255,6 +259,8 @@ export class PersonaleVetclinicComponent implements OnInit{
 
   assegnaCapoReparto(utenteId: number, event: Event): void {
     const repartoId = parseInt((event.target as HTMLSelectElement).value, 10);
+    const reparto = this.reparti.find(r => r.id === repartoId);
+    const repartoNome = reparto ? reparto.name : 'il nuovo reparto';
 
     if (isNaN(repartoId)) {
       this.toastr.error('Errore: Seleziona un reparto valido.');
@@ -265,6 +271,7 @@ export class PersonaleVetclinicComponent implements OnInit{
       .subscribe({
         next: () => {
           this.toastr.success('Capo reparto assegnato con successo!');
+          this.notificheService.inviaNotifica(utenteId, `Sei stato spostato nel reparto: ${repartoNome}`).subscribe();
           this.loadCapoReparto();
         },
         error: (error: any) => {
@@ -276,6 +283,8 @@ export class PersonaleVetclinicComponent implements OnInit{
 
   assegnaAssistenteAReparto(utenteId: number, event: Event): void {
     const repartoId = parseInt((event.target as HTMLSelectElement).value, 10);
+    const reparto = this.reparti.find(r => r.id === repartoId);
+    const repartoNome = reparto ? reparto.name : 'il nuovo reparto';
 
     if (isNaN(repartoId)) {
       this.toastr.error('Errore: Seleziona un reparto valido.');
@@ -286,6 +295,7 @@ export class PersonaleVetclinicComponent implements OnInit{
       .subscribe({
         next: () => {
           this.toastr.success('Assistente assegnato con successo!');
+          this.notificheService.inviaNotifica(utenteId, `Sei stato spostato nel reparto: ${repartoNome}`).subscribe();
           this.loadAssistente();
         },
         error: (error: any) => {
@@ -343,25 +353,6 @@ export class PersonaleVetclinicComponent implements OnInit{
   }
 
 
-  cambiaReparto(utenteId: number, repartoId: number): void {
-    if (!repartoId || isNaN(repartoId)) {
-      this.toastr.error('Errore: Seleziona un reparto valido.');
-      return;
-    }
-
-    this.adminService.assignDoctorToDepartment(utenteId, repartoId)
-      .subscribe({
-        next: () => {
-          this.toastr.success('Reparto aggiornato con successo!');
-          this.loadDottori();
-        },
-        error: (error: any) => {
-          console.error("Errore aggiornando il reparto:", error);
-          this.toastr.error('Errore nell\'aggiornamento del reparto.');
-        }
-      });
-  }
-
   toggleTurnoTable(capoRepartoId: number) {
     this.capoReparti.forEach(capo => {
       if (capo.id === capoRepartoId) {
@@ -385,6 +376,8 @@ export class PersonaleVetclinicComponent implements OnInit{
     }
 
     console.log(`Turni assegnati per il Capo Reparto ID ${capoRepartoId}:`, this.turniAssegnati[capoRepartoId]);
+    this.notificheService.inviaNotifica(capoRepartoId, `Ti è stato assegnato il turno: ${turno} per ${giorno}`).subscribe();
+
   }
 
   getTurnoColor(capoRepartoId: number, giorno: string, turno: string): string {

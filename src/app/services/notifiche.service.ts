@@ -31,8 +31,10 @@ export class NotificheService {
   }
 
 
-
-
-
-
+  inviaNotifica(destinatarioId: number, messaggio: string) {
+    return this.http.post(`${this.apiUrl}/send-to-user`, {
+      userId: destinatarioId,
+      message: messaggio
+    });
   }
+}
