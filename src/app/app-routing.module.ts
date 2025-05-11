@@ -36,6 +36,7 @@ import {AppuntamentiClienteComponent} from './appuntamenti-cliente/appuntamenti-
 import {ProfiloAdminComponent} from './profilo-admin/profilo-admin.component';
 import {PersonaleVetclinicComponent} from './personale-vetclinic/personale-vetclinic.component';
 import {PazientiVetclinicComponent} from './pazienti-vetclinic/pazienti-vetclinic.component';
+import {RepartiAdminComponent} from './reparti-admin/reparti-admin.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -66,7 +67,7 @@ const routes: Routes = [
   { path: 'profile-admin', component: ProfiloAdminComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
   { path: 'personale-vetclinic', component: PersonaleVetclinicComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
   { path: 'pazienti-vetclinic', component: PazientiVetclinicComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
-
+  { path: 'reparti-admin', component: RepartiAdminComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
   { path: 'error', component: ErrorComponent },
   { path: '**', redirectTo: 'error' }
 ];

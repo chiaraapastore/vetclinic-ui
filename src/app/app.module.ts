@@ -41,6 +41,7 @@ import { AppuntamentiClienteComponent } from './appuntamenti-cliente/appuntament
 import { ProfiloAdminComponent } from './profilo-admin/profilo-admin.component';
 import { PersonaleVetclinicComponent } from './personale-vetclinic/personale-vetclinic.component';
 import { PazientiVetclinicComponent } from './pazienti-vetclinic/pazienti-vetclinic.component';
+import { RepartiAdminComponent } from './reparti-admin/reparti-admin.component';
 
 export function initializeKeycloak(keycloak: KeycloakService, platformId: Object) {
   return () =>
@@ -90,6 +91,7 @@ export function initializeKeycloak(keycloak: KeycloakService, platformId: Object
     ProfiloAdminComponent,
     PersonaleVetclinicComponent,
     PazientiVetclinicComponent,
+    RepartiAdminComponent,
   ],
   imports: [
     BrowserModule,

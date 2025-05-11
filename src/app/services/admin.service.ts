@@ -133,4 +133,9 @@ export class AdminService {
     return this.http.get<any[]>(`${this.apiUrl}/animali`);
   }
 
+  createDepartmentWithStaff(payload: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/create-department-with-staff`, payload);
+  }
+
+
 }

@@ -9,6 +9,7 @@
       <li><a routerLink="/pazienti-vetclinic"><i class="fa-solid fa-paw"></i> Pazienti Animali</a></li>
       <li><a routerLink="/magazzino-admin"><i class="fa-solid fa-warehouse"></i> Magazzino</a></li>
       <li><a routerLink="/personale-vetclin"><i class="fas fa-user-md"></i> Personale Clinica </a></li>
+      <li><a routerLink="/reparti-admin"><i class="fas fa-hospital"></i> Reparti Clinica</a></li>
       <li><a routerLink="/dati-statistiche"><i class="fas fa-chart-bar"></i> Dati e Statistiche</a></li>
       <li><a routerLink="/profile-admin"><i class="fas fa-user-circle"></i> Profilo</a></li>
     </ul>
@@ -42,6 +43,10 @@
       <div class="card" (click)="navigateTo('personale-vetclinic')">
         <i class="fas fa-user-md"></i>
         <h3>Personale Clinica</h3>
+      </div>
+      <div class="card" (click)="navigateTo('reparti-admin')">
+        <i class="fas fa-hospital" style="color: #007b5e;"></i>
+        <h3>Reparti</h3>
       </div>
       <div class="card" (click)="navigateTo('/dati-statistiche')">
         <i class="fas fa-chart-bar"></i>
