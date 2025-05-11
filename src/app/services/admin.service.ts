@@ -137,5 +137,9 @@ export class AdminService {
     return this.http.post(`${this.apiUrl}/create-department-with-staff`, payload);
   }
 
+  deleteReparto(repartoId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/delete-department/${repartoId}`);
+  }
+
 
 }

@@ -28,7 +28,7 @@
     <table>
       <thead>
       <tr>
-        <th>ID</th><th>Nome</th><th>Capo Reparto</th>
+        <th>ID</th><th>Nome</th><th>Capo Reparto</th><th>Azioni</th>
       </tr>
       </thead>
       <tbody>
@@ -36,6 +36,13 @@
         <td>{{ r.id }}</td>
         <td>{{ r.name }}</td>
         <td>{{ r.headOfDepartment?.email || 'Non assegnato' }}</td>
+        <td>
+          <div class="azioni-container">
+            <button class="action-btn" (click)="eliminaReparto(r.id)" title="Elimina Reparto">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </td>
       </tr>
       </tbody>
     </table>

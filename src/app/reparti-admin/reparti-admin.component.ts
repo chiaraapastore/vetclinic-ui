@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AdminService} from '../services/admin.service';
 import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-reparti-admin',
@@ -95,4 +96,31 @@ export class RepartiAdminComponent implements OnInit {
       error: () => this.toastr.error("Errore nella creazione del reparto.")
     });
   }
+
+  eliminaReparto(repartoId: number): void {
+    Swal.fire({
+      title: 'Sei sicuro?',
+      text: 'Il reparto e tutto il personale associato verranno eliminati!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#00796b',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sì, elimina!',
+      cancelButtonText: 'Annulla'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.adminService.deleteReparto(repartoId).subscribe({
+          next: () => {
+            this.toastr.success('Reparto eliminato con successo!');
+            this.caricaReparti();
+          },
+          error: (err) => {
+            console.error(err);
+            this.toastr.error('Errore durante l\'eliminazione del reparto.');
+          }
+        });
+      }
+    });
+  }
+
 }
