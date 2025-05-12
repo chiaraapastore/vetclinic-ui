@@ -7,6 +7,7 @@ import { Ferie } from '../models/ferie.model';
 import {Animale} from '../models/animale.model';
 import {CronologiaAnimale} from '../models/cronologia-animale.model';
 import {environment} from '../environments/environment';
+import {Magazzino} from '../models/magazzino.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class CapoRepartoService {
 
   private apiUrl = 'http://localhost:8081/api/capo-reparto';
   private urlUtente = 'http://localhost:8081/api/utente';
+  private stockUrl = 'http://localhost:8081/api/stock';
 
   constructor(private http: HttpClient) {}
 
@@ -64,8 +66,12 @@ export class CapoRepartoService {
 
 
 
-  updateStockAndSendReport(magazine: any): Observable<{ message: string }> {
-    return this.http.put<{ message: string }>(`${this.apiUrl}/magazine/update-stock-and-report`, magazine);
+  updateStockAndSendReport(id: number, currentStock: number, maximumCapacity: number): Observable<void> {
+    const params = new HttpParams()
+      .set('id', id.toString())
+      .set('currentStock', currentStock.toString())
+      .set('maximumCapacity', maximumCapacity.toString());
+    return this.http.put<void>(`${this.apiUrl}/magazine/update-stock-and-report`, null, { params });
   }
 
   getPersonaleDelReparto(repartoId: number): Observable<{ veterinari: any[], assistenti: any[] }> {
@@ -120,8 +126,7 @@ export class CapoRepartoService {
   }
 
 
-
-
-
-
+  getMagazzino(): Observable<Magazzino> {
+    return this.http.get<Magazzino>(`${this.stockUrl}/dettagli`);
+  }
 }

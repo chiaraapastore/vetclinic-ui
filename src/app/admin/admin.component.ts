@@ -52,13 +52,22 @@ export class AdminComponent implements OnInit {
 
   ) {}
 
+
   ngOnInit() {
+    this.authenticationService.getUserInfo().subscribe(user => {
+      if (user && user.id) {
+        this.userId = user.id;
+        console.log("Admin ID caricato:", this.userId);
+        this.loadNotifications();
+      } else {
+        console.warn("Nessun userId disponibile per il caricamento notifiche");
+      }
+    });
+
     this.caricaDottori();
     this.getAdminUsername();
-    this.listenForNewNotifications();
     this.caricaOrdini();
-    // this.loadAttivitaRecenti();
-
+    this.loadAttivitaRecenti();
     this.caricaFeriePendenti();
     this.loadReparti();
   }
@@ -92,9 +101,14 @@ export class AdminComponent implements OnInit {
   }
 
   loadNotifications() {
-    if (!this.userId) return;
+    if (!this.userId) {
+      console.warn("Nessun userId disponibile per il caricamento notifiche");
+      return;
+    }
+
     this.notificationService.getNotificationsForUser().subscribe({
       next: (notifications) => {
+        console.log("Notifiche caricate:", notifications);
         this.notifications = notifications;
         this.unreadNotifications = notifications.filter(n => !n.letta).length;
       },
@@ -104,9 +118,32 @@ export class AdminComponent implements OnInit {
 
 
 
+
   caricaOrdini() {
     this.adminService.getOrderHistory().subscribe((data: any[]) => {
       this.ordini = data;
+    });
+  }
+
+  loadAttivitaRecenti() {
+    this.attivitaRecenti = [];
+
+    this.notificationService.getNotificationsForUser().subscribe({
+      next: (notifiche) => {
+        if (notifiche.length === 0) {
+          this.attivitaRecenti = [];
+          return;
+        }
+
+        const recenti = notifiche.map(n => ({
+          testo: n.message,
+          orario: this.getRelativeTime(n.notificationDate),
+          isFerie: false
+        }));
+
+        this.attivitaRecenti = recenti;
+        this.sortAttivita();
+      }
     });
   }
 

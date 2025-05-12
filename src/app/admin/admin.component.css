@@ -259,7 +259,7 @@ footer {
   margin-top: 0;
   background-color: #f9fcfc;
   flex-wrap: wrap;
-  width: calc(75% - 200px);
+  width: calc(125% - 300px);
   box-sizing: border-box;
 }
 

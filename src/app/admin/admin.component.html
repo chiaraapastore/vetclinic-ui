@@ -61,11 +61,6 @@
             <li *ngFor="let attivita of attivitaRecenti">
               <i class="fas fa-check-circle"></i> {{ attivita.testo }}
               <span class="time">{{ attivita.orario }}</span>
-<!--              <ng-container *ngIf="attivita.isAppuntamento">-->
-<!--                <button class="btn-approva" (click)="approva(attivita)">✔️</button>-->
-<!--                <button class="btn-rifiuta" (click)="rifiuta(attivita)">❌</button>-->
-<!--              </ng-container>-->
-
             </li>
           </ul>
           <ng-template #nessunaAttivita>

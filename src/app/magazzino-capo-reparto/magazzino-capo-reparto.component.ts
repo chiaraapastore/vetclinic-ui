@@ -19,7 +19,7 @@ export class MagazzinoCapoRepartoComponent implements OnInit {
 
   medicinali: Medicine[] = [];
   filteredMedicinali: Medicine[] = [];
-  magazines: Magazzino[] = [];
+  magazzino!: Magazzino;
   categorie: string[] = ['Tutti', 'Farmaci scaduti'];
   selectedCategory: string = 'Tutti';
   searchKeyword: string = '';
@@ -54,7 +54,19 @@ export class MagazzinoCapoRepartoComponent implements OnInit {
   ngOnInit(): void {
     this.loadMedicinali();
     this.categorieFiltrate = [...this.categorie];
+    this.loadMagazzino();
 
+  }
+
+  loadMagazzino(): void {
+    this.caporepartoService.getMagazzino().subscribe({
+      next: (data: Magazzino) => {
+        this.magazzino = data;
+      },
+      error: (err) => {
+        console.error("Errore nel caricamento del magazzino:", err);
+      }
+    });
   }
   editMedicinale(medicinale: Medicine): void {
     this.editableMedicineId = medicinale.id ?? null;
@@ -228,18 +240,19 @@ export class MagazzinoCapoRepartoComponent implements OnInit {
   }
 
   updateStockAndSendReport(): void {
-    console.log("Bottone premuto: aggiornamento stock e invio report in corso...");
-
-    this.caporepartoService.updateStockAndSendReport(this.magazines).subscribe({
-      next: () => {
-        this.toastr.success("Stock aggiornato e report inviato all'admin!");
-        console.log("Richiesta completata con successo!");
-      },
-      error: (err) => {
-        console.error("Errore nell'aggiornamento dello stock e nell'invio del report:", err);
-        this.toastr.error("Errore durante l'aggiornamento dello stock.");
-      }
-    });
+    this.caporepartoService
+      .updateStockAndSendReport(this.magazzino.id, this.magazzino.currentStock, this.magazzino.maximumCapacity)
+      .subscribe({
+        next: () => {
+          console.log('Report e stock aggiornati con successo');
+          this.toastr.success('Report inviato con successo', 'Successo');
+        },
+        error: (error) => {
+          console.error('Errore durante l\'invio del report', error);
+          this.toastr.error('Errore durante l\'invio del report', 'Errore');
+        }
+      });
   }
+
 
 }

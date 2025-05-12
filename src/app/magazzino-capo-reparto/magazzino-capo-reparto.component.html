@@ -104,7 +104,9 @@
         <button class="btn btn-success d-flex align-items-center px-3" (click)="toggleForm()">
           <i class="fas fa-plus me-2"></i> Aggiungi Farmaco
         </button>
-        <button class="btn btn-success" (click)="updateStockAndSendReport()">Salva e Invia Report</button>
+        <button class="btn btn-success" *ngIf="magazzino" (click)="updateStockAndSendReport()">
+          Salva e Invia Report
+        </button>
       </div>
 
       <div *ngIf="showAddForm" class="add-farmaco-form">

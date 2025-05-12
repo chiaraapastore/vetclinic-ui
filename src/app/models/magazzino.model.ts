@@ -1,5 +1,5 @@
 export interface Magazzino {
-  id?: number;
+  id: number;
   currentStock: number;
   maximumCapacity: number;
 }
