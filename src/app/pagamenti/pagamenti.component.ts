@@ -4,6 +4,8 @@ import {PagamentoService} from '../services/pagamento.service';
 import {generaFatturaPDF} from '../utils/fattura-pds';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
+import {Animale} from '../models/animale.model';
+import {Pagamento} from '../models/pagamento.model';
 
 @Component({
   selector: 'app-pagamenti',
@@ -17,9 +19,12 @@ export class PagamentiComponent implements OnInit {
   cardType: { [id: number]: string } = {};
   selectedAmount: { [id: number]: number } = {};
   filtroStato: string = 'Tutti';
+  pageSize: number = 5;
+  tableSize: number[] = [5, 10, 20];
+  page: number = 1;
+  filteredPagamenti: Appuntamento[] = [];
 
-
-  constructor(private pagamentoService: PagamentoService, private toastr: ToastrService,private router: Router) {}
+  constructor(private pagamentoService: PagamentoService, private toastr: ToastrService, private router: Router) {}
 
   ngOnInit(): void {
     this.caricaAppuntamenti();
@@ -29,7 +34,6 @@ export class PagamentiComponent implements OnInit {
     this.router.navigate(['/assistente']);
   }
 
-
   caricaAppuntamenti(): void {
     this.pagamentoService.getAppuntamenti().subscribe({
       next: data => this.appuntamenti = data,
@@ -37,13 +41,6 @@ export class PagamentiComponent implements OnInit {
     });
   }
 
-
-
-  getAppuntamentiFiltrati(): Appuntamento[] {
-    if (this.filtroStato === 'Tutti') return this.appuntamenti;
-    return this.appuntamenti.filter(app =>
-      this.filtroStato === 'Pagati' ? app.status === 'PAID' : app.status !== 'PAID');
-  }
 
   scaricaFattura(appuntamento: Appuntamento): void {
     generaFatturaPDF({
@@ -53,7 +50,6 @@ export class PagamentiComponent implements OnInit {
       amount: this.selectedAmount[appuntamento.id]
     });
   }
-
 
   inviaPromemoria(appuntamento: Appuntamento): void {
     const message = `Gentile ${appuntamento.cliente.firstName}, ti ricordiamo di completare il pagamento per l'appuntamento del ${new Date(appuntamento.appointmentDate).toLocaleDateString()}.`;
@@ -69,4 +65,44 @@ export class PagamentiComponent implements OnInit {
     });
   }
 
+  getAppuntamentiFiltrati(): Appuntamento[] {
+    let filteredList = this.appuntamenti;
+    if (this.filtroStato !== 'Tutti') {
+      filteredList = this.appuntamenti.filter(app =>
+        this.filtroStato === 'Pagati' ? app.status === 'PAID' : app.status !== 'PAID');
+    }
+
+    const start = (this.page - 1) * this.pageSize;
+    const end = this.page * this.pageSize;
+    return filteredList.slice(start, end);
+  }
+
+  updateFilteredPagamenti(): void {
+    this.filteredPagamenti = this.getAppuntamentiFiltrati();  // Use filtered and paginated list
+  }
+
+
+  goToPreviousPage(): void {
+    if (this.page > 1) {
+      this.page--;
+      this.updateFilteredPagamenti();
+    }
+  }
+
+  goToNextPage(): void {
+    if (this.page < this.totalPages) {
+      this.page++;
+      this.updateFilteredPagamenti();
+    }
+  }
+
+  onPageSizeChange(event: Event): void {
+    this.pageSize = +(event.target as HTMLSelectElement).value;
+    this.page = 1;
+    this.updateFilteredPagamenti();
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.appuntamenti.length / this.pageSize) || 1;
+  }
 }

@@ -13,6 +13,7 @@
     </select>
   </div>
 
+
   <table>
     <thead>
     <tr>
@@ -37,8 +38,6 @@
               {{ app.status || 'DA PAGARE' }}
             </span>
       </td>
-
-      <!-- Prezzo -->
       <td>
         <select [(ngModel)]="selectedAmount[app.id]">
           <option [value]="50">€50</option>
@@ -57,7 +56,6 @@
           <option [value]="320">€320</option>
         </select>
       </td>
-
       <td>
         <button *ngIf="app.status !== 'PAID'" (click)="inviaPromemoria(app)">Invia Promemoria</button>
         <button *ngIf="app.status === 'PAID'" (click)="scaricaFattura(app)">Scarica Fattura</button>
@@ -65,6 +63,32 @@
     </tr>
     </tbody>
   </table>
+
+
+
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <div class="animali-page-size-container">
+        <label for="pageSizeSelect">Pagamenti per pagina:</label>
+        <select id="pageSizeSelect" [(ngModel)]="pageSize" (change)="onPageSizeChange($event)"
+                class="form-select w-auto">
+          <option *ngFor="let size of tableSize" [value]="size">{{ size }}</option>
+        </select>
+      </div>
+
+      <nav>
+        <ul class="pagination justify-content-center align-items-center gap-2 mb-0">
+          <li class="page-item" [class.disabled]="page === 1">
+            <button class="page-link" (click)="goToPreviousPage()">&laquo;</button>
+          </li>
+          <li class="page-item disabled">
+            <span class="page-link text-dark bg-white border rounded">Pagina {{ page }} di {{ totalPages }}</span>
+          </li>
+          <li class="page-item" [class.disabled]="page === totalPages">
+            <button class="page-link" (click)="goToNextPage()">&raquo;</button>
+          </li>
+        </ul>
+      </nav>
+    </div>
 </div>
 
 <footer class="footer">

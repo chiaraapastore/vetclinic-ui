@@ -21,7 +21,10 @@ export class PagamentiClienteComponent implements OnInit {
   filtroStato: string = 'Tutti';
   selectedMethod: { [id: number]: string } = {};
   cardType: { [id: number]: string } = {};
-
+  pageSize: number = 5;
+  tableSize: number[] = [5, 10, 20];
+  page: number = 1;
+  filteredPagamenti: Appuntamento[] = [];
 
   constructor(private clienteService: ClienteService, private assistenteService: AssistenteService,private pagamentoService: PagamentoService,   private router: Router,private toastr: ToastrService) {}
 
@@ -63,11 +66,6 @@ export class PagamentiClienteComponent implements OnInit {
     });
   }
 
-  getAppuntamentiFiltrati(): Appuntamento[] {
-    if (this.filtroStato === 'Tutti') return this.appuntamenti;
-    return this.appuntamenti.filter(app =>
-      this.filtroStato === 'Pagati' ? app.status === 'PAID' : app.status !== 'PAID');
-  }
 
 
   pagaPagamento(appuntamento: Appuntamento): void {
@@ -109,6 +107,47 @@ export class PagamentiClienteComponent implements OnInit {
         this.toastr.error("Errore nel salvataggio dell’importo.");
       }
     });
+  }
+
+  getAppuntamentiFiltrati(): Appuntamento[] {
+    let filteredList = this.appuntamenti;
+    if (this.filtroStato !== 'Tutti') {
+      filteredList = this.appuntamenti.filter(app =>
+        this.filtroStato === 'Pagati' ? app.status === 'PAID' : app.status !== 'PAID');
+    }
+
+    const start = (this.page - 1) * this.pageSize;
+    const end = this.page * this.pageSize;
+    return filteredList.slice(start, end);
+  }
+
+  updateFilteredPagamenti(): void {
+    this.filteredPagamenti = this.getAppuntamentiFiltrati();  // Use filtered and paginated list
+  }
+
+
+  goToPreviousPage(): void {
+    if (this.page > 1) {
+      this.page--;
+      this.updateFilteredPagamenti();
+    }
+  }
+
+  goToNextPage(): void {
+    if (this.page < this.totalPages) {
+      this.page++;
+      this.updateFilteredPagamenti();
+    }
+  }
+
+  onPageSizeChange(event: Event): void {
+    this.pageSize = +(event.target as HTMLSelectElement).value;
+    this.page = 1;
+    this.updateFilteredPagamenti();
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.appuntamenti.length / this.pageSize) || 1;
   }
 
 
