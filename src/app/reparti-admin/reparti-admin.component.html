@@ -1,79 +1,106 @@
 <body>
-
 <button class="back-button" (click)="goBack()">Indietro</button>
 
 <div class="container">
-  <div class="card-buttons-container">
-    <div class="card-button" (click)="mostraTabella = !mostraTabella">
-      <i class="fas fa-hospital"></i>
-      <span>{{ mostraTabella ? 'Nascondi Reparti' : 'Mostra Reparti' }}</span>
-    </div>
-    <div class="card-button" (click)="mostraForm = !mostraForm">
-      <i class="fas fa-plus-circle"></i>
-      <span>{{ mostraForm ? 'Nascondi Form' : 'Aggiungi Reparto' }}</span>
-    </div>
-  </div>
+  <div class="content-wrapper">
+    <!-- Tabella dei reparti -->
+    <div class="table-wrapper">
+      <div class="table-container">
+        <div class="search-container centered-search">
+          <input [(ngModel)]="searchKeyword" name="searchKeyword" type="text" class="search-bar"
+                 placeholder="Cerca per nome reparto ...">
+          <button class="btn btn-success search-btn" (click)="searchReparti()">
+            <i class="fas fa-search"></i>
+          </button>
+          <button class="reset-button" (click)="resetFilters()" title="Ricarica">
+            <i class="fas fa-sync-alt"></i>
+          </button>
+        </div>
 
-  <div *ngIf="mostraTabella" class="table-container">
-    <div class="centered-search">
-      <input [(ngModel)]="searchKeyword" type="text" placeholder="Cerca per nome reparto...">
-      <button class="btn btn-success search-btn" (click)="searchReparti()">
-        <i class="fas fa-search"></i>
-      </button>
-      <button class="reset-button" (click)="resetFilters()" title="Ricarica">
-        <i class="fas fa-sync-alt"></i>
-      </button>
-    </div>
+        <table>
+          <thead>
+          <tr>
+            <th>ID</th><th>Nome</th><th>Capo Reparto</th><th>Azioni</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let r of paginatedReparti">
+            <td>{{ r.id }}</td>
+            <td>{{ r.name }}</td>
+            <td>{{ r.headOfDepartment?.email || 'Non assegnato' }}</td>
+            <td>
+              <div class="azioni-container">
+                <button class="action-btn" (click)="eliminaReparto(r.id)" title="Elimina Reparto">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
 
-    <table>
-      <thead>
-      <tr>
-        <th>ID</th><th>Nome</th><th>Capo Reparto</th><th>Azioni</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let r of reparti">
-        <td>{{ r.id }}</td>
-        <td>{{ r.name }}</td>
-        <td>{{ r.headOfDepartment?.email || 'Non assegnato' }}</td>
-        <td>
-          <div class="azioni-container">
-            <button class="action-btn" (click)="eliminaReparto(r.id)" title="Elimina Reparto">
-              <i class="fas fa-trash-alt"></i>
-            </button>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div class="animali-page-size-container">
+            <label for="pageSizeSelect">Reparti per pagina:</label>
+            <select id="pageSizeSelect" [(ngModel)]="pageSize" (change)="onPageSizeChange($event)"
+                    class="form-select w-auto">
+              <option *ngFor="let size of tableSize" [value]="size">{{ size }}</option>
+            </select>
           </div>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
 
-  <div *ngIf="mostraForm" class="form-section-container">
-    <h2 class="form-title">Registra Reparto</h2>
-    <div class="form-grid">
-      <input type="text" [(ngModel)]="nuovoReparto.repartoNome" placeholder="Nome Reparto" />
+          <nav>
+            <ul class="pagination justify-content-center align-items-center gap-2 mb-0">
+              <li class="page-item" [class.disabled]="page === 1">
+                <button class="page-link" (click)="goToPreviousPage()">&laquo;</button>
+              </li>
+              <li class="page-item disabled">
+                <span class="page-link text-dark bg-white border rounded">Pagina {{ page }} di {{ totalPages }}</span>
+              </li>
+              <li class="page-item" [class.disabled]="page === totalPages">
+                <button class="page-link" (click)="goToNextPage()">&raquo;</button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
 
-      <h4>Capo Reparto</h4>
-      <input type="text" [(ngModel)]="nuovoReparto.capoReparto.nome" placeholder="Nome" />
-      <input type="text" [(ngModel)]="nuovoReparto.capoReparto.cognome" placeholder="Cognome" />
-      <input type="text" [(ngModel)]="nuovoReparto.capoReparto.username" placeholder="Username" />
-      <input type="email" [(ngModel)]="nuovoReparto.capoReparto.email" placeholder="Email" />
+    <!-- Card con form di aggiunta reparto -->
+    <div class="form-side-wrapper">
+      <div class="card-button toggle-add-form" (click)="mostraForm = !mostraForm">
+        <i class="fas fa-plus-circle"></i>
+        <span>{{ mostraForm ? 'Nascondi Form' : 'Aggiungi Reparto' }}</span>
+      </div>
 
-      <h4>Assistente</h4>
-      <input type="text" [(ngModel)]="nuovoReparto.assistente.nome" placeholder="Nome" />
-      <input type="text" [(ngModel)]="nuovoReparto.assistente.cognome" placeholder="Cognome" />
-      <input type="text" [(ngModel)]="nuovoReparto.assistente.username" placeholder="Username" />
-      <input type="email" [(ngModel)]="nuovoReparto.assistente.email" placeholder="Email" />
+      <!-- Mostra il form solo se 'mostraForm' è true -->
+      <div *ngIf="mostraForm" class="form-card">
+        <h4>Registra Reparto</h4>
+        <div class="form-grid">
+          <input type="text" [(ngModel)]="nuovoReparto.repartoNome" placeholder="Nome Reparto" />
 
-      <h4>Veterinario</h4>
-      <input type="text" [(ngModel)]="nuovoReparto.veterinario.nome" placeholder="Nome" />
-      <input type="text" [(ngModel)]="nuovoReparto.veterinario.cognome" placeholder="Cognome" />
-      <input type="text" [(ngModel)]="nuovoReparto.veterinario.username" placeholder="Username" />
-      <input type="email" [(ngModel)]="nuovoReparto.veterinario.email" placeholder="Email" />
+          <h4>Capo Reparto</h4>
+          <input type="text" [(ngModel)]="nuovoReparto.capoReparto.nome" placeholder="Nome" />
+          <input type="text" [(ngModel)]="nuovoReparto.capoReparto.cognome" placeholder="Cognome" />
+          <input type="text" [(ngModel)]="nuovoReparto.capoReparto.username" placeholder="Username" />
+          <input type="email" [(ngModel)]="nuovoReparto.capoReparto.email" placeholder="Email" />
 
-      <button class="btn-icon-aggiungi" (click)="creaReparto()">
-        <i class="fas fa-check-circle"></i> Registra Reparto
-      </button>
+          <h4>Assistente</h4>
+          <input type="text" [(ngModel)]="nuovoReparto.assistente.nome" placeholder="Nome" />
+          <input type="text" [(ngModel)]="nuovoReparto.assistente.cognome" placeholder="Cognome" />
+          <input type="text" [(ngModel)]="nuovoReparto.assistente.username" placeholder="Username" />
+          <input type="email" [(ngModel)]="nuovoReparto.assistente.email" placeholder="Email" />
+
+          <h4>Veterinario</h4>
+          <input type="text" [(ngModel)]="nuovoReparto.veterinario.nome" placeholder="Nome" />
+          <input type="text" [(ngModel)]="nuovoReparto.veterinario.cognome" placeholder="Cognome" />
+          <input type="text" [(ngModel)]="nuovoReparto.veterinario.username" placeholder="Username" />
+          <input type="email" [(ngModel)]="nuovoReparto.veterinario.email" placeholder="Email" />
+
+          <button class="btn-icon-aggiungi" (click)="creaReparto()">
+            <i class="fas fa-check-circle"></i> Registra Reparto
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -17,6 +17,9 @@ export class RepartiAdminComponent implements OnInit {
   mostraForm = false;
   searchKeyword = '';
   originalReparti: any[] = [];
+  page: number = 1;
+  pageSize: number = 5;
+  tableSize: number[] = [5, 10, 20];
 
   nuovoReparto = {
     repartoNome: '',
@@ -122,5 +125,34 @@ export class RepartiAdminComponent implements OnInit {
       }
     });
   }
+
+  goToPreviousPage(): void {
+    if (this.page > 1) this.page--;
+  }
+
+  goToNextPage(): void {
+    if (this.page < this.totalPages) this.page++;
+  }
+
+  onPageSizeChange(event: Event): void {
+    this.pageSize = +(event.target as HTMLSelectElement).value;
+    this.page = 1;
+    this.applyPagination();
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.reparti.length / this.pageSize) || 1;
+  }
+
+  get paginatedReparti() {
+    const startIndex = (this.page - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    return this.reparti.slice(startIndex, endIndex);
+  }
+
+  applyPagination() {
+    this.reparti = this.paginatedReparti;
+  }
+
 
 }
