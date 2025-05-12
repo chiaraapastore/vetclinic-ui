@@ -3,6 +3,8 @@ import {AdminService} from '../services/admin.service';
 import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
 import Swal from 'sweetalert2';
+import {Medicine} from '../models/medicine.model';
+import {Animale} from '../models/animale.model';
 
 @Component({
   selector: 'app-pazienti-vetclinic',
@@ -15,9 +17,13 @@ export class PazientiVetclinicComponent implements OnInit {
   reparti: any[] = [];
 
   mostraTabella: boolean = false;
+  filteredAnimali: Animale[] = [];
   mostraForm: boolean = false;
   page: number = 1;
   originalAnimali: any[] = [];
+  pageSize: number = 5;
+  tableSize: number[] = [5, 10, 20];
+
 
 
   searchKeyword: string = '';
@@ -152,6 +158,18 @@ export class PazientiVetclinicComponent implements OnInit {
   reset(): void {
     this.searchKeyword = '';
     this.caricaDati();
+  }
+
+  goToPreviousPage(): void { if (this.page > 1) this.page--; }
+  goToNextPage(): void { if (this.page < this.totalPages) this.page++; }
+  onPageSizeChange(event: Event): void {
+    this.pageSize = +(event.target as HTMLSelectElement).value;
+    this.page = 1;
+    this.applyAnimalFilters();
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredAnimali.length / this.pageSize) || 1;
   }
 }
 
