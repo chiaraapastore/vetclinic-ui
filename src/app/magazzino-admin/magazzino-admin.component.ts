@@ -253,7 +253,10 @@ export class MagazzinoAdminComponent implements OnInit {
 
   loadReportConsumi(): void {
     this.adminService.getReportConsumi().subscribe({
-      next: (response) => this.reportConsumi = response,
+      next: (response) => {
+        console.log('Report consumi:', response);
+        this.reportConsumi = response;
+      },
       error: (err) => console.error("Errore nel caricamento dei report consumi:", err)
     });
   }
