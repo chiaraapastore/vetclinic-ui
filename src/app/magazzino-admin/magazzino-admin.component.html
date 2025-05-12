@@ -1,0 +1,174 @@
+<body>
+
+
+<button class="back-button" (click)="goBack()">Indietro</button>
+
+<div class="container">
+  <div class="row justify-content-between mb-4 align-items-start">
+    <div class="col-md-12">
+
+      <div class="d-flex flex-wrap gap-3 align-items-start mb-4">
+        <form class="d-flex gap-2 flex-grow-1" (ngSubmit)="searchMedicinali()">
+          <input [(ngModel)]="searchKeyword" name="searchKeyword" type="text" class="form-control" placeholder="Cerca farmaco...">
+          <button class="btn btn-success px-4" type="submit">Cerca</button>
+        </form>
+        <div class="dropdown">
+          <button class="btn btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Filtra Categoria
+          </button>
+          <ul class="dropdown-menu p-2 shadow" style="min-width: 250px;">
+            <li class="list-group-item d-flex justify-content-between align-items-center filter-item"
+                *ngFor="let categoria of categorie"
+                [class.active]="selectedCategory === categoria"
+                (click)="onCategorySelect(categoria)">
+              {{ categoria }}
+              <span class="badge filter-badge">{{ countByCategory(categoria) }}</span>
+            </li>
+          </ul>
+        </div>
+        <button class="btn btn-outline-secondary d-flex align-items-center" (click)="resetFilters()" title="Ricarica">
+          <i class="bi bi-arrow-clockwise"></i>
+        </button>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped shadow-sm rounded">
+          <thead style="background-color: #38a3a5; color: white">
+          <tr>
+            <th>Nome</th>
+            <th>Dosaggio</th>
+            <th>Disponibili</th>
+            <th>Scadenza</th>
+            <th>Azioni</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let medicinale of getMedicinaliForPage()">
+            <td>{{ medicinale.name }}</td>
+            <td>{{ medicinale.dosage }}</td>
+            <td><input type="number" [(ngModel)]="medicinale.availableQuantity" class="form-control form-control-sm" (blur)="updateMedicinaleQuantity(medicinale)" /></td>
+            <td [ngClass]="{'text-danger': isExpired(medicinale.expirationDate)}">{{ medicinale.expirationDate | date:'dd/MM/yyyy' }}</td>
+            <td class="text-center">
+              <button class="btn btn-light btn-sm me-2 shadow-sm" title="Modifica" (click)="editMedicinale(medicinale)"><i class="fas fa-pen" style="color: #38a3a5;"></i></button>
+              <button class="btn btn-light btn-sm shadow-sm" title="Elimina" (click)="deleteMedicinale(medicinale)"><i class="fas fa-trash text-danger"></i></button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <div class="d-flex align-items-center">
+          <label class="text-dark fw-semibold me-2" for="pageSizeSelect">Farmaci per pagina:</label>
+          <select id="pageSizeSelect" [(ngModel)]="pageSize" (change)="onPageSizeChange($event)" class="form-select w-auto">
+            <option *ngFor="let size of tableSize" [value]="size">{{ size }}</option>
+          </select>
+        </div>
+
+        <nav>
+          <ul class="pagination justify-content-center align-items-center gap-2 mb-0">
+            <li class="page-item" [class.disabled]="page === 1">
+              <button class="page-link" (click)="goToPreviousPage()">&laquo;</button>
+            </li>
+            <li class="page-item disabled">
+              <span class="page-link text-dark bg-white border rounded">Pagina {{ page }} di {{ totalPages }}</span>
+            </li>
+            <li class="page-item" [class.disabled]="page === totalPages">
+              <button class="page-link" (click)="goToNextPage()">&raquo;</button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <div *ngIf="modificaInCorso" class="edit-farmaco-form mt-4 p-3 bg-light border rounded">
+        <h5 class="mb-3">Modifica Farmaco</h5>
+        <input type="text" [(ngModel)]="medicinaleDaModificare.name" class="form-control mb-2" placeholder="Nome">
+        <input type="number" [(ngModel)]="medicinaleDaModificare.quantity" class="form-control mb-2" placeholder="Quantità">
+        <input type="number" [(ngModel)]="medicinaleDaModificare.availableQuantity" class="form-control mb-2" placeholder="Disponibili">
+        <input type="text" [(ngModel)]="medicinaleDaModificare.dosage" class="form-control mb-2" placeholder="Dosaggio">
+        <input type="date" [(ngModel)]="medicinaleDaModificare.expirationDate" class="form-control mb-3">
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary w-100" (click)="salvaModificheMedicinale()">Salva</button>
+          <button class="btn btn-secondary w-100" (click)="modificaInCorso = false">Annulla</button>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center flex-wrap gap-2 mt-5 mb-6">
+
+        <button class="btn btn-success d-flex align-items-center px-3" (click)="toggleForm()">
+          <i class="fas fa-plus me-2"></i> Aggiungi Farmaco
+        </button>
+        <button class="btn btn-success d-flex align-items-center px-3" (click)="showOrdina = !showOrdina">
+          <i class="fas fa-truck me-2"></i> Ordina Farmaco
+        </button>
+        <button class="btn btn-success d-flex align-items-center px-3" (click)="showStorico = !showStorico">
+          <i class="fas fa-clipboard-list me-2"></i> Storico Ordini
+        </button>
+        <button class="btn btn-success d-flex align-items-center px-3" (click)="showReport = !showReport">
+          <i class="fas fa-chart-bar me-2"></i> Report Consumi
+        </button>
+      </div>
+
+      <div *ngIf="showAddForm" class="add-farmaco-form">
+        <input type="text" placeholder="Nome" [(ngModel)]="newMedicinale.nome" class="form-control mb-2">
+        <input type="number" placeholder="Quantità" [(ngModel)]="newMedicinale.quantita" class="form-control mb-2">
+        <input type="number" placeholder="Disponibili" [(ngModel)]="newMedicinale.availableQuantity" class="form-control mb-2">
+        <input type="text" placeholder="Dosaggio" [(ngModel)]="newMedicinale.dosage" class="form-control mb-2">
+        <input type="date" [(ngModel)]="newMedicinale.expirationDate" class="form-control mb-2">
+        <button (click)="aggiungiFarmaco()" class="btn btn-primary w-100">Salva</button>
+      </div>
+
+
+
+
+      <div *ngIf="showOrdina" class="sezione-box">
+        <div class="mb-3">
+          <label class="form-label">Fornitore</label>
+          <input [(ngModel)]="newOrdine.fornitore" class="form-control" placeholder="Inserisci nome fornitore">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Nome Medicinale</label>
+          <input [(ngModel)]="newOrdine.materiale" class="form-control" placeholder="Inserisci nome farmaco">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Quantità</label>
+          <input [(ngModel)]="newOrdine.quantita" type="number" min="1" class="form-control" placeholder="Quantità">
+        </div>
+        <button class="btn btn-warning w-100" (click)="creaOrdine()">Crea Ordine</button>
+      </div>
+
+      <div *ngIf="showStorico" class="sezione-box">
+        <ul class="list-group list-group-flush">
+          <li *ngFor="let ordine of storicoOrdini" class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <strong>Quantità:</strong> {{ ordine.quantity }} |
+              <strong>Fornitore:</strong> {{ ordine.supplierName }} |
+              <strong>Data ordine:</strong> {{ ordine.orderDate | date:'shortDate' }}
+            </div>
+            <select [(ngModel)]="ordine.status" (change)="aggiornaStatoOrdine(ordine.id, ordine.status)">
+              <option value="PENDING">In Attesa</option>
+              <option value="COMPLETED">Consegnato</option>
+              <option value="CANCELED">Annullato</option>
+            </select>
+          </li>
+          <li *ngIf="storicoOrdini.length === 0" class="list-group-item text-muted">Nessun ordine registrato.</li>
+        </ul>
+      </div>
+
+      <div *ngIf="showReport" class="sezione-box mt-3">
+        <ul class="styled-list">
+          <li *ngFor="let report of reportConsumi">
+            <strong>{{ report.reparto }}</strong> - Consumo: <strong>{{ report.consumo }}</strong> unità
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<footer class="footer">
+  <p>© 2025 VetEnterprise Solutions. Tutti i diritti riservati.</p>
+</footer>
+
+</body>
