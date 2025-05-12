@@ -3,32 +3,10 @@
 
 <div class="container">
 
-  <div class="card-buttons-container">
-    <div class="card-button" (click)="mostraTabella = !mostraTabella">
-      <i class="fas fa-users"></i>
-      <span>{{ mostraTabella ? 'Nascondi Personale' : 'Mostra Personale' }}</span>
-    </div>
-
-    <div class="aggiungi-buttons-container">
-      <div class="card-button" (click)="mostraDottore = !mostraDottore">
-        <i class="fas fa-user-md"></i>
-        <span>{{ mostraDottore ? 'Nascondi Form Dottore' : 'Aggiungi Nuovo Dottore' }}</span>
-      </div>
-      <div class="card-button" (click)="mostraCapo = !mostraCapo">
-        <i class="fas fa-user-tie"></i>
-        <span>{{ mostraCapo ? 'Nascondi Form Capo Reparto' : 'Aggiungi Nuovo CapoReparto' }}</span>
-      </div>
-      <div class="card-button" (click)="mostraAssistente = !mostraAssistente">
-        <i class="fas fa-user-nurse"></i>
-        <span>{{ mostraAssistente ? 'Nascondi Form Assistente' : 'Aggiungi Nuovo Assistente' }}</span>
-      </div>
-    </div>
-  </div>
-
-
-  <div *ngIf="mostraTabella" class="table-container">
+  <div class="table-container">
     <div class="search-container centered-search">
-      <input [(ngModel)]="searchKeyword" name="searchKeyword" type="text" class="search-bar" placeholder="Cerca per nome, cognome o email...">
+      <input [(ngModel)]="searchKeyword" name="searchKeyword" type="text" class="search-bar"
+             placeholder="Cerca per nome, cognome o email...">
       <button class="btn btn-success search-btn" (click)="searchPersonale()">
         <i class="fas fa-search"></i>
       </button>
@@ -36,6 +14,7 @@
         <i class="fas fa-sync-alt"></i>
       </button>
     </div>
+
     <table>
       <thead>
       <tr>
@@ -71,7 +50,6 @@
             </button>
           </div>
         </td>
-
       </tr>
 
       <tr *ngFor="let capoReparto of capoReparti">
@@ -97,25 +75,6 @@
               <i class="fas fa-trash-alt"></i>
             </button>
           </div>
-          <div *ngIf="capoReparto.showTurnoTable" class="turno-table">
-            <table>
-              <thead>
-              <tr>
-                <th>Giorno</th>
-                <th *ngFor="let turno of turni">{{ turno }}</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr *ngFor="let giorno of giorniSettimana">
-                <td>{{ giorno }}</td>
-                <td *ngFor="let turno of turni"
-                    (click)="assegnaTurno(capoReparto.id, giorno, turno)"
-                    [ngStyle]="{'background-color': getTurnoColor(capoReparto.id, giorno, turno)}"
-                    class="turno-cell"></td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
         </td>
       </tr>
 
@@ -138,64 +97,100 @@
             <button class="action-btn" (click)="eliminaUtente(assist.id)" title="Elimina">
               <i class="fas fa-trash-alt"></i>
             </button>
-
           </div>
         </td>
-
       </tr>
       </tbody>
     </table>
-  </div>
-</div>
 
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <div class="animali-page-size-container">
+        <label for="pageSizeSelect">Personale per pagina:</label>
+        <select id="pageSizeSelect" [(ngModel)]="pageSize" (change)="onPageSizeChange($event)"
+                class="form-select w-auto">
+          <option *ngFor="let size of tableSize" [value]="size">{{ size }}</option>
+        </select>
+      </div>
 
-<div class="accordion-section" *ngIf="mostraDottore">
-  <div class="form-container">
-    <div class="form-grid">
-      <input type="text" [(ngModel)]="nuovoDottoreNome" placeholder="Nome" />
-      <input type="text" [(ngModel)]="nuovoDottoreCognome" placeholder="Cognome" />
-      <input type="text" [(ngModel)]="nuovoDottoreUsername" placeholder="Username" />
-      <input type="text" [(ngModel)]="nuovoDottoreEmail" placeholder="Email" />
-      <input type="text" [(ngModel)]="nuovoDottoreRegistrationNumber" placeholder="RegistrationNumber" />
-      <select [(ngModel)]="nuovoDottoreRepartoNome">
-        <option value="" disabled selected>Seleziona reparto</option>
-        <option *ngFor="let reparto of reparti" [value]="reparto.name">{{ reparto.name }}</option>
-      </select>
-      <button class="btn-icon-aggiungi" (click)="aggiungiDottore()">Aggiungi Dottore</button>
+      <nav>
+        <ul class="pagination justify-content-center align-items-center gap-2 mb-0">
+          <li class="page-item" [class.disabled]="page === 1">
+            <button class="page-link" (click)="goToPreviousPage()">&laquo;</button>
+          </li>
+          <li class="page-item disabled">
+            <span class="page-link text-dark bg-white border rounded">Pagina {{ page }} di {{ totalPages }}</span>
+          </li>
+          <li class="page-item" [class.disabled]="page === totalPages">
+            <button class="page-link" (click)="goToNextPage()">&raquo;</button>
+          </li>
+        </ul>
+      </nav>
     </div>
   </div>
-</div>
 
-<div class="accordion-section" *ngIf="mostraCapo">
-  <div class="form-container">
-    <div class="form-grid">
-      <input type="text" [(ngModel)]="nuovoCapoRepartoNome" placeholder="Nome" />
-      <input type="text" [(ngModel)]="nuovoCapoRepartoCognome" placeholder="Cognome" />
-      <input type="text" [(ngModel)]="nuovoCapoRepartoUsername" placeholder="Username" />
-      <input type="text" [(ngModel)]="nuovoCapoRepartoEmail" placeholder="Email" />
-      <input type="text" [(ngModel)]="nuovoCapoRepartoRegistrationNumber" placeholder="RegistrationNumber" />
-      <select [(ngModel)]="nuovoCapoRepartoNomeReparto">
-        <option value="" disabled selected>Seleziona reparto</option>
-        <option *ngFor="let reparto of reparti" [value]="reparto.name">{{ reparto.name }}</option>
-      </select>
-      <button class="btn-icon-aggiungi" (click)="aggiungiCapoReparto()">Aggiungi Capo Reparto</button>
+  <div class="aggiungi-buttons-container">
+    <div class="card-button" (click)="mostraDottore = !mostraDottore">
+      <i class="fas fa-user-md"></i>
+      <span>{{ mostraDottore ? 'Nascondi Form Dottore' : 'Aggiungi Nuovo Dottore' }}</span>
+    </div>
+    <div class="card-button" (click)="mostraCapo = !mostraCapo">
+      <i class="fas fa-user-tie"></i>
+      <span>{{ mostraCapo ? 'Nascondi Form Capo Reparto' : 'Aggiungi Nuovo CapoReparto' }}</span>
+    </div>
+    <div class="card-button" (click)="mostraAssistente = !mostraAssistente">
+      <i class="fas fa-user-nurse"></i>
+      <span>{{ mostraAssistente ? 'Nascondi Form Assistente' : 'Aggiungi Nuovo Assistente' }}</span>
     </div>
   </div>
-</div>
 
-<div class="accordion-section" *ngIf="mostraAssistente">
-  <div class="form-container">
-    <div class="form-grid">
-      <input type="text" [(ngModel)]="nuovoAssistenteNome" placeholder="Nome" />
-      <input type="text" [(ngModel)]="nuovoAssistenteCognome" placeholder="Cognome" />
-      <input type="text" [(ngModel)]="nuovoAssistenteUsername" placeholder="Username" />
-      <input type="text" [(ngModel)]="nuovoAssistenteEmail" placeholder="Email" />
-      <input type="text" [(ngModel)]="nuovoAssistenteRegistrationNumber" placeholder="RegistrationNumber" />
-      <select [(ngModel)]="nuovoAssistenteNomeReparto">
-        <option value="" disabled selected>Seleziona reparto</option>
-        <option *ngFor="let reparto of reparti" [value]="reparto.name">{{ reparto.name }}</option>
-      </select>
-      <button class="btn-icon-aggiungi" (click)="aggiungiAssistente()">Aggiungi Assistente</button>
+  <div class="accordion-section" *ngIf="mostraDottore">
+    <div class="form-container">
+      <div class="form-grid">
+        <input type="text" [(ngModel)]="nuovoDottoreNome" placeholder="Nome" />
+        <input type="text" [(ngModel)]="nuovoDottoreCognome" placeholder="Cognome" />
+        <input type="text" [(ngModel)]="nuovoDottoreUsername" placeholder="Username" />
+        <input type="text" [(ngModel)]="nuovoDottoreEmail" placeholder="Email" />
+        <input type="text" [(ngModel)]="nuovoDottoreRegistrationNumber" placeholder="RegistrationNumber" />
+        <select [(ngModel)]="nuovoDottoreRepartoNome">
+          <option value="" disabled selected>Seleziona reparto</option>
+          <option *ngFor="let reparto of reparti" [value]="reparto.name">{{ reparto.name }}</option>
+        </select>
+        <button class="btn-icon-aggiungi" (click)="aggiungiDottore()">Aggiungi Dottore</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion-section" *ngIf="mostraCapo">
+    <div class="form-container">
+      <div class="form-grid">
+        <input type="text" [(ngModel)]="nuovoCapoRepartoNome" placeholder="Nome" />
+        <input type="text" [(ngModel)]="nuovoCapoRepartoCognome" placeholder="Cognome" />
+        <input type="text" [(ngModel)]="nuovoCapoRepartoUsername" placeholder="Username" />
+        <input type="text" [(ngModel)]="nuovoCapoRepartoEmail" placeholder="Email" />
+        <input type="text" [(ngModel)]="nuovoCapoRepartoRegistrationNumber" placeholder="RegistrationNumber" />
+        <select [(ngModel)]="nuovoCapoRepartoNomeReparto">
+          <option value="" disabled selected>Seleziona reparto</option>
+          <option *ngFor="let reparto of reparti" [value]="reparto.name">{{ reparto.name }}</option>
+        </select>
+        <button class="btn-icon-aggiungi" (click)="aggiungiCapoReparto()">Aggiungi Capo Reparto</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion-section" *ngIf="mostraAssistente">
+    <div class="form-container">
+      <div class="form-grid">
+        <input type="text" [(ngModel)]="nuovoAssistenteNome" placeholder="Nome" />
+        <input type="text" [(ngModel)]="nuovoAssistenteCognome" placeholder="Cognome" />
+        <input type="text" [(ngModel)]="nuovoAssistenteUsername" placeholder="Username" />
+        <input type="text" [(ngModel)]="nuovoAssistenteEmail" placeholder="Email" />
+        <input type="text" [(ngModel)]="nuovoAssistenteRegistrationNumber" placeholder="RegistrationNumber" />
+        <select [(ngModel)]="nuovoAssistenteNomeReparto">
+          <option value="" disabled selected>Seleziona reparto</option>
+          <option *ngFor="let reparto of reparti" [value]="reparto.name">{{ reparto.name }}</option>
+        </select>
+        <button class="btn-icon-aggiungi" (click)="aggiungiAssistente()">Aggiungi Assistente</button>
+      </div>
     </div>
   </div>
 </div>

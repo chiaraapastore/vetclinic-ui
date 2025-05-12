@@ -5,6 +5,8 @@ import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
 import Swal from 'sweetalert2';
 import {NotificheService} from '../services/notifiche.service';
+import {Appuntamento} from '../models/appuntamento.model';
+import {Utente} from '../models/utente.model';
 
 @Component({
   selector: 'app-personale-vetclinic',
@@ -41,14 +43,13 @@ export class PersonaleVetclinicComponent implements OnInit{
   mostraCapo: boolean = false;
   mostraAssistente: boolean = false;
   searchKeyword: string = '';
-
+  pageSize: number = 5;
+  tableSize: number[] = [5, 10, 20];
   originalDottori: any[] = [];
   originalAssistenti: any[] = [];
   originalCapoReparti: any[] = [];
-
-
-
-
+  totalPages: number = 1;
+  personaleUnificato: any[] = [];
   turni: string[] = ['Mattina', 'Pomeriggio', 'Notte', 'Monto', 'Smonto'];
   giorniSettimana: string[] = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'];
   turniAssegnati: { [key: number]: { [giorno: string]: string } } = {};
@@ -63,54 +64,99 @@ export class PersonaleVetclinicComponent implements OnInit{
     this.loadDottori();
     this.loadAssistente();
     this.loadPersonale();
+    const savedPageSize = localStorage.getItem('pageSize');
+    const savedPage = localStorage.getItem('currentPage');
+
+    if (savedPageSize) {
+      this.pageSize = +savedPageSize;
+    }
+
+    if (savedPage) {
+      this.page = +savedPage;
+    }
     this.originalDottori = [...this.dottori];
     this.originalAssistenti = [...this.assistenti];
     this.originalCapoReparti = [...this.capoReparti];
+    this.totalPages = Math.ceil(this.personaleUnificato.length / this.pageSize);
 
+    this.paginatePersonale();
 
   }
 
   loadPersonale(): void {
     this.adminService.getAllVeterinaries().subscribe(data => {
       this.dottori = data;
-      this.originalDottori = [...data];
+      this.loadCapoReparto();
     });
 
     this.adminService.getAllAssistants().subscribe(data => {
       this.assistenti = data;
-      this.originalAssistenti = [...data];
+      this.loadCapoReparto();
     });
 
     this.adminService.getHeadOfDepartments().subscribe(data => {
       this.capoReparti = data;
-      this.originalCapoReparti = [...data];
+      this.combinePersonale();
     });
   }
 
-  applyFilters(): void {
-    const term = this.searchKeyword.toLowerCase();
+  combinePersonale(): void {
+    this.personaleUnificato = [
+      ...this.dottori.map(p => ({ ...p, role: 'Veterinario' })),
+      ...this.assistenti.map(p => ({ ...p, role: 'Assistente' })),
+      ...this.capoReparti.map(p => ({ ...p, role: 'Capo Reparto' }))
+    ];
 
-    this.dottori = this.originalDottori.filter(p =>
-      p.firstName.toLowerCase().includes(term) ||
-      p.lastName.toLowerCase().includes(term) ||
-      p.email.toLowerCase().includes(term)
-    );
+    this.totalPages = Math.ceil(this.personaleUnificato.length / this.pageSize);
 
-    this.assistenti = this.originalAssistenti.filter(p =>
-      p.firstName.toLowerCase().includes(term) ||
-      p.lastName.toLowerCase().includes(term) ||
-      p.email.toLowerCase().includes(term)
-    );
-
-    this.capoReparti = this.originalCapoReparti.filter(p =>
-      p.firstName.toLowerCase().includes(term) ||
-      p.lastName.toLowerCase().includes(term) ||
-      p.email.toLowerCase().includes(term)
-    );
+    this.paginatePersonale();
   }
 
-  searchPersonale(): void {
-    this.applyFilters();
+  paginatePersonale(): void {
+    const startIndex = (this.page - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    const paginatedList = this.personaleUnificato.slice(startIndex, endIndex);
+
+    this.dottori = paginatedList.filter(p => p.role === 'Veterinario');
+    this.assistenti = paginatedList.filter(p => p.role === 'Assistente');
+    this.capoReparti = paginatedList.filter(p => p.role === 'Capo Reparto');
+  }
+
+
+
+  onPageSizeChange(event: Event): void {
+    this.pageSize = +(event.target as HTMLSelectElement).value;
+    this.page = 1;
+    localStorage.setItem('pageSize', this.pageSize.toString());
+    this.paginatePersonale();
+  }
+
+  goToNextPage(): void {
+    if (this.page < this.totalPages) {
+      this.page++;
+      localStorage.setItem('currentPage', this.page.toString());
+      this.paginatePersonale();
+    }
+  }
+
+  goToPreviousPage(): void {
+    if (this.page > 1) {
+      this.page--;
+      localStorage.setItem('currentPage', this.page.toString());
+      this.paginatePersonale();
+    }
+  }
+
+
+  applyFilters(): void {
+    const term = this.searchKeyword.toLowerCase();
+    this.personaleUnificato = this.personaleUnificato.filter(p =>
+      p.firstName.toLowerCase().includes(term) ||
+      p.lastName.toLowerCase().includes(term) ||
+      p.email.toLowerCase().includes(term)
+    );
+
+    this.paginatePersonale();
   }
 
   resetFilters(): void {
@@ -119,6 +165,9 @@ export class PersonaleVetclinicComponent implements OnInit{
     this.loadPersonale();
   }
 
+  searchPersonale(): void {
+    this.applyFilters();
+  }
 
   caricaDati(): void {
     this.adminService.getAllVeterinaries().subscribe(data => {
@@ -458,7 +507,5 @@ export class PersonaleVetclinicComponent implements OnInit{
       }
     });
   }
-
-
 }
 
