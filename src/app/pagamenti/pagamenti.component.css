@@ -22,7 +22,7 @@ body {
   max-width: 1200px;
   margin-right: auto;
   margin-left: auto;
-  margin-top: 200px;
+  margin-top: 60px;
   background: white;
   padding: 30px;
   border-radius: 20px;
@@ -34,7 +34,7 @@ body {
 .title {
   text-align: center;
   color: #00796b;
-  font-size: 16px;
+  font-size: 30px;
   margin-bottom: 20px;
 }
 
@@ -100,11 +100,12 @@ button:hover {
   line-height: 50px;
   font-size: 0.8rem;
   text-align: center;
-  position: fixed;
+  position: relative;
   bottom: 0;
   left: 0;
   z-index: 10;
   box-sizing: border-box;
+  margin-top: auto;
 }
 
 .back-button {
