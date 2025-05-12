@@ -32,5 +32,8 @@ export class MedicineService {
   }
 
 
+  updateMedicinale(medicinale: Medicine): Observable<any> {
+    return this.http.put(`${this.baseUrl}/update/${medicinale.id}`, medicinale);
+  }
 
 }
