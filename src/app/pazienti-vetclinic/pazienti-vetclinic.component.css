@@ -465,10 +465,12 @@ footer {
 
 .btn-icon-aggiungi i {
   font-size: 16px;
+
 }
 
 .btn-icon-aggiungi:hover {
   background-color: #004d40;
+
 }
 
 
@@ -658,6 +660,7 @@ input, select {
   transition: transform 0.2s ease-in-out, background 0.3s;
   text-align: center;
 }
+
 
 .card-button:hover {
   background-color: #b2dfdb;
@@ -1070,12 +1073,15 @@ table thead th {
   box-sizing: border-box;
 }
 
-
 .table-wrapper {
   flex: 1;
+  margin-top: -120px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
+  /* RIMUOVI o RIDUCI questo margine */
+  margin-left: 0; /* oppure al massimo 20px */
 }
+
 
 
 .form-card {
@@ -1176,7 +1182,12 @@ table thead th {
 .table-wrapper {
   flex: 1;
   margin-top: -120px;
+  display: flex;
+  justify-content: flex-start;
+  /* RIMUOVI o RIDUCI questo margine */
+  margin-left: 0; /* oppure al massimo 20px */
 }
+
 
 .form-side-wrapper {
   display: flex;
@@ -1185,7 +1196,7 @@ table thead th {
   gap: 20px;
   padding: 30px;
   margin-top: -30px;
-  margin-left: 1.9%;
+  margin-left: -50px;
 }
 
 @media (max-width: 992px) {
