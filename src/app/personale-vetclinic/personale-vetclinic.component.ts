@@ -64,22 +64,6 @@ export class PersonaleVetclinicComponent implements OnInit{
     this.loadDottori();
     this.loadAssistente();
     this.loadPersonale();
-    const savedPageSize = localStorage.getItem('pageSize');
-    const savedPage = localStorage.getItem('currentPage');
-
-    if (savedPageSize) {
-      this.pageSize = +savedPageSize;
-    }
-
-    if (savedPage) {
-      this.page = +savedPage;
-    }
-    this.originalDottori = [...this.dottori];
-    this.originalAssistenti = [...this.assistenti];
-    this.originalCapoReparti = [...this.capoReparti];
-    this.totalPages = Math.ceil(this.personaleUnificato.length / this.pageSize);
-
-    this.paginatePersonale();
 
   }
 
@@ -102,9 +86,9 @@ export class PersonaleVetclinicComponent implements OnInit{
 
   combinePersonale(): void {
     this.personaleUnificato = [
-      ...this.dottori.map(p => ({ ...p, role: 'Veterinario' })),
-      ...this.assistenti.map(p => ({ ...p, role: 'Assistente' })),
-      ...this.capoReparti.map(p => ({ ...p, role: 'Capo Reparto' }))
+      ...this.dottori.map(p => ({ ...p, role: 'veterinario' })),
+      ...this.assistenti.map(p => ({ ...p, role: 'assistente' })),
+      ...this.capoReparti.map(p => ({ ...p, role: 'capo-reparto' }))
     ];
 
     this.totalPages = Math.ceil(this.personaleUnificato.length / this.pageSize);
@@ -117,9 +101,10 @@ export class PersonaleVetclinicComponent implements OnInit{
     const endIndex = startIndex + this.pageSize;
     const paginatedList = this.personaleUnificato.slice(startIndex, endIndex);
 
-    this.dottori = paginatedList.filter(p => p.role === 'Veterinario');
-    this.assistenti = paginatedList.filter(p => p.role === 'Assistente');
-    this.capoReparti = paginatedList.filter(p => p.role === 'Capo Reparto');
+    this.dottori = paginatedList.filter(p => p.role === 'veterinario');
+    this.assistenti = paginatedList.filter(p => p.role === 'assistente');
+    this.capoReparti = paginatedList.filter(p => p.role === 'capo-reparto');
+    this.totalPages = Math.ceil(this.personaleUnificato.length / this.pageSize);
   }
 
 
@@ -379,7 +364,8 @@ export class PersonaleVetclinicComponent implements OnInit{
         console.log("Dati ricevuti dal backend per capi reparto:", data);
         this.capoReparti = data.map(capo => ({
           ...capo,
-          reparto: capo.reparto?.name || "Nessun reparto"
+          repartoName: capo.reparto?.name|| "Nessun reparto",
+          showReparto: false
         }));
       },
       error: (err: any) => console.error("Errore nel caricamento dei capi reparto", err)
