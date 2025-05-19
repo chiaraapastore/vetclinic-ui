@@ -61,7 +61,11 @@ export class PazientiVetclinicComponent implements OnInit {
       (a.cliente?.email && a.cliente.email.toLowerCase().includes(term)) ||
       (a.reparto?.name && a.reparto.name.toLowerCase().includes(term))
     );
+
+    this.page = 1;
+    this.paginateAnimali();
   }
+
 
   searchAnimali(): void {
     this.applyAnimalFilters();
@@ -73,17 +77,6 @@ export class PazientiVetclinicComponent implements OnInit {
     this.caricaDati();
   }
 
-
-  caricaDati(): void {
-    this.adminService.getAllAnimals().subscribe(data => {
-      this.animali = data;
-      this.originalAnimali = [...data];
-    });
-
-    this.adminService.getAllDepartments().subscribe(data => {
-      this.reparti = data;
-    });
-  }
 
 
   aggiungiAnimale(): void {
@@ -160,16 +153,54 @@ export class PazientiVetclinicComponent implements OnInit {
     this.caricaDati();
   }
 
-  goToPreviousPage(): void { if (this.page > 1) this.page--; }
-  goToNextPage(): void { if (this.page < this.totalPages) this.page++; }
+  paginateAnimali(): void {
+    const start = (this.page - 1) * this.pageSize;
+    const end = start + this.pageSize;
+    this.filteredAnimali = this.animali.slice(start, end);
+  }
+
+  caricaDati(): void {
+    this.adminService.getAllAnimals().subscribe(data => {
+      this.animali = data;
+      this.originalAnimali = [...data];
+      this.page = 1;
+      this.paginateAnimali();
+    });
+
+    this.adminService.getAllDepartments().subscribe(data => {
+      this.reparti = data;
+    });
+  }
+
+
+
+  goToNextPage(): void {
+    if (this.page < this.totalPages) {
+      this.page++;
+      localStorage.setItem('currentPage', this.page.toString());
+      this.paginateAnimali();
+    }
+  }
+
+  goToPreviousPage(): void {
+    if (this.page > 1) {
+      this.page--;
+      localStorage.setItem('currentPage', this.page.toString());
+      this.paginateAnimali();
+    }
+  }
+
+
   onPageSizeChange(event: Event): void {
     this.pageSize = +(event.target as HTMLSelectElement).value;
     this.page = 1;
-    this.applyAnimalFilters();
+    localStorage.setItem('pageSize', this.pageSize.toString());
+    this.paginateAnimali();
   }
 
   get totalPages(): number {
-    return Math.ceil(this.filteredAnimali.length / this.pageSize) || 1;
+    return Math.ceil(this.animali.length / this.pageSize) || 1;
   }
+
 }
 

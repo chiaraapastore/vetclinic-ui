@@ -26,8 +26,8 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let a of animali">
-            <td>{{ a.id }}</td>
+          <tr *ngFor="let a of filteredAnimali">
+          <td>{{ a.id }}</td>
             <td>{{ a.name }}</td>
             <td>{{ a.species }}</td>
             <td>{{ a.breed }}</td>
@@ -35,8 +35,8 @@
             <td>{{ a.reparto?.name || 'Non assegnato' }}</td>
             <td>{{ a.cliente.email }}</td>
             <td>
-              <button class="btn btn-danger btn-sm" (click)="eliminaAnimale(a.id)">
-                <i class="fas fa-trash"></i>
+              <button class="btn btn-danger btn-sm" (click)="eliminaAnimale(a.id!)">
+              <i class="fas fa-trash"></i>
               </button>
             </td>
           </tr>
