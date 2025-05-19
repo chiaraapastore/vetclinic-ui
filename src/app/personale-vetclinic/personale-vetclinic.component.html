@@ -58,7 +58,7 @@
         <td>{{ capoReparto.lastName }}</td>
         <td>{{ capoReparto.email }}</td>
         <td>{{ capoReparto.registrationNumber }}</td>
-        <td>{{ capoReparto.reparto.name  || 'Nessun reparto' }}</td>
+        <td>{{ capoReparto.reparto  || capoReparto.reparto.name  }}</td>
         <td>Capo Reparto</td>
         <td>
           <div class="azioni-container">
@@ -84,7 +84,7 @@
         <td>{{ assist.lastName }}</td>
         <td>{{ assist.email }}</td>
         <td>{{ assist.registrationNumber }}</td>
-        <td>{{ assist.reparto.name  }}</td>
+        <td>{{ assist.reparto.name || assist.reparto  }}</td>
         <td>Assistente</td>
         <td>
           <div class="azioni-container">
