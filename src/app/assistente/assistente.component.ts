@@ -30,6 +30,7 @@ export class AssistenteComponent implements OnInit {
   ordini: any[] = [];
   richiesteAppuntamenti: any[] = [];
   repartoId!: number;
+  repartoName: string = '';
 
   constructor(
     private assistenteService: AssistenteService,
@@ -49,6 +50,8 @@ export class AssistenteComponent implements OnInit {
     this.caricaOrdini();
     this.loadAttivitaRecenti();
     this.caricaRichieste();
+    this.caricaNomeReparto();
+
   }
 
 
@@ -56,6 +59,25 @@ export class AssistenteComponent implements OnInit {
     setTimeout(() => this.updateCalendarEvents(), 0);
   }
 
+
+  caricaNomeReparto(): void {
+    this.authenticationService.getUserInfo().subscribe({
+      next: (user) => {
+        if (user && user.nameDepartment && user.repartoId) {
+          this.repartoName = user.nameDepartment;
+          this.repartoId = user.repartoId;
+          console.log('Nome reparto dell’assistente loggato:', this.repartoName);
+          this.caricaMedicinali(this.repartoId);
+        } else {
+          this.repartoName = 'Nessun reparto';
+        }
+      },
+      error: (err) => {
+        console.error('Errore nel recupero del reparto utente:', err);
+        this.repartoName = 'Errore nel caricamento';
+      }
+    });
+  }
 
   loadRepartoAndData() {
     this.authenticationService.getUserInfo().subscribe(user => {

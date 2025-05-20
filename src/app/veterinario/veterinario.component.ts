@@ -20,6 +20,8 @@ export class VeterinarioComponent implements OnInit {
   attivitaRecenti: any[] = [];
   dropdownOpen: boolean = false;
   userId!: number;
+  repartoName: string = '';
+  repartoId!: number;
 
   constructor(
     private keycloakService: KeycloakService,
@@ -34,11 +36,32 @@ export class VeterinarioComponent implements OnInit {
     this.getDoctorUsername();
     this.loadAppuntamentiDelGiorno();
     this.loadAttivitaRecenti();
+    this.caricaNomeReparto();
+
   }
 
   navigateTo(route: string) {
     this.router.navigate([route]);
   }
+
+  caricaNomeReparto(): void {
+    this.authenticationService.getUserInfo().subscribe({
+      next: (user) => {
+        if (user && user.nameDepartment && user.repartoId) {
+          this.repartoName = user.nameDepartment;
+          this.repartoId = user.repartoId;
+          console.log('Nome reparto del veterinario loggato:', this.repartoName);
+        } else {
+          this.repartoName = 'Nessun reparto';
+        }
+      },
+      error: (err) => {
+        console.error('Errore nel recupero del reparto utente:', err);
+        this.repartoName = 'Errore nel caricamento';
+      }
+    });
+  }
+
 
   loadAppuntamentiDelGiorno() {
     this.appuntamentoService.getAppointmentsCreatedByAssistant().subscribe({

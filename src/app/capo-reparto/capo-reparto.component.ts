@@ -29,6 +29,8 @@ export class CapoRepartoComponent implements OnInit {
   selectedRepartoId!: number;
   selectedPatientName: string = '';
   feriePendenti: any[] = [];
+  repartoName: string = '';
+
 
   constructor(
     private doctorService: VeterinarioService,
@@ -49,7 +51,29 @@ export class CapoRepartoComponent implements OnInit {
     this.loadAppuntamentiDelGiorno();
     this.loadAttivitaRecenti();
     this.caricaFeriePendenti();
+    this.caricaNomeReparto();
   }
+
+  caricaNomeReparto(): void {
+    this.headOfDepartmentService.getUserInfo().subscribe({
+      next: (user) => {
+        if (user && user.nameDepartment && user.repartoId) {
+          this.repartoName = user.nameDepartment;
+          this.selectedRepartoId = user.repartoId;
+          console.log('Nome reparto dell’utente loggato:', this.repartoName);
+        } else {
+          this.repartoName = 'Nessun reparto';
+        }
+      },
+      error: (err) => {
+        console.error('Errore nel recupero del reparto utente:', err);
+        this.repartoName = 'Errore nel caricamento';
+      }
+    });
+  }
+
+
+
 
   caricaDottori() {
     if (!this.selectedRepartoId) return;
