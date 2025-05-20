@@ -55,7 +55,7 @@ export class PersonaleVetclinicComponent implements OnInit{
   turniAssegnati: { [key: number]: { [giorno: string]: string } } = {};
 
 
-  constructor(private adminService: AdminService, private notificheService: NotificheService ,private router: Router, private headOfDepartmentService: CapoRepartoService, private toastr: ToastrService) {}
+  constructor(private adminService: AdminService,  private capoRepartoService: CapoRepartoService,private notificheService: NotificheService ,private router: Router, private headOfDepartmentService: CapoRepartoService, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.caricaDati();
@@ -399,7 +399,7 @@ export class PersonaleVetclinicComponent implements OnInit{
   }
 
 
-  assegnaTurno(capoRepartoId: number, giorno: string, turno: string) {
+  assegnaTurni(capoRepartoId: number, giorno: string, turno: string) {
     if (!this.turniAssegnati[capoRepartoId]) {
       this.turniAssegnati[capoRepartoId] = {};
     }
@@ -413,6 +413,29 @@ export class PersonaleVetclinicComponent implements OnInit{
     console.log(`Turni assegnati per il Capo Reparto ID ${capoRepartoId}:`, this.turniAssegnati[capoRepartoId]);
     this.notificheService.inviaNotifica(capoRepartoId, `Ti è stato assegnato il turno: ${turno} per ${giorno}`).subscribe();
 
+  }
+
+
+  assegnaTurno(capoRepartoId: number, giorno: string, turno: string): void {
+    if (!this.turniAssegnati[capoRepartoId]) {
+      this.turniAssegnati[capoRepartoId] = {};
+    }
+
+    const giaAssegnato = this.turniAssegnati[capoRepartoId][giorno] === turno;
+    if (giaAssegnato) {
+      delete this.turniAssegnati[capoRepartoId][giorno];
+    } else {
+      this.turniAssegnati[capoRepartoId][giorno] = turno;
+
+      const today = new Date();
+      const giornoIndex = this.giorniSettimana.indexOf(giorno);
+      const oggiIndex = today.getDay();
+      const diff = ((giornoIndex + 1 + 7 - oggiIndex) % 7);
+      const dataTurno = new Date(today);
+      dataTurno.setDate(today.getDate() + diff);
+      console.log(`Turni assegnati per il Capo Reparto ID ${capoRepartoId}:`, this.turniAssegnati[capoRepartoId]);
+      this.notificheService.inviaNotifica(capoRepartoId, `Ti è stato assegnato il turno: ${turno} per ${giorno}`).subscribe();
+    }
   }
 
   getTurnoColor(capoRepartoId: number, giorno: string, turno: string): string {
