@@ -117,12 +117,12 @@ export class HomeComponent implements OnInit {
 
 
   testimonials = [
-    { text: 'Finalmente un\'app pensata davvero per noi! Gestire i pazienti, i trattamenti e la documentazione clinica è diventato semplice e veloce. Non potrei più farne a meno!', author: 'Sara B.' },
-    { text: 'Da quando usiamo questa piattaforma, abbiamo ridotto del 40% gli errori di gestione e migliorato l\'organizzazione interna. Intuitiva, sicura e completa.', author: 'Marco L.' },
-    { text: 'Poter consultare la storia clinica del mio cane direttamente online è fantastico! Mi sento più seguito e ho tutte le informazioni sempre a portata di mano.', author: 'Anna R.' },
-    { text: 'Con il sistema di notifiche e il monitoraggio dei farmaci, abbiamo migliorato tantissimo l\'efficienza del nostro reparto. Ogni dottore ha esattamente ciò che serve al momento giusto.', author: 'Laura P.' },
-    { text: 'L\'app ci permette di aggiornare visite e somministrazioni in tempo reale. È facilissima da usare anche durante le giornate più impegnative!', author: 'Davide M.' },
-    { text: 'Gestisco due cani e un gatto. Grazie all\'app posso prenotare le visite, monitorare i trattamenti e ricevere promemoria. Una rivoluzione!', author: 'Luca N.' }
+    { text: 'Finalmente un\'app pensata davvero per noi! Gestire i pazienti, i trattamenti e la documentazione clinica è diventato semplice e veloce. Non potrei più farne a meno!', author: ' Dr.ssa Sara B.' },
+    { text: 'Da quando usiamo questa piattaforma, abbiamo ridotto del 40% gli errori di gestione e migliorato l\'organizzazione interna. Intuitiva, sicura e completa.', author: 'Dr Marco L.' },
+    { text: 'Poter consultare la storia clinica del mio cane direttamente online è fantastico! Mi sento più seguito e ho tutte le informazioni sempre a portata di mano.', author: ' Dr.ssa Anna R.' },
+    { text: 'Con il sistema di notifiche e il monitoraggio dei farmaci, abbiamo migliorato tantissimo l\'efficienza del nostro reparto. Ogni dottore ha esattamente ciò che serve al momento giusto.', author: ' Dr.ssa Laura P.' },
+    { text: 'L\'app ci permette di aggiornare visite e somministrazioni in tempo reale. È facilissima da usare anche durante le giornate più impegnative!', author: 'Dr Davide M.' },
+    { text: 'Gestisco due cani e un gatto. Grazie all\'app posso prenotare le visite, monitorare i trattamenti e ricevere promemoria. Una rivoluzione!', author: 'Dr Luca N.' }
   ];
 
 
