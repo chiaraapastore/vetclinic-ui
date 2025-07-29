@@ -2,6 +2,46 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.8.
 
+#  VetClinic – Frontend
+
+User interface of the VetClinic platform, a modular management system for veterinary clinics.  
+This module is built with Angular and provides a responsive, role-based experience integrated with Keycloak for secure access control.
+
+---
+
+##  Technologies Used
+
+-  Angular
+-  RxJS, Angular Router, Angular Material
+-  Keycloak (SSO, role-based access control)
+-  Responsive UI with component-based architecture
+-  Data visualization and PDF reporting
+
+---
+
+##  Key Features
+
+- Secure login and logout via Keycloak
+- Dashboard with role-based views (Admin, Head of Department, Vet, Assistant, Client)
+- Full CRUD operations for:
+  - Patients
+  - Appointments
+  - Medical administrations
+  - Staff shifts
+  - Departments and rooms
+  - Payments and invoices
+- PDF reports and exportable data
+- Integrated calendar and notifications
+
+---
+
+##  How to Run the Frontend
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/chiaraapastore/vetclinic-ui.git
+
+
 ## Development server
 
 To start a local development server, run:
